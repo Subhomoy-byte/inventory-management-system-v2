@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/layout/Navbar';
 import { Dock, type NavTab } from './components/layout/Dock';
 import { LoginPage } from './pages/LoginPage';
+import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { InventoryPage } from './pages/InventoryPage';
 import { WarehouseMapPage } from './pages/WarehouseMapPage';
@@ -20,10 +21,30 @@ import type { Product, MovementType } from './types';
 
 const MainLayout: React.FC = () => {
   const { isAuthenticated } = useAuth();
+  const [hash, setHash] = useState<string>(() => window.location.hash);
   const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [pendingSyncCount, setPendingSyncCount] = useState<number>(0);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleHash = () => setHash(window.location.hash);
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  const navigateToLogin = () => {
+    window.location.hash = '#login';
+    setHash('#login');
+  };
+
+  const navigateToStory = () => {
+    window.location.hash = '';
+    if (window.history.pushState) {
+      window.history.pushState(null, '', window.location.pathname + window.location.search);
+    }
+    setHash('');
+  };
 
   // Movement modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,7 +92,10 @@ const MainLayout: React.FC = () => {
   };
 
   if (!isAuthenticated) {
-    return <LoginPage />;
+    if (hash === '#login') {
+      return <LoginPage onBackToOverview={navigateToStory} />;
+    }
+    return <LandingPage onLaunchApp={navigateToLogin} />;
   }
 
   return (

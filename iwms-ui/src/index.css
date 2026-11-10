@@ -56,6 +56,21 @@
   .badge-glow {
     @apply relative inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold tracking-wide border;
   }
+
+  .story-glass-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom scrollbar */

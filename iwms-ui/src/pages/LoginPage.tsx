@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { Boxes, Lock, User, ArrowRight, ShieldCheck, Sun, Moon, AlertCircle } from 'lucide-react';
+import { Boxes, Lock, User, ArrowRight, ArrowLeft, ShieldCheck, Sun, Moon, AlertCircle } from 'lucide-react';
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
 
-export const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  onBackToOverview?: () => void;
+}
+
+export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
   const { login } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -106,6 +110,24 @@ export const LoginPage: React.FC = () => {
       {/* Background ambient blobs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/15 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/15 dark:bg-purple-500/20 rounded-full blur-3xl pointer-events-none translate-x-1/2 translate-y-1/2" />
+
+      {/* Top left back to overview */}
+      <div className="absolute top-6 left-6 z-20">
+        <button
+          onClick={() => {
+            if (onBackToOverview) {
+              onBackToOverview();
+            } else {
+              window.location.hash = '';
+            }
+          }}
+          className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl glass-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-sm"
+          title="Back to story overview"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to overview</span>
+        </button>
+      </div>
 
       {/* Top right theme toggle */}
       <div className="absolute top-6 right-6">
@@ -227,6 +249,23 @@ export const LoginPage: React.FC = () => {
               >
                 <span className="font-bold">Staff Member</span>
                 <span className="text-xs opacity-75 mt-0.5">Standard View</span>
+              </button>
+            </div>
+
+            <div className="mt-6 pt-5 border-t border-slate-200/50 dark:border-white/10 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onBackToOverview) {
+                    onBackToOverview();
+                  } else {
+                    window.location.hash = '';
+                  }
+                }}
+                className="text-xs font-semibold text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1.5"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to story overview</span>
               </button>
             </div>
           </div>

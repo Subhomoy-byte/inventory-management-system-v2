@@ -7,7 +7,15 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
       colors: {
+        'story-bg': '#070912',
+        'accent-violet': '#7C6CFF',
+        'accent-cyan': '#22D3EE',
         glass: {
           surface: 'rgba(255, 255, 255, 0.65)',
           darkSurface: 'rgba(15, 23, 42, 0.75)',
