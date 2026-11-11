@@ -38,10 +38,10 @@ interface ResponsiveVideoProps {
 const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
   baseName,
   poster,
-  loop = false,
-  autoPlay = false,
+  loop = true,
+  autoPlay = true,
   playOnView = false,
-  pauseWhenOffscreen = false,
+  pauseWhenOffscreen = true,
   className = '',
   overlayOpacity = 0,
   ariaLabel,
@@ -49,7 +49,6 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [videoError, setVideoError] = useState(false);
 
@@ -87,18 +86,23 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
     const container = containerRef.current;
     if (!video || !container) return;
 
+    // Ensure video is muted so browser autoplay & looping policies succeed
+    video.muted = true;
+
+    if (autoPlay) {
+      video.play().catch(() => {});
+    }
+
     if (!playOnView && !pauseWhenOffscreen) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            if (playOnView && !hasPlayedOnce) {
-              video.play().catch(() => {});
-              setHasPlayedOnce(true);
-            } else if (pauseWhenOffscreen && loop) {
-              video.play().catch(() => {});
+            if (video.ended) {
+              video.currentTime = 0;
             }
+            video.play().catch(() => {});
           } else {
             if (pauseWhenOffscreen) {
               video.pause();
@@ -106,12 +110,19 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.2 }
     );
 
     observer.observe(container);
     return () => observer.disconnect();
-  }, [playOnView, pauseWhenOffscreen, loop, hasPlayedOnce, isOffline, videoError]);
+  }, [playOnView, pauseWhenOffscreen, loop, autoPlay, isOffline, videoError]);
+
+  const handleEnded = () => {
+    if (loop && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+  };
 
   return (
     <div
@@ -136,6 +147,7 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
           loop={loop}
           aria-label={ariaLabel}
           preload="metadata"
+          onEnded={handleEnded}
           onError={() => setVideoError(true)}
           className="w-full h-full object-contain mx-auto block"
         />
@@ -311,7 +323,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
                 baseName="hero-warehouse-build"
                 poster="hero-warehouse-build-poster.webp"
                 autoPlay={true}
-                loop={false}
+                loop={true}
+                pauseWhenOffscreen={true}
                 ariaLabel="Warehouse automated building process"
                 className="aspect-video w-full shadow-2xl"
               />
@@ -351,7 +364,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
               <ResponsiveVideo
                 baseName="problem-truck-drive"
                 poster="problem-truck-drive-poster.webp"
+                autoPlay={true}
                 playOnView={true}
+                loop={true}
+                pauseWhenOffscreen={true}
                 overlayOpacity={0.6}
                 ariaLabel="Logistics transport entering distribution bay"
                 className="aspect-video w-full shadow-2xl"
@@ -517,6 +533,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
               <ResponsiveVideo
                 baseName="floor-conveyor-boxes"
                 poster="floor-conveyor-boxes-poster.webp"
+                autoPlay={true}
+                playOnView={true}
                 loop={true}
                 pauseWhenOffscreen={true}
                 ariaLabel="Automated floor conveyor moving storage bins"
