@@ -192,8 +192,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
       <header className="sticky top-0 z-50 w-full px-6 py-4 backdrop-blur-xl bg-[#070912]/80 border-b border-white/10 transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#7C6CFF] to-[#22D3EE] flex items-center justify-center text-white shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20">
-              <Boxes className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-[#060810] flex items-center justify-center shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20 border-t border-white/30 p-1.5">
+              <img src="/favicon.svg" alt="IWMS Pro Warehouse Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">

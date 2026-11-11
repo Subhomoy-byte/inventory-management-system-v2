@@ -91,8 +91,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand & System Status */}
         <div className="flex items-center gap-3">
-          <div className="icon-slot w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#7C6CFF] to-[#22D3EE] flex items-center justify-center text-[#060810] shadow-lg shadow-[#7C6CFF]/30 ring-1 ring-white/30 border-t border-white/40">
-            <Boxes className="w-5 h-5 stroke-[2.5]" />
+          <div className="icon-slot w-10 h-10 rounded-2xl bg-[#060810] flex items-center justify-center shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20 border-t border-white/30 p-1.5">
+            <img src="/favicon.svg" alt="IWMS Pro Warehouse Logo" className="w-full h-full object-contain" />
           </div>
 
           <div>

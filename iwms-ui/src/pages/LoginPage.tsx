@@ -193,8 +193,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
         <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
           {/* Brand Eyebrow with Micro Vector Graphic */}
           <div className="flex items-center gap-3">
-            <div className="icon-slot w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#7C6CFF] to-[#22D3EE] flex items-center justify-center text-[#070912] shadow-lg shadow-[#7C6CFF]/30 ring-1 ring-white/20">
-              <Boxes className="w-6 h-6 stroke-[2.5]" />
+            <div className="icon-slot w-12 h-12 rounded-2xl bg-[#060810] flex items-center justify-center shadow-lg shadow-[#7C6CFF]/30 ring-1 ring-white/20 border-t border-white/30 p-2">
+              <img src="/favicon.svg" alt="IWMS Pro Warehouse Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">

@@ -9,6 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       includeAssets: [
+        'favicon.ico',
         'favicon.svg',
         'icons.svg',
         'pwa-192x192.png',
