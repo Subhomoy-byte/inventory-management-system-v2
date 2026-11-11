@@ -42,3 +42,9 @@ logs/
 **/backups/
 data/
 backups/
+.env
+.env.*
+*.p12
+*.jks
+*.pem
+iwms-assets-raw/
