@@ -127,12 +127,17 @@ export class OfflineSyncManager {
     return queueItem;
   }
 
+  public static isCurrentlySyncing(): boolean {
+    return this.isSyncing;
+  }
+
   // Drain outbox queue to server
   public static async drainQueue(): Promise<{ processed: number; conflicts: number }> {
     if (this.isSyncing) return { processed: 0, conflicts: 0 };
     if (!navigator.onLine) return { processed: 0, conflicts: 0 };
 
     this.isSyncing = true;
+    window.dispatchEvent(new CustomEvent('iwms:sync-start'));
     try {
       const db = await getDb();
       const pending = await db.getAllFromIndex('outbox', 'by-status', 'PENDING');
@@ -172,6 +177,8 @@ export class OfflineSyncManager {
       return { processed: 0, conflicts: 0 };
     } finally {
       this.isSyncing = false;
+      window.dispatchEvent(new CustomEvent('iwms:sync-end'));
+      window.dispatchEvent(new CustomEvent('iwms:outbox-updated'));
     }
   }
 

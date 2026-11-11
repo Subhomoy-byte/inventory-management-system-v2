@@ -50,6 +50,22 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [videoError, setVideoError] = useState(false);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      setVideoError(false);
+    };
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     const checkWidth = () => {
@@ -65,6 +81,8 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
     : `/videos/${baseName}.mp4`;
 
   useEffect(() => {
+    if (isOffline || videoError) return;
+
     const video = videoRef.current;
     const container = containerRef.current;
     if (!video || !container) return;
@@ -93,25 +111,35 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
 
     observer.observe(container);
     return () => observer.disconnect();
-  }, [playOnView, pauseWhenOffscreen, loop, hasPlayedOnce]);
+  }, [playOnView, pauseWhenOffscreen, loop, hasPlayedOnce, isOffline, videoError]);
 
   return (
     <div
       ref={containerRef}
       className={`relative rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] ${className}`}
     >
-      <video
-        ref={videoRef}
-        src={videoSrc}
-        poster={`/videos/${poster}`}
-        muted
-        playsInline
-        autoPlay={autoPlay}
-        loop={loop}
-        aria-label={ariaLabel}
-        preload="metadata"
-        className="w-full h-full object-contain mx-auto block"
-      />
+      {isOffline || videoError ? (
+        <img
+          src={`/videos/${poster}`}
+          alt={ariaLabel}
+          loading="lazy"
+          className="w-full h-full object-contain mx-auto block"
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          poster={`/videos/${poster}`}
+          muted
+          playsInline
+          autoPlay={autoPlay}
+          loop={loop}
+          aria-label={ariaLabel}
+          preload="metadata"
+          onError={() => setVideoError(true)}
+          className="w-full h-full object-contain mx-auto block"
+        />
+      )}
       {overlayOpacity > 0 && (
         <div
           className="absolute inset-0 bg-[#070912] pointer-events-none transition-opacity"
@@ -394,10 +422,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
                   </p>
                   <p className="text-slate-500 pt-2"># Or deploy with multi-stage Docker container</p>
                   <p className="text-[#7C6CFF] font-semibold">
-                    docker run -d -p 8443:8443 Subhomoy-byte/iwms-pro:latest
+                    docker build -t iwms-pro . &amp;&amp; docker run -d -p 8443:8443 iwms-pro
                   </p>
                   <div className="mt-4 p-3 rounded-xl bg-white/[0.04] text-xs text-slate-400 space-y-1">
-                    <p className="text-emerald-400">✓ In-memory ConcurrentHashMap &amp; TreeMap initialized</p>
+                    <p className="text-emerald-400">✓ In-memory HashMap &amp; TreeMap guarded by ReentrantReadWriteLock</p>
                     <p className="text-emerald-400">✓ File-backed catalog repository bound to data/products.json</p>
                     <p className="text-emerald-400">✓ Append-only disk ledger active on data/ledger.log</p>
                     <p className="text-slate-300">→ Ready on http://localhost:8443</p>
@@ -451,7 +479,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
                   DASHBOARD SCREENSHOT PLACEHOLDER
                 </span>
                 <p className="text-sm text-slate-400 max-w-md">
-                  Active operations monitor: Occupancy Gauges (Zone A Ambient, Zone B Cold, Zone C Vault), Recharts Trendline, and WAL Audit Stream.
+                  Active operations monitor: KPI Cards (Total Products, Stock Counts, Low Stock Warnings, Valuation), Recharts Category Distribution, and Recent Movement Activity.
                 </p>
               </div>
               <button

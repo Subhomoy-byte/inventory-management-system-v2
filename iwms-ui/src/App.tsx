@@ -15,6 +15,7 @@ import { ReportsPage } from './pages/ReportsPage';
 import { ConflictReviewPanel } from './components/sync/ConflictReviewPanel';
 import { StockMovementModal } from './components/modals/StockMovementModal';
 import { CommandPalette } from './components/CommandPalette';
+import { ReloadPrompt } from './components/common/ReloadPrompt';
 import { OfflineSyncManager } from './storage/sync';
 import { api } from './services/api';
 import type { Product, MovementType } from './types';
@@ -169,6 +170,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <MainLayout />
+        <ReloadPrompt />
       </AuthProvider>
     </ThemeProvider>
   );

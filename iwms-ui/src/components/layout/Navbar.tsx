@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { OfflineSyncManager } from '../../storage/sync';
 import { StatusChip } from '../common/StatusChip';
 import {
   Sun,
@@ -10,6 +11,7 @@ import {
   WifiOff,
   Boxes,
   Search,
+  RefreshCw,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -19,15 +21,49 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [pendingCount, setPendingCount] = useState<number>(0);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+    const updatePending = async () => {
+      try {
+        const count = await OfflineSyncManager.getPendingCount();
+        setPendingCount(count);
+      } catch {
+        // fallback
+      }
+    };
+
+    updatePending();
+
+    const handleOnline = () => {
+      setIsOnline(true);
+      updatePending();
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      updatePending();
+    };
+    const handleOutboxUpdate = () => {
+      updatePending();
+    };
+    const handleSyncStart = () => {
+      setIsSyncing(true);
+      updatePending();
+    };
+    const handleSyncEnd = () => {
+      setIsSyncing(false);
+      updatePending();
+    };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    window.addEventListener('iwms:outbox-updated', handleOutboxUpdate);
+    window.addEventListener('iwms:sync-start', handleSyncStart);
+    window.addEventListener('iwms:sync-end', handleSyncEnd);
+    window.addEventListener('iwms:sync-complete', handleOutboxUpdate);
 
     const timer = setInterval(() => {
       setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -36,6 +72,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('iwms:outbox-updated', handleOutboxUpdate);
+      window.removeEventListener('iwms:sync-start', handleSyncStart);
+      window.removeEventListener('iwms:sync-end', handleSyncEnd);
+      window.removeEventListener('iwms:sync-complete', handleOutboxUpdate);
       clearInterval(timer);
     };
   }, []);
@@ -79,15 +119,46 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
         <div className="flex items-center gap-3">
           {/* LAN Status Pill */}
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border backdrop-blur-md ${
-              isOnline
-                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
-                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 animate-pulse'
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border backdrop-blur-md transition-all ${
+              !isOnline
+                ? 'bg-amber-500/15 text-amber-500 dark:text-amber-400 border-amber-500/40 animate-pulse'
+                : isSyncing
+                ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/40'
+                : pendingCount > 0
+                ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/40'
+                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
             }`}
-            title={isOnline ? 'Online (Connected)' : 'Offline (Local Storage Active)'}
+            title={
+              !isOnline
+                ? `Offline Mode (${pendingCount} queued action${pendingCount === 1 ? '' : 's'})`
+                : isSyncing
+                ? `Synchronizing ${pendingCount} offline action${pendingCount === 1 ? '' : 's'} with server...`
+                : pendingCount > 0
+                ? `${pendingCount} action${pendingCount === 1 ? '' : 's'} queued in outbox`
+                : 'Network Online (Connected)'
+            }
           >
-            {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">{isOnline ? 'Network Online' : 'Offline Mode'}</span>
+            {!isOnline ? (
+              <>
+                <WifiOff className="w-3.5 h-3.5" />
+                <span>Offline Mode{pendingCount > 0 ? ` (${pendingCount})` : ''}</span>
+              </>
+            ) : isSyncing ? (
+              <>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                <span>Syncing{pendingCount > 0 ? ` (${pendingCount})` : ''}...</span>
+              </>
+            ) : pendingCount > 0 ? (
+              <>
+                <Wifi className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Online ({pendingCount} queued)</span>
+              </>
+            ) : (
+              <>
+                <Wifi className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Network Online</span>
+              </>
+            )}
           </div>
 
           {/* Clock */}
