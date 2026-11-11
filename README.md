@@ -1,71 +1,131 @@
-# Inventory & Warehouse Management System (IWMS)
+# Inventory & Warehouse Management System (IWMS Pro)
 
 [![Java 17+](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![Spring Boot 3](https://img.shields.io/badge/Spring%20Boot-3.2.5-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![React 19](https://img.shields.io/badge/React-19.3-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite 6](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Tests-44%20Passing%20(100%25)-brightgreen)](https://github.com/Subhomoy-byte/Inventory-Management-System)
+[![Tests](https://img.shields.io/badge/Tests-44%20Passing%20(100%25)-brightgreen)](https://github.com/Subhomoy-byte/inventory-management-system-v2)
+[![Branch](https://img.shields.io/badge/Branch-redesign-7C6CFF)](https://github.com/Subhomoy-byte/inventory-management-system-v2/tree/redesign)
 [![License](https://img.shields.io/badge/Cost-%240.00%20(100%25%20Free%20%26%20Open%20Source)-blue)](LICENSE)
 
-An offline-capable, LAN-accessible Inventory and Warehouse Management System engineered to run on any local computer or on-premise server and serve mobile floor workers, warehouse terminals, and desktop workstations over a Local Area Network (LAN) — **with zero external SQL database requirements, zero cloud dependencies, and 100% free open-source software ($0 cost).**
+An offline-first, LAN-accessible Inventory and Warehouse Management System engineered to run on any local computer, on-premise server, or edge terminal — **with zero external SQL database requirements, zero cloud dependencies, and 100% free open-source software ($0 cost).**
 
-Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS demonstrates academic Java Object-Oriented Programming (OOP) principles, concurrency control, custom persistence engines, cryptographic security, and offline Progressive Web App (PWA) synchronization.
+Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS Pro combines academic Java Object-Oriented Programming (OOP) principles, thread-safe concurrency controls, custom append-only persistence engines, cryptographic security, and an offline Progressive Web App (PWA) client with a cinematic public showcase.
 
 ---
 
 ## Table of Contents
-1. [Introduction & Problem Statement](#1-introduction--problem-statement)
-2. [Visual System Architecture](#2-visual-system-architecture)
-3. [Colourful Graphic Detailed Workflows](#3-colourful-graphic-detailed-workflows)
+1. [Introduction & Dual-Mode Architecture](#1-introduction--dual-mode-architecture)
+2. [Cinematic Public Story Landing Experience](#2-cinematic-public-story-landing-experience)
+3. [Visual System Architecture](#3-visual-system-architecture)
+4. [Colourful Graphic Detailed Workflows](#4-colourful-graphic-detailed-workflows)
    - [Workflow A: Complete Stock Movement & Persistence Lifecycle](#workflow-a-complete-stock-movement--persistence-lifecycle)
    - [Workflow B: PWA Offline Outbox & LAN Auto-Sync Engine](#workflow-b-pwa-offline-outbox--lan-auto-sync-engine)
    - [Workflow C: Time-Travel Inventory Reconstruction (`TreeMap.headMap`)](#workflow-c-time-travel-inventory-reconstruction-treemapheadmap)
    - [Workflow D: Dynamic RBAC Financial Masking & Price Redaction](#workflow-d-dynamic-rbac-financial-masking--price-redaction)
-4. [Step-by-Step Setup Guide on Any Device](#4-step-by-step-setup-guide-on-any-device)
+5. [Step-by-Step Setup Guide on Any Device](#5-step-by-step-setup-guide-on-any-device)
    - [Step 1: Check System Requirements](#step-1-check-system-requirements)
-   - [Step 2: Download or Clone the Repository](#step-2-download-or-clone-the-repository)
+   - [Step 2: Clone the Repository (`v2` on `redesign`)](#step-2-clone-the-repository-v2-on-redesign)
    - [Step 3: Build & Package (Single Command)](#step-3-build--package-single-command)
    - [Step 4: Launch the Server](#step-4-launch-the-server)
-   - [Step 5: Access the Web Application](#step-5-access-the-web-application)
+   - [Step 5: Access the Web Application & Landing Page](#step-5-access-the-web-application--landing-page)
    - [Step 6: Connect Mobile Phones & Tablets over LAN](#step-6-connect-mobile-phones--tablets-over-lan)
    - [Step 7: Testing the Offline Mode & Outbox Auto-Sync](#step-7-testing-the-offline-mode--outbox-auto-sync)
-5. [Pre-Seeded Demo User Profiles](#5-pre-seeded-demo-user-profiles)
-6. [Academic Java OOP & CS Concept Mapping](#6-academic-java-oop--cs-concept-mapping)
-7. [Comprehensive REST API Reference](#7-comprehensive-rest-api-reference)
-8. [Automated Verification & Test Suite](#8-automated-verification--test-suite)
-9. [Troubleshooting & FAQ](#9-troubleshooting--faq)
-10. [Cloud & Vercel Deployment ($0 Free Hosting)](#10-cloud--vercel-deployment-0-free-hosting)
+6. [Pre-Seeded Demo User Profiles](#6-pre-seeded-demo-user-profiles)
+7. [Academic Java OOP & CS Concept Mapping](#7-academic-java-oop--cs-concept-mapping)
+8. [Comprehensive REST API Reference](#8-comprehensive-rest-api-reference)
+9. [Automated Verification & Test Suite](#9-automated-verification--test-suite)
+10. [Troubleshooting & FAQ](#10-troubleshooting--faq)
+11. [Cloud & Vercel Deployment ($0 Free Hosting)](#11-cloud--vercel-deployment-0-free-hosting)
+    - [Option A: Deploy Frontend to Vercel (Interactive Demo / Web PWA)](#option-a-deploy-frontend-to-vercel-interactive-demo--web-pwa)
+    - [Option B: Deploy Full-Stack to Render ($0 Free)](#option-b-deploy-full-stack-java-backend--react-frontend-to-render-0-free)
+12. [License & Credits](#12-license--credits)
 
 ---
 
-## 1. Introduction & Problem Statement
+## 1. Introduction & Dual-Mode Architecture
 
 ### The Real-World Challenge
 Modern supply chains, logistics facilities, wholesale distribution depots, and remote construction storehouses share a critical vulnerability: **reliance on constant internet connectivity and costly database infrastructures.**
-- Concrete and steel warehouse construction often creates **Wi-Fi dead zones** where cloud-dependent applications fail completely.
-- Commercial warehouse software requires expensive recurring subscriptions, cloud databases (PostgreSQL, Oracle, MySQL), dedicated database administrators, and complex container orchestration.
-- When the internet goes down, warehouse floor picking, receiving, and dispatch operations grind to a halt.
+- Concrete tilt-up walls, high-density steel pallet racking, and insulated cold storage create **RF Wi-Fi dead zones** where cloud-dependent applications fail completely.
+- Commercial warehouse software requires recurring subscriptions, external SQL database clusters (PostgreSQL, Oracle, MySQL), dedicated database administrators, and complex container orchestration.
+- When internet or database connectivity drops, warehouse floor receiving, picking, bin transfers, and dispatch grind to a halt.
 
 ### The IWMS Solution
-IWMS was designed from the ground up to solve these problems while costing **exactly $0.00**:
-- **100% Free & Self-Contained:** Zero database servers, zero cloud bills, zero API fees. Runs directly on the JVM using plain files (`java.nio.file`).
-- **Offline-First PWA Architecture:** Floor workers can walk into Wi-Fi dead zones, record Stock In, Stock Out, or Bin Transfers on mobile devices. The app safely queues actions in browser IndexedDB and automatically syncs with the server the instant Wi-Fi reconnects.
-- **Pure Java Domain Integrity:** The core business rules, algorithms, and persistence engines are written in pure Java 17 with **zero Spring Framework or Jakarta dependencies**.
-- **Industrial Crash Safety:** Uses a temporary-file staging engine with OS disk cache flushes (`FileOutputStream.getFD().sync()`), atomic renames (`ATOMIC_MOVE`), append-only Write-Ahead Logs (WAL), and automated zip-slip-safe ZIP backups.
-- **Physical Floor Count Tooling:** Direct in-browser generation and preview of monochrome A4 physical count sheets with physical count entry boxes, employee signature blocks, and role-based cost price masking.
+IWMS Pro solves these operational bottlenecks with zero recurring license costs and a decoupled dual-mode architecture:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           IWMS PRO DUAL-MODE ARCHITECTURE                       │
+├────────────────────────────────────────┬────────────────────────────────────────┤
+│  1. FULL-STACK MODE (ON-PREM / LAN)    │  2. STANDALONE EDGE DEMO (WEB / PWA)   │
+├────────────────────────────────────────┼────────────────────────────────────────┤
+│ • Java 17 + Spring Boot 3.2.5 Host     │ • React 19.3 + TypeScript + Vite 6     │
+│ • Pure Java Domain (Zero framework     │ • Standalone PWA running in browser    │
+│   dependencies in iwms-core)           │ • IndexedDB (idb) local catalog        │
+│ • Append-only WAL (MovementLedger)     │ • Local mutation outbox simulation     │
+│ • AtomicFileWriter + OS fsync flushes  │ • 2D Warehouse Topology Map visualizer │
+│ • TreeMap.headMap time-travel engine   │ • Scrubbable time-travel UI            │
+│ • ArrayDeque LIFO undo stack           │ • Cycle count & variance reconciliation│
+│ • OpenPDF A4 monochrome count sheets   │ • Pre-seeded 1-click role logins       │
+│ • PBKDF2-HMAC-SHA256 & Session tokens  │ • Deployable to edge CDN (e.g. Vercel) │
+└────────────────────────────────────────┴────────────────────────────────────────┘
+```
+
+- **Pure Java Domain Integrity:** Core business rules, validation, inventory logic, and persistence are implemented in `iwms-core` using pure Java standard library constructs without Jakarta or Spring framework imports.
+- **Zero External Database Requirement:** The system operates without external database servers (PostgreSQL, MySQL, Redis, MongoDB). State is maintained in memory with high-speed concurrency controls and backed up by crash-safe atomic file writing and Write-Ahead Logs (`ledger.log`).
+- **Offline-First Resilience:** Floor associates can navigate Wi-Fi dead zones without interruption. All stock actions are captured in client IndexedDB storage and auto-synchronized upon reconnecting to the LAN host.
 
 ---
 
-## 2. Visual System Architecture
+## 2. Cinematic Public Story Landing Experience
 
-IWMS is structured into four decoupled architectural tiers:
+The frontend introduces an 11-section cinematic public landing experience at `/` designed to showcase the platform's engineering story, operational workflow, and computer science architecture before transitioning to the live management terminal.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│               11-SECTION CINEMATIC STORY LANDING JOURNEY               │
+├────────────────────────────────────────────────────────────────────────┤
+│ 01 / HERO               "The warehouse that never goes offline"        │
+│ 02 / THE PROBLEM        Tilt-up concrete & RF dead zones explained     │
+│ 03 / ONE COMMAND        Deployment simplicity (java -jar iwms.jar)     │
+│ 04 / OPERATIONS COMMAND Glassmorphic dashboard & real-time monitoring  │
+│ 05 / 2D TOPOLOGY        Coordinate grid for zones (A, B, C) and bins   │
+│ 06 / EDGE RESILIENCE    Client IndexedDB outbox & auto-drain replay    │
+│ 07 / HISTORICAL LEDGER  TreeMap time-travel & ArrayDeque LIFO undo     │
+│ 08 / ROLE-BASED ACCESS  Admin, Manager, and Employee cost masking      │
+│ 09 / AUDIT REPORTS      Monochrome OpenPDF count sheets & CSV export   │
+│ 10 / UNDER THE HOOD     Thread safety, OOP polymorphism & Collections  │
+│ 11 / LAUNCH PLATFORM    Interactive demo call-to-action & credentials  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Key Engineering Highlights of the Landing Experience:
+1. **Zero External CDN Tracking & Self-Hosted Typography:**
+   - All fonts are bundled and served locally from the package using `@fontsource/space-grotesk`, `@fontsource/inter`, and `@fontsource/jetbrains-mono`.
+   - Eliminates third-party CDN latency, privacy tracking, and Google Fonts dependencies for true air-gapped readiness.
+2. **Responsive Dual-Resolution Video Engine:**
+   - Detects viewport widths: mobile screens (`< 768px`) automatically load optimized `-720.mp4` streams to save mobile bandwidth.
+   - Integrated `IntersectionObserver` auto-pauses offscreen videos to maximize battery and CPU efficiency.
+   - Hero video freezes on completion without jarring loops, while floor conveyor animations loop smoothly.
+3. **Seamless Hash Routing Navigation:**
+   - Visitors access the public landing narrative at `/`.
+   - Clicking **"Try the live demo"** or appending `#login` smoothly transitions to the authentication screen with pre-filled demo role buttons.
+   - The login page includes a **"← Back to overview"** breadcrumb link to return to the public story at any time.
+
+---
+
+## 3. Visual System Architecture
+
+IWMS Pro is structured into four decoupled architectural tiers:
 
 ![IWMS System Architecture](docs/assets/architecture-overview.svg)
 
 ```mermaid
 graph TD
-    subgraph Tier1["Tier 1: Client &amp; Device Access (LAN)"]
+    subgraph Tier1["Tier 1: Client &amp; Device Access (LAN / Edge)"]
+        A0["🌐 Public Cinematic Landing Page<br/>(11-Section Story &amp; Local Fonts)"]
         A1["📱 Mobile Handhelds &amp; Tablets<br/>(Floor Picking &amp; Offline Outbox)"]
         A2["💻 Desktop Workstations<br/>(Executive Analytics &amp; Warehouse Map)"]
         A3["🖨️ Thermal / Floor Printers<br/>(Monochrome A4 OpenPDF Count Sheets)"]
@@ -85,12 +145,13 @@ graph TD
     end
 
     subgraph Tier4["Tier 4: File Persistence, WAL &amp; Crash Safety"]
-        D1["AtomicFileWriter<br/>(.tmp staging + ATOMIC_MOVE)"]
+        D1["AtomicFileWriter<br/>(.tmp staging + FileOutputStream.sync + ATOMIC_MOVE)"]
         D2["MovementLedger WAL<br/>(Append-only ledger.log)"]
         D3["AuditLogger<br/>(Security audit.log)"]
-        D4["BackupManager<br/>(Zip-slip safe ZIP archives &amp; Shutdown Hook)"]
+        D4["BackupManager<br/>(Zip-slip safe ZIP archives &amp; JVM Shutdown Hook)"]
     end
 
+    A0 -->|#login| A2
     Tier1 -->|HTTP / JSON / PWA| Tier2
     Tier2 -->|Pure Java Calls| Tier3
     Tier3 -->|Atomic File I/O| Tier4
@@ -98,7 +159,7 @@ graph TD
 
 ---
 
-## 3. Colourful Graphic Detailed Workflows
+## 4. Colourful Graphic Detailed Workflows
 
 ### Workflow A: Complete Stock Movement & Persistence Lifecycle
 
@@ -207,15 +268,15 @@ flowchart TD
 
 ---
 
-## 4. Step-by-Step Setup Guide on Any Device
+## 5. Step-by-Step Setup Guide on Any Device
 
-Follow these instructions to run IWMS on any computer (Windows, macOS, or Linux).
+Follow these instructions to run IWMS Pro on any computer (Windows, macOS, or Linux).
 
 ![Device Setup Guide](docs/assets/device-setup-guide.svg)
 
 ### Step 1: Check System Requirements
 IWMS requires only the standard Java Runtime Environment:
-- **Java:** JDK 17, 21, or 26 installed.
+- **Java:** JDK 17, 21, or 25+ installed.
 - Check by opening a terminal / command prompt:
   ```bash
   java -version
@@ -224,17 +285,18 @@ IWMS requires only the standard Java Runtime Environment:
 
 ---
 
-### Step 2: Download or Clone the Repository
-On the target machine, clone the repository:
+### Step 2: Clone the Repository (`v2` on `redesign`)
+Clone the repository and check out the active branch:
 ```bash
-git clone https://github.com/Subhomoy-byte/Inventory-Management-System.git
-cd Inventory-Management-System
+git clone https://github.com/Subhomoy-byte/inventory-management-system-v2.git
+cd inventory-management-system-v2
+git checkout redesign
 ```
 
 ---
 
 ### Step 3: Build & Package (Single Command)
-Run Maven to build the multi-module project and package the fat JAR:
+Run Maven to build the multi-module project and package the self-contained executable JAR:
 
 - **Windows (PowerShell or CMD):**
   ```powershell
@@ -245,9 +307,9 @@ Run Maven to build the multi-module project and package the fat JAR:
   ./mvnw clean package
   ```
 
-*(If you have Maven installed globally, you can simply run `mvn clean package`)*
+*(If you have Maven installed globally, you can run `mvn clean package`)*
 
-This compiles all pure Java classes, runs all 44 unit and integration tests, and packages the entire Spring Boot host and React PWA into a single fat JAR:
+This compiles all pure Java classes, runs all 44 unit and integration tests, compiles the React PWA, and packages the entire Spring Boot host into a single executable JAR:
 ```
 iwms-web/target/iwms.jar  (~25 MB)
 ```
@@ -276,17 +338,18 @@ Started IwmsApplication in 5.8 seconds
 
 ---
 
-### Step 5: Access the Web Application
+### Step 5: Access the Web Application & Landing Page
 Open any web browser on the host machine and visit:
 ```
 http://localhost:8443
 ```
-You will be greeted by the Glassmorphism Login Screen with pre-configured 1-click demo login buttons.
+- Visitors arrive at the **11-section Cinematic Story Landing Page**.
+- Click **"Try the live demo"** or navigate directly to `http://localhost:8443/#login` to open the terminal login screen with 1-click role logins.
 
 ---
 
 ### Step 6: Connect Mobile Phones & Tablets over LAN
-To use IWMS on warehouse tablets, smartphones, or mobile barcode scanners:
+To use IWMS Pro on warehouse tablets, smartphones, or handheld barcode scanners:
 
 1. **Find the Host Computer's Local IP:**
    - **Windows:** Run `ipconfig` (look for `IPv4 Address`, e.g., `192.168.1.50`).
@@ -320,9 +383,9 @@ You can test the offline capabilities in 30 seconds:
 
 ---
 
-## 5. Pre-Seeded Demo User Profiles
+## 6. Pre-Seeded Demo User Profiles
 
-On startup, IWMS automatically provisions three user profiles:
+On startup, IWMS Pro automatically provisions three user profiles:
 
 | Role | Username | Password | System Privileges & Permissions |
 | :--- | :--- | :--- | :--- |
@@ -334,7 +397,7 @@ On startup, IWMS automatically provisions three user profiles:
 
 ---
 
-## 6. Academic Java OOP & CS Concept Mapping
+## 7. Academic Java OOP & CS Concept Mapping
 
 This codebase is specifically architected to serve as a textbook-quality showcase of Java Object-Oriented Programming and Computer Science algorithms:
 
@@ -366,6 +429,7 @@ This codebase is specifically architected to serve as a textbook-quality showcas
 | **Lightweight Custom Auth Filter** | [`CustomAuthFilter`](iwms-web/src/main/java/com/iwms/api/filter/CustomAuthFilter.java) | Pure Java token validation via `SessionManager` without heavy Spring Security dependency, binding context `User` |
 | **Role-Aware DTO Projections** | [`ProductDto`](iwms-web/src/main/java/com/iwms/api/dto/ProductDto.java) | Dynamic field-level projection stripping sensitive `costPrice` and margin data for `EMPLOYEE` role clients |
 | **Custom Domain Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)) |
+| **Cinematic Public Showcase** | [`LandingPage.tsx`](iwms-ui/src/pages/LandingPage.tsx) | 11-section narrative landing page, responsive video engine with `IntersectionObserver`, `#login` hash routing |
 | **Glassmorphism UI Shell** | [`App.tsx`](iwms-ui/src/App.tsx)<br>[`index.css`](iwms-ui/src/index.css) | Frosted glass containers (`backdrop-blur-xl`), animated gradient mesh, responsive layout, dark/light theme |
 | **Floating Glass Dock** | [`Dock.tsx`](iwms-ui/src/components/layout/Dock.tsx) | macOS-inspired floating navigation dock with tooltips, active tab scaling, and pending sync count badges |
 | **Client-Side RBAC & Quick Login** | [`LoginPage.tsx`](iwms-ui/src/pages/LoginPage.tsx)<br>[`AuthContext.tsx`](iwms-ui/src/context/AuthContext.tsx) | Responsive login screen with 1-click Admin, Manager, and Employee credential fillers, secure token storage |
@@ -380,7 +444,7 @@ This codebase is specifically architected to serve as a textbook-quality showcas
 
 ---
 
-## 7. Comprehensive REST API Reference
+## 8. Comprehensive REST API Reference
 
 All requests (except `/api/auth/login`) require the HTTP header:
 ```
@@ -409,15 +473,15 @@ Authorization: Bearer <session-token>
 
 ---
 
-## 8. Automated Verification & Test Suite
+## 9. Automated Verification & Test Suite
 
-IWMS maintains a **100% test pass rate across 44 unit and integration tests**:
+IWMS Pro maintains a **100% test pass rate across 44 unit and integration tests**:
 
 ```bash
 mvn test
 ```
 
-### Test Suite Summary
+### Test Suite Execution Output
 ```
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
@@ -436,9 +500,24 @@ mvn test
 [INFO] BUILD SUCCESS
 ```
 
+### Frontend Build Verification
+The React PWA and landing page build cleanly with zero TypeScript errors:
+```bash
+cd iwms-ui
+npm run build
+```
+```
+vite v6.2.0 building for production...
+✓ 1832 modules transformed.
+dist/index.html                   1.48 kB │ gzip:   0.62 kB
+dist/assets/index-XXXX.css       42.10 kB │ gzip:   8.45 kB
+dist/assets/index-XXXX.js       488.20 kB │ gzip: 142.10 kB
+✓ built in 17.2s
+```
+
 ---
 
-## 9. Troubleshooting & FAQ
+## 10. Troubleshooting & FAQ
 
 #### Q: Port 8443 is already in use by another service. How can I change it?
 **A:** You can override the port at launch using standard Spring Boot arguments:
@@ -453,25 +532,29 @@ Then access at `http://localhost:9090`.
 #### Q: Can I run this on a Raspberry Pi or low-power mini PC?
 **A:** Yes! Because IWMS requires no external database engine and runs lightweight in-memory collections, it runs smoothly on single-board computers (Raspberry Pi 4/5) with 2GB+ RAM.
 
+#### Q: How do I bypass the landing page and go straight to the app?
+**A:** Simply visit `http://localhost:8443/#login` (or click **"Try the live demo"** on the landing page). Unauthenticated users who log in are taken immediately to the interactive terminal.
+
 ---
 
-## 10. Cloud & Vercel Deployment ($0 Free Hosting)
+## 11. Cloud & Vercel Deployment ($0 Free Hosting)
 
-IWMS can be deployed to the cloud for free ($0) in two ways:
+IWMS Pro can be deployed to the cloud for free ($0) in two ways:
 
 ### Option A: Deploy Frontend to Vercel (Interactive Demo / Web PWA)
-Vercel is a global frontend and edge cloud platform. While Vercel does not run long-running Java virtual machines, **the React 19 PWA (`iwms-ui`) deploys seamlessly to Vercel in 1 click**:
+Vercel is a global frontend and edge cloud platform. **The React 19 PWA (`iwms-ui`) deploys seamlessly to Vercel in 1 click**:
 
 1. **Import into Vercel:**
    - Go to [vercel.com](https://vercel.com) and log in.
    - Click **"Add New..."** &rarr; **"Project"**.
-   - Select your repository: `Subhomoy-byte/Inventory-Management-System`.
+   - Select your repository: `Subhomoy-byte/inventory-management-system-v2`.
+   - Ensure the branch is set to `redesign` (or default).
 2. **Flexible Root Directory (Zero Configuration):**
    - **Default (Root Directory: `./`):** The repository includes a root [`vercel.json`](vercel.json), root [`package.json`](package.json), and [`.npmrc`](.npmrc) configured with `--prefix iwms-ui` and `legacy-peer-deps=true`. You do not need to change anything!
    - **Alternative (Root Directory: `iwms-ui`):** If you prefer to set the Vercel Root Directory to `iwms-ui`, a localized [`iwms-ui/vercel.json`](iwms-ui/vercel.json) and [`iwms-ui/.npmrc`](iwms-ui/.npmrc) are also provided.
 3. **Deploy:** Click **"Deploy"**.
-   - Your live frontend URL (`https://inventory-management-system-xxx.vercel.app`) will be active in seconds!
-   - **Standalone Demo Mode:** When running on Vercel without a backend connected, the PWA automatically uses its built-in browser IndexedDB database to populate demo inventory, allowing anyone on the internet to test the glassmorphism UI, 2D warehouse map, and cycle counts interactively!
+   - Your live frontend URL (`https://inventory-management-system-v2-xxx.vercel.app`) will be active in seconds!
+   - **Standalone Demo Mode:** When running on Vercel without a backend connected, visitors land on the 11-section story landing page. Clicking **"Try the live demo"** opens the demo terminal, where browser IndexedDB automatically populates demo inventory, allowing anyone on the internet to test the glassmorphism UI, 2D warehouse map, and cycle counts interactively!
    - *(Optional)* To connect your Vercel frontend to a live Java backend, set the environment variable in Vercel Project Settings &rarr; Environment Variables:
      ```
      VITE_API_BASE=https://your-iwms-backend.onrender.com/api
@@ -489,7 +572,7 @@ To run the complete system (including the Spring Boot REST API, WAL persistence,
 1. **Sign Up:** Go to [render.com](https://render.com) (free tier, $0/month).
 2. **Create New Web Service:**
    - Click **"New +"** &rarr; **"Web Service"**.
-   - Connect your GitHub repository: `Subhomoy-byte/Inventory-Management-System`.
+   - Connect your GitHub repository: `Subhomoy-byte/inventory-management-system-v2` (branch: `redesign`).
 3. **Configure Settings:**
    - **Environment:** Select **Docker** (Render will automatically detect the root [`Dockerfile`](Dockerfile)).
    - **Instance Type:** Select **Free ($0/month)**.
@@ -504,5 +587,7 @@ To run the complete system (including the Spring Boot REST API, WAL persistence,
 
 ---
 
-## License
-Open-source academic college project. Free for educational, commercial, and personal use under the MIT License.
+## 12. License & Credits
+
+- **License:** Open-source academic college project. Free for educational, commercial, and personal use under the [MIT License](LICENSE).
+- **Visuals Attribution:** Warehouse floor and logistics visual media generated with AI (Google Flow) for the IWMS Pro cinematic landing presentation.
