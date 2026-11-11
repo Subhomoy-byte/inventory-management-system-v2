@@ -21,60 +21,60 @@ export const StatusChip: React.FC<StatusChipProps> = ({ status, label, className
       case 'ADJUST': return 'Audit Adjustment';
       case 'ADMIN': return 'Administrator';
       case 'MANAGER': return 'Manager';
-      case 'EMPLOYEE': return 'Staff Member';
+      case 'EMPLOYEE': return 'Floor Staff';
       default: return s || 'Unknown';
     }
   };
 
   const text = label || getReadableLabel(status);
 
-  let colorClasses = 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-400/20';
+  let colorClasses = 'bg-white/[0.06] text-white/80 border-white/10';
 
   switch (status) {
     case 'OPTIMAL':
-      colorClasses = 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30';
+      colorClasses = 'bg-[#34D399]/15 text-[#34D399] border-[#34D399]/30';
       break;
     case 'LOW_STOCK':
-      colorClasses = 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30';
+      colorClasses = 'bg-[#FBBF24]/15 text-[#FBBF24] border-[#FBBF24]/30';
       break;
     case 'CRITICAL':
-      colorClasses = 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/30 animate-pulse-subtle';
+      colorClasses = 'bg-[#F87171]/20 text-[#F87171] border-[#F87171]/40 animate-pulse';
       break;
     case 'OVERSTOCKED':
-      colorClasses = 'bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30';
+      colorClasses = 'bg-[#7C6CFF]/15 text-[#7C6CFF] border-[#7C6CFF]/30';
       break;
     case 'IN':
-      colorClasses = 'bg-teal-500/10 text-teal-700 dark:text-teal-400 border-teal-500/30';
+      colorClasses = 'bg-[#34D399]/15 text-[#34D399] border-[#34D399]/30';
       break;
     case 'OUT':
-      colorClasses = 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/30';
+      colorClasses = 'bg-[#F87171]/15 text-[#F87171] border-[#F87171]/30';
       break;
     case 'TRANSFER':
-      colorClasses = 'bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/30';
+      colorClasses = 'bg-[#22D3EE]/15 text-[#22D3EE] border-[#22D3EE]/30';
       break;
     case 'ADJUST':
-      colorClasses = 'bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-500/30';
+      colorClasses = 'bg-[#7C6CFF]/15 text-[#7C6CFF] border-[#7C6CFF]/30';
       break;
     case 'ADMIN':
-      colorClasses = 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30';
+      colorClasses = 'bg-[#7C6CFF]/20 text-[#7C6CFF] border-[#7C6CFF]/40';
       break;
     case 'MANAGER':
-      colorClasses = 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30';
+      colorClasses = 'bg-[#22D3EE]/20 text-[#22D3EE] border-[#22D3EE]/40';
       break;
     case 'EMPLOYEE':
-      colorClasses = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30';
+      colorClasses = 'bg-[#34D399]/20 text-[#34D399] border-[#34D399]/40';
       break;
   }
 
   return (
     <span
       className={cn(
-        'badge-glow font-medium text-xs',
+        'badge-glow font-mono font-bold text-[11px] tracking-tight',
         colorClasses,
         className
       )}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-75 mr-1.5 inline-block" />
+      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80 mr-1.5 inline-block" />
       {text}
     </span>
   );

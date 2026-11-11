@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { NavTab } from './layout/Dock';
 import type { Product } from '../types';
 import {
@@ -50,13 +51,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   const tabs: { id: NavTab; label: string; icon: React.ReactNode; desc: string }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" />, desc: 'System overview, KPI cards & charts' },
+    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" />, desc: 'System overview, KPI cards & telemetry charts' },
     { id: 'inventory', label: 'Inventory Catalog', icon: <Boxes className="w-4 h-4" />, desc: 'Live catalog, filtering & movements' },
-    { id: 'warehouse', label: 'Warehouse Map', icon: <MapPin className="w-4 h-4" />, desc: '2D Zone and Storage Shelf capacity visualization' },
+    { id: 'warehouse', label: 'Floor Map', icon: <MapPin className="w-4 h-4" />, desc: '2D Zone and storage shelf capacity matrix' },
     { id: 'movements', label: 'Time-Travel Ledger', icon: <History className="w-4 h-4" />, desc: 'Transaction history and historical state' },
-    { id: 'orders', label: 'Purchase Orders', icon: <ShoppingCart className="w-4 h-4" />, desc: 'Supplier orders and receiving' },
-    { id: 'cyclecount', label: 'Cycle Count', icon: <ClipboardCheck className="w-4 h-4" />, desc: 'Guided floor count and variance' },
-    { id: 'reports', label: 'PDF Reports', icon: <FileText className="w-4 h-4" />, desc: 'OpenPDF floor count sheets and CSV' },
+    { id: 'orders', label: 'Purchase Orders', icon: <ShoppingCart className="w-4 h-4" />, desc: 'Supplier orders and inbound receiving' },
+    { id: 'cyclecount', label: 'Cycle Count', icon: <ClipboardCheck className="w-4 h-4" />, desc: 'Floor verification and discrepancy reconciliation' },
+    { id: 'reports', label: 'PDF Reports', icon: <FileText className="w-4 h-4" />, desc: 'OpenPDF printable sheets and CSV catalog' },
     { id: 'conflicts', label: 'Offline Outbox', icon: <RefreshCw className="w-4 h-4" />, desc: 'IndexedDB queue and sync conflicts' },
   ];
 
@@ -77,36 +78,42 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     : [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="w-full max-w-xl glass-panel p-4 shadow-2xl ring-1 ring-white/20">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-black/70 backdrop-blur-md">
+      <motion.div
+        initial={{ scale: 0.96, opacity: 0, y: -10 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.96, opacity: 0, y: -10 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+        className="w-full max-w-xl glass-panel p-4 shadow-2xl relative"
+      >
         {/* Search Input Bar */}
-        <div className="relative flex items-center border-b border-slate-200/60 dark:border-slate-800 pb-3">
-          <Search className="w-5 h-5 text-indigo-500 ml-2 mr-3 shrink-0" />
+        <div className="relative flex items-center border-b border-white/10 pb-3">
+          <Search className="w-4 h-4 text-[#22D3EE] ml-2 mr-3 shrink-0" />
           <input
             type="text"
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search screens, product names, or item codes..."
-            className="w-full bg-transparent border-0 outline-none text-base text-slate-800 dark:text-slate-100 placeholder-slate-400 font-medium"
+            placeholder="Search screens, product SKUs, or warehouse commands..."
+            className="w-full bg-transparent border-0 outline-none text-sm text-white placeholder-white/40 font-mono"
           />
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            className="p-1.5 rounded-xl text-white/40 hover:text-white"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Results Body */}
-        <div className="mt-3.5 max-h-80 overflow-y-auto space-y-3.5">
+        <div className="mt-3 max-h-80 overflow-y-auto space-y-3 font-mono">
           {/* Screens Navigation */}
           {filteredTabs.length > 0 && (
             <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 px-2.5 mb-2">
-                Navigation Screens
+              <div className="text-[10px] uppercase tracking-wider text-white/40 px-2.5 mb-2 font-bold">
+                Operational Screens
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 {filteredTabs.map((t) => (
                   <button
                     key={t.id}
@@ -114,20 +121,20 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       onSelectTab(t.id);
                       onClose();
                     }}
-                    className="w-full p-2.5 rounded-2xl flex items-center justify-between text-left hover:bg-indigo-500/10 dark:hover:bg-indigo-500/20 text-slate-700 dark:text-slate-200 transition-colors group"
+                    className="w-full p-2.5 rounded-2xl flex items-center justify-between text-left hover:bg-white/[0.06] text-white/80 hover:text-white transition-colors group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-slate-200/60 dark:bg-slate-800/60 text-indigo-600 dark:text-indigo-400">
+                      <div className="p-2 rounded-xl bg-white/[0.04] text-[#7C6CFF] border border-white/5">
                         {t.icon}
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-slate-900 dark:text-white">
+                        <div className="text-xs font-bold text-white font-sans">
                           {t.label}
                         </div>
-                        <div className="text-xs text-slate-400 mt-0.5">{t.desc}</div>
+                        <div className="text-[11px] text-white/40 mt-0.5">{t.desc}</div>
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ArrowRight className="w-3.5 h-3.5 text-[#22D3EE] opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
               </div>
@@ -136,11 +143,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
           {/* Matched Products */}
           {matchedProducts.length > 0 && (
-            <div className="pt-2.5 border-t border-slate-200/50 dark:border-slate-800">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 px-2.5 mb-2">
-                Matching Products
+            <div className="pt-2 border-t border-white/10">
+              <div className="text-[10px] uppercase tracking-wider text-white/40 px-2.5 mb-2 font-bold">
+                Matching SKUs
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 {matchedProducts.map((p) => (
                   <button
                     key={p.id}
@@ -149,17 +156,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       if (onSelectProduct) onSelectProduct(p);
                       onClose();
                     }}
-                    className="w-full p-2.5 rounded-2xl flex items-center justify-between text-left hover:bg-emerald-500/10 dark:hover:bg-emerald-500/20 transition-colors"
+                    className="w-full p-2.5 rounded-2xl flex items-center justify-between text-left hover:bg-white/[0.06] transition-colors"
                   >
                     <div>
-                      <div className="text-sm font-bold text-slate-900 dark:text-white">
+                      <div className="text-xs font-bold text-white font-sans">
                         {p.name}
                       </div>
-                      <div className="text-xs font-mono font-semibold text-indigo-500 mt-0.5">
-                        Code: {p.sku} &bull; Shelf: {p.binLocation}
+                      <div className="text-[11px] text-[#7C6CFF] mt-0.5">
+                        SKU: {p.sku} &bull; Shelf: {p.binLocation}
                       </div>
                     </div>
-                    <span className="text-sm font-mono font-bold text-slate-700 dark:text-slate-300">
+                    <span className="text-xs font-mono font-bold text-[#22D3EE]">
                       {p.quantity} units
                     </span>
                   </button>
@@ -170,13 +177,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="mt-3 pt-2.5 border-t border-slate-200/50 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-          <span>Use &uarr; &darr; to navigate &bull; Esc to close</span>
-          <kbd className="px-1.5 py-0.5 rounded bg-slate-200/80 dark:bg-slate-800/80 font-mono text-[10px]">
+        <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px] text-white/40 font-mono">
+          <span>&uarr; &darr; navigate &bull; Esc close</span>
+          <kbd className="px-1.5 py-0.5 rounded-lg bg-white/[0.06] border border-white/10 text-white/60">
             Ctrl + K
           </kbd>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

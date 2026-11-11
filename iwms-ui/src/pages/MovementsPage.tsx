@@ -92,56 +92,61 @@ export const MovementsPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
-            <History className="w-8 h-8 text-indigo-500" />
-            <span>Inventory Transaction History & Time Travel</span>
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Complete transaction ledger with 1-click transaction undo and historical state replay.
+          <div className="flex items-center gap-2">
+            <h1 className="font-heading text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
+              <History className="w-7 h-7 text-[#7C6CFF]" />
+              <span>Transaction Ledger & Time-Travel</span>
+            </h1>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#7C6CFF]/20 text-[#7C6CFF] border border-[#7C6CFF]/40 font-bold">
+              TREEMAP.HEADMAP
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-white/60 font-mono mt-0.5">
+            Immutable transaction record with 1-click LIFO undo and scrubbable historical state replay.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={handleUndo}
             disabled={undoLoading || movements.length === 0}
-            className="glass-button-secondary text-sm py-2.5 px-4 hover:text-amber-600 disabled:opacity-50"
+            className="glass-button-secondary text-xs sm:text-sm py-2 px-3.5 hover:text-[#FBBF24] disabled:opacity-40"
             title="Reverses the most recent inventory transaction"
           >
             <RotateCcw className={`w-4 h-4 ${undoLoading ? 'animate-spin' : ''}`} />
-            <span>Undo Last Transaction</span>
+            <span>Undo Last Action</span>
           </button>
         </div>
       </div>
 
       {/* Undo Alert Notification */}
       {undoResult && (
-        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-sm font-semibold flex items-center justify-between">
+        <div className="p-3.5 rounded-2xl bg-[#FBBF24]/15 border border-[#FBBF24]/30 text-[#FBBF24] text-xs font-mono font-semibold flex items-center justify-between">
           <span>{undoResult}</span>
-          <button onClick={() => setUndoResult(null)} className="text-sm font-bold hover:underline">
+          <button onClick={() => setUndoResult(null)} className="text-xs font-bold hover:underline">
             Dismiss
           </button>
         </div>
       )}
 
       {/* Time-Travel Interactive Slider Card */}
-      <GlassCard className="p-5 border-indigo-500/30 bg-gradient-to-r from-indigo-500/5 via-purple-500/5 to-transparent">
+      <GlassCard className="p-5 sm:p-6 border-[#7C6CFF]/30 bg-gradient-to-r from-[#7C6CFF]/10 via-[#22D3EE]/5 to-transparent">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+            <div className="p-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-[#7C6CFF]">
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <span>Time-Travel Inventory Replay</span>
+              <h3 className="font-heading text-base font-bold text-white flex items-center gap-2">
+                <span>Time-Travel Historical Replay</span>
                 {isTimeTraveling && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 animate-pulse">
-                    Historical View Active
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#22D3EE]/20 text-[#22D3EE] border border-[#22D3EE]/40 animate-pulse font-bold">
+                    HISTORICAL REPLAY ACTIVE
                   </span>
                 )}
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Scrub through the immutable TreeMap ledger timeline to inspect inventory levels at any historical instant.
+              <p className="text-xs text-white/50 font-mono">
+                Scrub the immutable timeline to reconstruct inventory quantities at any historical instant.
               </p>
             </div>
           </div>
@@ -149,9 +154,9 @@ export const MovementsPage: React.FC = () => {
           {isTimeTraveling && (
             <button
               onClick={() => handleQueryAsOf(0)}
-              className="glass-button-secondary text-xs py-1.5 px-3 self-start md:self-auto"
+              className="glass-button-secondary text-xs py-1.5 px-3 self-start md:self-auto font-mono"
             >
-              <RotateCw className="w-3.5 h-3.5" />
+              <RotateCw className="w-3.5 h-3.5 text-[#22D3EE]" />
               <span>Reset to Present</span>
             </button>
           )}
@@ -159,12 +164,12 @@ export const MovementsPage: React.FC = () => {
 
         {/* Slider Controls */}
         <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span className="flex items-center gap-1 font-mono">
-              <Calendar className="w-3.5 h-3.5" />
-              {timeTravelMinutesAgo === 0 ? 'Present (Live Stock)' : timeTravelDate.toLocaleString()}
+          <div className="flex items-center justify-between text-xs text-white/60 font-mono">
+            <span className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#7C6CFF]" />
+              {timeTravelMinutesAgo === 0 ? 'Present (Live Floor Stock)' : timeTravelDate.toLocaleString()}
             </span>
-            <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="font-bold text-[#22D3EE]">
               {timeTravelMinutesAgo === 0 ? 'Live 0m' : `-${timeTravelMinutesAgo} mins ago`}
             </span>
           </div>
@@ -176,11 +181,11 @@ export const MovementsPage: React.FC = () => {
             step="15"
             value={timeTravelMinutesAgo}
             onChange={(e) => handleQueryAsOf(parseInt(e.target.value) || 0)}
-            className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+            className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#7C6CFF]"
           />
 
-          <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-            <span>Now (0m)</span>
+          <div className="flex justify-between text-[10px] text-white/40 font-mono">
+            <span>Live (0m)</span>
             <span>-1 Hour</span>
             <span>-6 Hours</span>
             <span>-12 Hours</span>
@@ -190,14 +195,14 @@ export const MovementsPage: React.FC = () => {
 
         {/* Historical Stock Results Preview */}
         {isTimeTraveling && (
-          <div className="mt-5 pt-4 border-t border-slate-200/60 dark:border-slate-800">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" />
-              <span>Reconstructed Stock Snapshot at {timeTravelDate.toLocaleTimeString()}</span>
+          <div className="mt-5 pt-4 border-t border-white/10">
+            <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-white/40 mb-3 flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-[#22D3EE]" />
+              <span>Reconstructed Snapshot at {timeTravelDate.toLocaleTimeString()}</span>
             </h4>
 
             {historyLoading ? (
-              <div className="py-6 text-center text-xs text-slate-400">
+              <div className="py-6 text-center text-xs text-white/40 font-mono">
                 Reconstructing state via TreeMap.headMap()...
               </div>
             ) : historicalStock ? (
@@ -209,14 +214,14 @@ export const MovementsPage: React.FC = () => {
                   return (
                     <div
                       key={p.id}
-                      className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 text-sm"
+                      className="p-2.5 rounded-2xl bg-white/[0.03] border border-white/10 text-xs font-mono"
                     >
-                      <div className="font-mono text-xs font-semibold text-indigo-500 truncate">{p.sku}</div>
-                      <div className="font-bold text-slate-900 dark:text-white truncate">{p.name}</div>
-                      <div className="mt-1 flex items-center justify-between text-xs font-mono">
-                        <span className="font-bold">{historicQty} units</span>
+                      <div className="text-[10px] font-bold text-[#7C6CFF] truncate">{p.sku}</div>
+                      <div className="font-bold text-white truncate font-sans text-xs mt-0.5">{p.name}</div>
+                      <div className="mt-1 flex items-center justify-between text-[11px]">
+                        <span className="font-extrabold text-white">{historicQty}u</span>
                         {delta !== 0 && (
-                          <span className={delta > 0 ? 'text-emerald-500 font-bold' : 'text-rose-500 font-bold'}>
+                          <span className={delta > 0 ? 'text-[#34D399] font-bold' : 'text-[#F87171] font-bold'}>
                             {delta > 0 ? `+${delta}` : delta}
                           </span>
                         )}
@@ -231,34 +236,34 @@ export const MovementsPage: React.FC = () => {
       </GlassCard>
 
       {/* Movement Ledger Table */}
-      <GlassCard className="p-6">
+      <GlassCard className="p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <History className="w-5 h-5 text-purple-500" />
-              <span>Verified Transaction Log</span>
+            <h3 className="font-heading text-lg font-bold text-white flex items-center gap-2">
+              <History className="w-4 h-4 text-[#7C6CFF]" />
+              <span>Verified Ledger Log</span>
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Total {movements.length} recorded inventory mutations in local transaction ledger
+            <p className="text-xs text-white/50 font-mono mt-0.5">
+              Total {movements.length} recorded inventory mutations in append-only WAL
             </p>
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50 text-sm font-semibold">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/10 text-xs font-mono">
             {[
-              { id: 'ALL', label: 'All Transactions' },
+              { id: 'ALL', label: 'All' },
               { id: 'IN', label: 'Stock In' },
               { id: 'OUT', label: 'Stock Out' },
-              { id: 'TRANSFER', label: 'Shelf Transfer' },
-              { id: 'ADJUST', label: 'Cycle Adjustment' },
+              { id: 'TRANSFER', label: 'Transfer' },
+              { id: 'ADJUST', label: 'Audit' },
             ].map((t) => (
               <button
                 key={t.id}
                 onClick={() => setSelectedType(t.id)}
                 className={`px-3 py-1.5 rounded-xl transition-all ${
                   selectedType === t.id
-                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'bg-gradient-to-r from-[#7C6CFF] to-[#22D3EE] text-[#070912] font-bold'
+                    : 'text-white/60 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
                 {t.label}
@@ -268,52 +273,52 @@ export const MovementsPage: React.FC = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider bg-slate-500/5 text-xs">
-                <th className="py-4 px-4">Transaction ID</th>
-                <th className="py-4 px-4">Action</th>
-                <th className="py-4 px-4">Product Code & Name</th>
-                <th className="py-4 px-4">Quantity</th>
-                <th className="py-4 px-4">Shelf Route</th>
-                <th className="py-4 px-4">Reason / Reference</th>
-                <th className="py-4 px-4">Staff Member</th>
-                <th className="py-4 px-4">Date & Time</th>
+              <tr className="border-b border-white/10 text-white/50 uppercase tracking-wider bg-white/[0.02] text-[10px]">
+                <th className="py-3 px-4">TX ID</th>
+                <th className="py-3 px-4">Action</th>
+                <th className="py-3 px-4">Product Code / ID</th>
+                <th className="py-3 px-4">Quantity</th>
+                <th className="py-3 px-4">Route</th>
+                <th className="py-3 px-4">Reason / Notes</th>
+                <th className="py-3 px-4">Operator</th>
+                <th className="py-3 px-4">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200/40 dark:divide-slate-800/60">
+            <tbody className="divide-y divide-white/5">
               {filteredMovements.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center text-slate-400">
-                    <Boxes className="w-10 h-10 mx-auto mb-3 opacity-40" />
-                    <span className="text-base font-medium">No inventory transactions match the filter criteria.</span>
+                  <td colSpan={8} className="py-16 text-center text-white/40">
+                    <Boxes className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                    <span className="text-xs font-mono">No inventory transactions match the filter criteria.</span>
                   </td>
                 </tr>
               ) : (
                 filteredMovements.map((m) => (
-                  <tr key={m.movementId} className="hover:bg-white/40 dark:hover:bg-slate-800/40 transition-colors">
-                    <td className="py-4 px-4 font-mono text-xs text-slate-500 dark:text-slate-400">
+                  <tr key={m.movementId} className="hover:bg-white/[0.03] transition-colors">
+                    <td className="py-3.5 px-4 font-mono text-[11px] text-white/40">
                       {m.movementId.slice(0, 8)}
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3.5 px-4">
                       <StatusChip status={m.movementType} />
                     </td>
-                    <td className="py-4 px-4 font-bold text-slate-900 dark:text-white">
+                    <td className="py-3.5 px-4 font-bold text-white">
                       {m.productId}
                     </td>
-                    <td className="py-4 px-4 font-mono font-extrabold text-slate-900 dark:text-white text-base">
+                    <td className="py-3.5 px-4 font-extrabold text-[#22D3EE] text-sm">
                       {m.quantity} units
                     </td>
-                    <td className="py-4 px-4 font-mono text-slate-600 dark:text-slate-300 text-xs">
+                    <td className="py-3.5 px-4 text-white/70">
                       {m.sourceBin || 'Receiving Dock'} &rarr; {m.targetBin || 'Shipping Dock'}
                     </td>
-                    <td className="py-4 px-4 text-slate-600 dark:text-slate-300 max-w-xs truncate text-xs">
+                    <td className="py-3.5 px-4 text-white/60 max-w-xs truncate text-[11px]">
                       {m.reason || '-'}
                     </td>
-                    <td className="py-4 px-4 text-slate-800 dark:text-slate-200 font-semibold">
+                    <td className="py-3.5 px-4 text-white/90 font-bold">
                       {m.operatorId}
                     </td>
-                    <td className="py-4 px-4 text-slate-400 font-mono text-xs">
+                    <td className="py-3.5 px-4 text-white/40 text-[11px]">
                       {new Date(m.timestamp).toLocaleString()}
                     </td>
                   </tr>

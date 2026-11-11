@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/layout/Navbar';
@@ -100,44 +101,70 @@ const MainLayout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col pb-28">
+    <div className="min-h-screen bg-[#070912] text-white flex flex-col pb-28 relative overflow-x-hidden selection:bg-[#7C6CFF] selection:text-white">
+      {/* Background ambient lighting */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div
+          className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full bg-[#7C6CFF]/12 blur-[120px]"
+          style={{ animation: 'float 12s ease-in-out infinite' }}
+        />
+        <div
+          className="absolute top-1/3 -right-32 w-[30rem] h-[30rem] rounded-full bg-[#22D3EE]/10 blur-[130px]"
+          style={{ animation: 'float 16s ease-in-out infinite reverse' }}
+        />
+        <div
+          className="absolute bottom-1/4 left-1/4 w-[28rem] h-[28rem] rounded-full bg-[#7C6CFF]/8 blur-[140px]"
+          style={{ animation: 'float 20s ease-in-out infinite' }}
+        />
+      </div>
+
       <Navbar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
-        {currentTab === 'dashboard' && (
-          <DashboardPage
-            onOpenMovementModal={handleOpenMovementModal}
-            onNavigateToTab={setCurrentTab}
-          />
-        )}
+      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+          >
+            {currentTab === 'dashboard' && (
+              <DashboardPage
+                onOpenMovementModal={handleOpenMovementModal}
+                onNavigateToTab={setCurrentTab}
+              />
+            )}
 
-        {currentTab === 'inventory' && (
-          <InventoryPage onOpenMovementModal={handleOpenMovementModal} />
-        )}
+            {currentTab === 'inventory' && (
+              <InventoryPage onOpenMovementModal={handleOpenMovementModal} />
+            )}
 
-        {currentTab === 'warehouse' && (
-          <WarehouseMapPage onOpenMovementModal={handleOpenMovementModal} />
-        )}
+            {currentTab === 'warehouse' && (
+              <WarehouseMapPage onOpenMovementModal={handleOpenMovementModal} />
+            )}
 
-        {currentTab === 'movements' && (
-          <MovementsPage />
-        )}
+            {currentTab === 'movements' && (
+              <MovementsPage />
+            )}
 
-        {currentTab === 'orders' && (
-          <OrdersPage products={allProducts} onRefreshCatalog={refreshCatalog} />
-        )}
+            {currentTab === 'orders' && (
+              <OrdersPage products={allProducts} onRefreshCatalog={refreshCatalog} />
+            )}
 
-        {currentTab === 'cyclecount' && (
-          <CycleCountPage products={allProducts} onRefreshCatalog={refreshCatalog} />
-        )}
+            {currentTab === 'cyclecount' && (
+              <CycleCountPage products={allProducts} onRefreshCatalog={refreshCatalog} />
+            )}
 
-        {currentTab === 'reports' && (
-          <ReportsPage products={allProducts} />
-        )}
+            {currentTab === 'reports' && (
+              <ReportsPage products={allProducts} />
+            )}
 
-        {currentTab === 'conflicts' && (
-          <ConflictReviewPanel />
-        )}
+            {currentTab === 'conflicts' && (
+              <ConflictReviewPanel />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <Dock

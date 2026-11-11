@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Product, MovementType } from '../../types';
 import { api } from '../../services/api';
 import { OfflineSyncManager } from '../../storage/sync';
@@ -62,13 +63,12 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
           timestamp: new Date().toISOString(),
         });
       } else {
-        // Send directly via API with fallback to IndexedDB Outbox
         try {
           if (movementType === 'IN') {
             await api.stockIn({
               productId: selectedProductId,
               quantity,
-              unitPrice,
+              unitCost: unitPrice,
               targetBin,
               reason,
             });
@@ -112,98 +112,104 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg glass-panel p-6 sm:p-8 shadow-2xl ring-1 ring-white/20 dark:ring-white/10 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+        className="w-full max-w-lg glass-panel p-6 sm:p-7 shadow-2xl relative"
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-800/40 transition-all"
+          className="absolute top-5 right-5 p-2 rounded-xl text-white/40 hover:text-white hover:bg-white/10 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
-        <div className="mb-6">
-          <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+        <div className="mb-5">
+          <h3 className="font-heading font-extrabold text-2xl text-white tracking-tight">
             Record Stock Movement
           </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Real-time inventory update with verified audit logging and automatic offline synchronization.
+          <p className="text-xs text-white/50 font-mono mt-0.5">
+            Append-only WAL transaction with thread safety and offline outbox sync.
           </p>
         </div>
 
         {/* Movement Type Tabs */}
-        <div className="grid grid-cols-3 gap-2.5 mb-6 p-1.5 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50">
+        <div className="grid grid-cols-3 gap-2 mb-5 p-1 rounded-2xl bg-white/[0.04] border border-white/10">
           <button
             type="button"
             onClick={() => setMovementType('IN')}
-            className={`py-2.5 px-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+            className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               movementType === 'IN'
-                ? 'bg-emerald-500 text-white shadow-md'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'bg-[#34D399] text-[#070912] shadow-md'
+                : 'text-white/60 hover:text-white'
             }`}
           >
-            <ArrowDownRight className="w-4 h-4" />
+            <ArrowDownRight className="w-3.5 h-3.5" />
             <span>Stock In</span>
           </button>
           <button
             type="button"
             onClick={() => setMovementType('OUT')}
-            className={`py-2.5 px-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+            className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               movementType === 'OUT'
-                ? 'bg-rose-500 text-white shadow-md'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'bg-[#F87171] text-[#070912] shadow-md'
+                : 'text-white/60 hover:text-white'
             }`}
           >
-            <ArrowUpRight className="w-4 h-4" />
+            <ArrowUpRight className="w-3.5 h-3.5" />
             <span>Stock Out</span>
           </button>
           <button
             type="button"
             onClick={() => setMovementType('TRANSFER')}
-            className={`py-2.5 px-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+            className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               movementType === 'TRANSFER'
-                ? 'bg-indigo-500 text-white shadow-md'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'bg-[#7C6CFF] text-white shadow-md'
+                : 'text-white/60 hover:text-white'
             }`}
           >
-            <ArrowLeftRight className="w-4 h-4" />
-            <span>Transfer Shelf</span>
+            <ArrowLeftRight className="w-3.5 h-3.5" />
+            <span>Transfer</span>
           </button>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-4 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-sm font-semibold flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 shrink-0" />
+          <div className="mb-4 p-3 rounded-2xl bg-[#F87171]/15 border border-[#F87171]/30 text-[#F87171] text-xs font-mono font-semibold flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs font-mono">
           {/* Product Select */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Select Product Item
+            <label className="block uppercase text-white/60 mb-1">
+              Select Product SKU
             </label>
             <select
               value={selectedProductId}
               onChange={(e) => setSelectedProductId(e.target.value)}
-              className="glass-input text-sm"
+              className="glass-input text-xs"
             >
               {allProducts.map((p) => (
-                <option key={p.id} value={p.id} className="bg-slate-900 text-white">
-                  [Code: {p.sku}] {p.name} (Available: {p.quantity} units)
+                <option key={p.id} value={p.id} className="bg-[#070912] text-white">
+                  [{p.sku}] {p.name} (Stock: {p.quantity} units)
                 </option>
               ))}
             </select>
           </div>
 
           {/* Quantity & Location */}
-          <div className="grid grid-cols-2 gap-3.5">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+              <label className="block uppercase text-white/60 mb-1">
                 Quantity Units
               </label>
               <input
@@ -212,13 +218,13 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                 required
                 value={quantity}
                 onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-                className="glass-input font-mono text-sm font-bold"
+                className="glass-input font-bold text-xs"
               />
             </div>
 
             {movementType === 'IN' && (
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block uppercase text-white/60 mb-1">
                   Destination Shelf
                 </label>
                 <input
@@ -226,15 +232,15 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={targetBin}
                   onChange={(e) => setTargetBin(e.target.value)}
-                  className="glass-input font-mono text-sm"
-                  placeholder="e.g. BIN-A1-01"
+                  className="glass-input text-xs"
+                  placeholder="BIN-A1-01"
                 />
               </div>
             )}
 
             {movementType === 'OUT' && (
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block uppercase text-white/60 mb-1">
                   Origin Shelf
                 </label>
                 <input
@@ -242,17 +248,17 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={sourceBin}
                   onChange={(e) => setSourceBin(e.target.value)}
-                  className="glass-input font-mono text-sm"
-                  placeholder="e.g. BIN-A1-01"
+                  className="glass-input text-xs"
+                  placeholder="BIN-A1-01"
                 />
               </div>
             )}
           </div>
 
           {movementType === 'TRANSFER' && (
-            <div className="grid grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block uppercase text-white/60 mb-1">
                   Origin Shelf
                 </label>
                 <input
@@ -260,12 +266,12 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={sourceBin}
                   onChange={(e) => setSourceBin(e.target.value)}
-                  className="glass-input font-mono text-sm"
-                  placeholder="e.g. BIN-A1-01"
+                  className="glass-input text-xs"
+                  placeholder="BIN-A1-01"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block uppercase text-white/60 mb-1">
                   Destination Shelf
                 </label>
                 <input
@@ -273,8 +279,8 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={targetBin}
                   onChange={(e) => setTargetBin(e.target.value)}
-                  className="glass-input font-mono text-sm"
-                  placeholder="e.g. BIN-A2-04"
+                  className="glass-input text-xs"
+                  placeholder="BIN-A2-04"
                 />
               </div>
             </div>
@@ -282,7 +288,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
 
           {movementType === 'IN' && (
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+              <label className="block uppercase text-white/60 mb-1">
                 Unit Purchase Price ($)
               </label>
               <input
@@ -291,62 +297,62 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                 min="0"
                 value={unitPrice}
                 onChange={(e) => setUnitPrice(parseFloat(e.target.value) || 0)}
-                className="glass-input font-mono text-sm"
+                className="glass-input text-xs"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Reason / Reference Notes
+            <label className="block uppercase text-white/60 mb-1">
+              Reason / Reference
             </label>
             <input
               type="text"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="glass-input text-sm"
-              placeholder="e.g., Supplier purchase delivery, Customer dispatch, Physical count audit"
+              className="glass-input text-xs"
+              placeholder="e.g. Supplier delivery, floor dispatch, audit"
             />
           </div>
 
           {currentSelectedProduct && (
-            <div className="p-3.5 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 text-sm text-slate-600 dark:text-slate-300 flex justify-between items-center">
-              <span>Current On-Hand: <strong className="text-slate-900 dark:text-white font-mono">{currentSelectedProduct.quantity} units</strong></span>
-              <span>Projected: <strong className="text-indigo-600 dark:text-indigo-400 font-mono">
+            <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 text-white/70 flex justify-between items-center text-xs">
+              <span>On-Hand: <strong className="text-white font-mono">{currentSelectedProduct.quantity}u</strong></span>
+              <span>Projected: <strong className="text-[#22D3EE] font-mono">
                 {movementType === 'IN'
                   ? currentSelectedProduct.quantity + quantity
                   : movementType === 'OUT'
                   ? Math.max(0, currentSelectedProduct.quantity - quantity)
-                  : currentSelectedProduct.quantity} units
+                  : currentSelectedProduct.quantity}u
               </strong></span>
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-3">
+          <div className="flex items-center justify-end gap-2.5 pt-3">
             <button
               type="button"
               onClick={onClose}
-              className="glass-button-secondary text-sm"
+              className="glass-button-secondary text-xs py-2 px-3.5"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="glass-button-primary text-sm"
+              className="glass-button-primary text-xs py-2 px-3.5"
             >
               {loading ? (
-                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="inline-block w-4 h-4 border-2 border-[#070912] border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
-                  <Check className="w-4 h-4" />
-                  <span>Execute Movement</span>
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Execute Action</span>
                 </>
               )}
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

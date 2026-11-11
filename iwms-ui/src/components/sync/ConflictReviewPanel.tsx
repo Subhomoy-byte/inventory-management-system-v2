@@ -3,6 +3,7 @@ import type { SyncQueueItem, SyncConflict } from '../../types';
 import { OfflineSyncManager } from '../../storage/sync';
 import { GlassCard } from '../common/GlassCard';
 import { StatusChip } from '../common/StatusChip';
+import { VectorGraphic } from '../common/VectorGraphic';
 import {
   RefreshCw,
   AlertOctagon,
@@ -61,37 +62,42 @@ export const ConflictReviewPanel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
-            <RefreshCw className="w-7 h-7 text-indigo-500" />
-            <span>Offline Synchronization Queue & Reconciliation</span>
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Local browser database queue, duplicate-safe transaction sync, and stock discrepancy reconciliation.
+          <div className="flex items-center gap-2">
+            <h1 className="font-heading text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
+              <RefreshCw className="w-7 h-7 text-[#7C6CFF]" />
+              <span>Offline Outbox & LAN Auto-Sync Queue</span>
+            </h1>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#22D3EE]/20 text-[#22D3EE] border border-[#22D3EE]/40 font-bold">
+              IDB REPLAY
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-white/60 font-mono mt-0.5">
+            Client-side IndexedDB mutations queue, duplicate-safe transaction synchronization, and variance resolution.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <div
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-semibold border ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono font-bold border ${
               isOnline
-                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
-                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 animate-pulse'
+                ? 'bg-[#34D399]/15 text-[#34D399] border-[#34D399]/30'
+                : 'bg-[#FBBF24]/15 text-[#FBBF24] border-[#FBBF24]/30 animate-pulse'
             }`}
           >
-            {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
+            {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
             <span>{isOnline ? 'Network Online' : 'Network Offline'}</span>
           </div>
 
           <button
             onClick={handleForceSync}
             disabled={syncing || !isOnline || pendingItems.length === 0}
-            className="glass-button-primary text-sm py-2.5 px-4"
+            className="glass-button-primary text-xs sm:text-sm py-2 px-3.5 font-mono"
           >
-            <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
             <span>{syncing ? 'Syncing...' : 'Force Sync Now'}</span>
           </button>
         </div>
@@ -99,34 +105,34 @@ export const ConflictReviewPanel: React.FC = () => {
 
       {/* Conflicts Alert Card */}
       {conflicts.length > 0 && (
-        <GlassCard className="border-rose-500/30 bg-rose-500/5 p-6">
-          <div className="flex items-center gap-2.5 mb-3 text-rose-600 dark:text-rose-400 font-bold text-base">
+        <GlassCard className="border-[#F87171]/40 bg-[#F87171]/10 p-5 sm:p-6">
+          <div className="flex items-center gap-2.5 mb-2 text-[#F87171] font-heading font-extrabold text-base">
             <AlertOctagon className="w-5 h-5" />
             <span>Unresolved Inventory Deficit Conflicts ({conflicts.length})</span>
           </div>
 
-          <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">
-            The following offline transactions resulted in stock deficits when synced against the master ledger. Review and dismiss after physical count adjustment:
+          <p className="text-xs text-white/70 font-mono mb-4">
+            The following offline transactions resulted in stock deficits when synced against the master ledger:
           </p>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {conflicts.map((c) => (
               <div
                 key={c.syncId}
-                className="p-4 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-rose-500/20 flex items-center justify-between text-sm"
+                className="p-3.5 rounded-2xl bg-white/[0.04] border border-[#F87171]/30 flex items-center justify-between text-xs font-mono"
               >
                 <div>
-                  <div className="font-semibold text-slate-900 dark:text-white">
+                  <div className="font-bold text-white">
                     {c.message}
                   </div>
-                  <div className="text-xs font-mono text-slate-400 mt-1">
-                    Product: {c.productId} &bull; Deficit: {c.deficitQuantity ?? 'N/A'} units &bull; Sync Reference: {c.syncId}
+                  <div className="text-[11px] text-white/50 mt-1">
+                    Product: <span className="text-[#22D3EE]">{c.productId}</span> &bull; Deficit: {c.deficitQuantity ?? 'N/A'} units &bull; Ref: {c.syncId}
                   </div>
                 </div>
 
                 <button
                   onClick={() => handleDismissConflict(c.syncId)}
-                  className="px-3.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-sm font-semibold transition-all"
+                  className="px-3 py-1.5 rounded-xl bg-[#F87171]/20 hover:bg-[#F87171]/30 text-[#F87171] text-xs font-bold transition-all"
                 >
                   Dismiss
                 </button>
@@ -137,27 +143,31 @@ export const ConflictReviewPanel: React.FC = () => {
       )}
 
       {/* Outbox Items List */}
-      <GlassCard className="p-6">
+      <GlassCard className="p-5 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <Clock className="w-5 h-5 text-indigo-500" />
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <Clock className="w-4 h-4 text-[#7C6CFF]" />
+            <h3 className="font-heading text-base font-bold text-white">
               Queued Offline Transactions ({pendingItems.length})
             </h3>
           </div>
-          <span className="text-sm font-medium text-slate-400">Stored in Local Browser Database</span>
+          <span className="text-xs font-mono text-white/40">Stored in Local Browser Database (IndexedDB)</span>
         </div>
 
         {pendingItems.length === 0 ? (
-          <div className="py-12 text-center text-slate-400 text-sm space-y-2">
-            <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-500" />
-            <div>Offline outbox is clean. All movements are synchronized with server!</div>
+          <div className="py-12 text-center text-white/50 space-y-4">
+            <div className="flex justify-center">
+              <VectorGraphic size={88} variant="radar" colorScheme="cyber" />
+            </div>
+            <div className="font-mono text-xs text-[#34D399] font-bold">
+              Offline outbox is clean. All movements are synchronized with server!
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-left text-xs font-mono">
               <thead>
-                <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-xs">
+                <tr className="border-b border-white/10 text-white/50 uppercase tracking-wider bg-white/[0.02] text-[10px]">
                   <th className="py-3 px-3">Sync ID</th>
                   <th className="py-3 px-3">Operation</th>
                   <th className="py-3 px-3">Product</th>
@@ -167,28 +177,28 @@ export const ConflictReviewPanel: React.FC = () => {
                   <th className="py-3 px-3">Queued At</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200/40 dark:divide-slate-800/60">
+              <tbody className="divide-y divide-white/5">
                 {pendingItems.map((item) => (
-                  <tr key={item.syncId} className="hover:bg-white/40 dark:hover:bg-slate-800/40 font-medium">
-                    <td className="py-3 px-3 font-mono text-xs text-indigo-500">
+                  <tr key={item.syncId} className="hover:bg-white/[0.03] transition-colors">
+                    <td className="py-3 px-3 font-mono text-[11px] text-[#7C6CFF]">
                       {item.syncId.slice(0, 16)}...
                     </td>
                     <td className="py-3 px-3">
                       <StatusChip status={item.movementType} />
                     </td>
-                    <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
+                    <td className="py-3 px-3 font-bold text-white">
                       {item.productId}
                     </td>
-                    <td className="py-3 px-3 font-mono font-bold text-base">
+                    <td className="py-3 px-3 font-extrabold text-[#22D3EE]">
                       {item.quantity}
                     </td>
-                    <td className="py-3 px-3 font-mono text-slate-400 text-xs">
+                    <td className="py-3 px-3 text-white/60">
                       {item.sourceBin || '-'} &rarr; {item.targetBin || '-'}
                     </td>
-                    <td className="py-3 px-3 text-slate-600 dark:text-slate-300">
+                    <td className="py-3 px-3 text-white/80">
                       {item.operatorId}
                     </td>
-                    <td className="py-3 px-3 text-slate-400 font-mono text-xs">
+                    <td className="py-3 px-3 text-white/40 text-[11px]">
                       {new Date(item.timestamp).toLocaleTimeString()}
                     </td>
                   </tr>

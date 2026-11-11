@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { OfflineSyncManager } from '../../storage/sync';
 import { StatusChip } from '../common/StatusChip';
+import { VectorGraphic } from '../common/VectorGraphic';
 import {
   Sun,
   Moon,
@@ -12,6 +13,7 @@ import {
   Boxes,
   Search,
   RefreshCw,
+  Radio,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -24,7 +26,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
-  const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  const [time, setTime] = useState(
+    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  );
 
   useEffect(() => {
     const updatePending = async () => {
@@ -66,7 +70,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
     window.addEventListener('iwms:sync-complete', handleOutboxUpdate);
 
     const timer = setInterval(() => {
-      setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setTime(
+        new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      );
     }, 1000);
 
     return () => {
@@ -81,24 +87,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 w-full px-6 py-3.5 backdrop-blur-xl bg-white/60 dark:bg-slate-950/60 border-b border-white/20 dark:border-white/10 transition-colors">
+    <header className="sticky top-0 z-40 w-full px-4 sm:px-6 py-3.5 backdrop-blur-xl bg-[#070912]/80 border-b border-white/10 transition-colors">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Brand & System Title */}
+        {/* Brand & System Status */}
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 ring-2 ring-white/20 dark:ring-white/10">
-            <Boxes className="w-6 h-6" />
+          <div className="icon-slot w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#7C6CFF] to-[#22D3EE] flex items-center justify-center text-[#070912] shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20">
+            <Boxes className="w-5 h-5 stroke-[2.5]" />
           </div>
+
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+              <span className="font-heading font-extrabold text-lg tracking-tight text-white">
                 IWMS Pro
               </span>
-              <span className="text-xs px-2 py-0.5 rounded-full font-mono font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50">
-                v1.0
-              </span>
+
+              {/* Pulsing live status badge */}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-[10px] font-mono font-bold text-[#22D3EE]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" />
+                <span>Offline-first &bull; Live</span>
+              </div>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 hidden sm:block font-medium">
-              Inventory & Warehouse Management System
+            <p className="text-[11px] text-white/50 hidden sm:block font-mono">
+              Industrial Warehouse Terminal
             </p>
           </div>
         </div>
@@ -106,27 +116,32 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
         {/* Global Search Bar Trigger */}
         <button
           onClick={onOpenCommandPalette}
-          className="hidden md:flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-200/50 dark:bg-slate-800/50 hover:bg-slate-200/80 dark:hover:bg-slate-800/80 border border-slate-300/40 dark:border-slate-700/40 text-slate-600 dark:text-slate-300 text-sm transition-all shadow-inner font-medium"
+          className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white/60 hover:text-white text-xs transition-all shadow-inner font-mono"
         >
-          <Search className="w-4 h-4 text-indigo-500" />
-          <span>Quick search items, screens, or commands...</span>
-          <kbd className="px-2 py-0.5 rounded-lg bg-white/80 dark:bg-slate-900/80 font-mono text-xs shadow-sm border border-slate-300/50 dark:border-slate-700/50 font-bold">
+          <Search className="w-3.5 h-3.5 text-[#22D3EE]" />
+          <span>Quick command search or jump to screen...</span>
+          <kbd className="px-2 py-0.5 rounded-lg bg-white/[0.08] text-white font-mono text-[10px] shadow-sm border border-white/10 font-bold">
             Ctrl + K
           </kbd>
         </button>
 
-        {/* Right Actions: Connection, Clock, Theme, User Role & Logout */}
+        {/* Right Actions: Connection, Clock, Role & Logout */}
         <div className="flex items-center gap-3">
+          {/* Micro Vector Graphic status indicator */}
+          <div className="hidden lg:block opacity-75">
+            <VectorGraphic size={28} variant="badge" colorScheme="cyber" />
+          </div>
+
           {/* LAN Status Pill */}
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border backdrop-blur-md transition-all ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono font-bold border backdrop-blur-md transition-all ${
               !isOnline
-                ? 'bg-amber-500/15 text-amber-500 dark:text-amber-400 border-amber-500/40 animate-pulse'
+                ? 'bg-[#FBBF24]/15 text-[#FBBF24] border-[#FBBF24]/40 animate-pulse'
                 : isSyncing
-                ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/40'
+                ? 'bg-[#22D3EE]/15 text-[#22D3EE] border-[#22D3EE]/40'
                 : pendingCount > 0
-                ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/40'
-                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+                ? 'bg-[#7C6CFF]/15 text-[#7C6CFF] border-[#7C6CFF]/40'
+                : 'bg-[#34D399]/15 text-[#34D399] border-[#34D399]/30'
             }`}
             title={
               !isOnline
@@ -134,14 +149,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
                 : isSyncing
                 ? `Synchronizing ${pendingCount} offline action${pendingCount === 1 ? '' : 's'} with server...`
                 : pendingCount > 0
-                ? `${pendingCount} action${pendingCount === 1 ? '' : 's'} queued in outbox`
+                ? `${pendingCount} action${pendingCount === 1 ? '' : 's'} queued in local outbox`
                 : 'Network Online (Connected)'
             }
           >
             {!isOnline ? (
               <>
                 <WifiOff className="w-3.5 h-3.5" />
-                <span>Offline Mode{pendingCount > 0 ? ` (${pendingCount})` : ''}</span>
+                <span>Offline{pendingCount > 0 ? ` (${pendingCount})` : ''}</span>
               </>
             ) : isSyncing ? (
               <>
@@ -150,46 +165,38 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
               </>
             ) : pendingCount > 0 ? (
               <>
-                <Wifi className="w-3.5 h-3.5 text-indigo-500" />
+                <Wifi className="w-3.5 h-3.5 text-[#7C6CFF]" />
                 <span>Online ({pendingCount} queued)</span>
               </>
             ) : (
               <>
-                <Wifi className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Network Online</span>
+                <Wifi className="w-3.5 h-3.5 text-[#34D399]" />
+                <span className="hidden sm:inline">LAN Connected</span>
               </>
             )}
           </div>
 
-          {/* Clock */}
-          <span className="text-sm font-mono font-semibold text-slate-500 dark:text-slate-400 hidden lg:inline">
+          {/* Telemetry Clock */}
+          <span className="text-xs font-mono text-white/50 hidden xl:inline">
             {time}
           </span>
 
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white/80 dark:hover:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 text-slate-600 dark:text-slate-300 transition-all shadow-sm active:scale-95"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-indigo-600" />}
-          </button>
-
-          {/* Current User & Role */}
+          {/* User & Role Badge */}
           {user && (
-            <div className="flex items-center gap-3 pl-3 border-l border-slate-200/60 dark:border-slate-800">
+            <div className="flex items-center gap-2.5 pl-2 border-l border-white/10">
               <div className="hidden sm:flex flex-col items-end">
-                <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                <span className="text-xs font-bold text-white font-mono">
                   {user.username}
                 </span>
                 <StatusChip status={user.role} />
               </div>
+
               <button
                 onClick={logout}
-                className="p-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 transition-all shadow-sm active:scale-95"
-                title="Log Out"
+                className="p-2.5 rounded-2xl bg-[#F87171]/10 hover:bg-[#F87171]/20 text-[#F87171] border border-[#F87171]/20 transition-all shadow-sm active:scale-95"
+                title="Log Out of Warehouse Terminal"
               >
-                <LogOut className="w-5 h-5" />
+                <LogOut className="w-4 h-4" />
               </button>
             </div>
           )}

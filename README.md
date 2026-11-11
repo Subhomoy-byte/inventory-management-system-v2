@@ -114,6 +114,13 @@ The frontend introduces an 11-section cinematic public landing experience at `/`
    - Clicking **"Try the live demo"** or appending `#login` smoothly transitions to the authentication screen with pre-filled demo role buttons.
    - The login page includes a **"← Back to overview"** breadcrumb link to return to the public story at any time.
 
+4. **Futuristic Motion-Graphic UI & 3D Card Stacking Engine:**
+   - **Jitter 3D Card Stack (`MotionStack.tsx`):** Interactive layered telemetry cards with spring slide-and-elevate physics, depth perspective, and automatic circular cycling.
+   - **Dynamic Vector Graphic (`VectorGraphic.tsx`):** Pure hardware-accelerated SVG motion emblem featuring an expanding clover backdrop, 20-point rotating starburst, and central counter-rotating 4-pointed cyber-spark diamond.
+   - **Glassmorphic Auth Terminal (`LoginPage.tsx`):** Redesigned split-screen stage with animated role switcher tabs (`Admin`, `Manager`, `Warehouse Floor Employee`), remember session toggle, 1-click preset logins, and RFID/Biometric alternative sign-in options.
+   - **Real-Time HUD Navigation & Fluid Dock (`Navbar.tsx` & `Dock.tsx`):** Luminous live status badge (`Offline-first • Live`), radar connectivity indicator, and spring-animated sliding dock capsule.
+
+
 ---
 
 ## 3. Visual System Architecture
@@ -430,9 +437,11 @@ This codebase is specifically architected to serve as a textbook-quality showcas
 | **Role-Aware DTO Projections** | [`ProductDto`](iwms-web/src/main/java/com/iwms/api/dto/ProductDto.java) | Dynamic field-level projection stripping sensitive `costPrice` and margin data for `EMPLOYEE` role clients |
 | **Custom Domain Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)) |
 | **Cinematic Public Showcase** | [`LandingPage.tsx`](iwms-ui/src/pages/LandingPage.tsx) | 11-section narrative landing page, responsive video engine with `IntersectionObserver`, `#login` hash routing |
-| **Glassmorphism UI Shell** | [`App.tsx`](iwms-ui/src/App.tsx)<br>[`index.css`](iwms-ui/src/index.css) | Frosted glass containers (`backdrop-blur-xl`), animated gradient mesh, responsive layout, dark/light theme |
-| **Floating Glass Dock** | [`Dock.tsx`](iwms-ui/src/components/layout/Dock.tsx) | macOS-inspired floating navigation dock with tooltips, active tab scaling, and pending sync count badges |
-| **Client-Side RBAC & Quick Login** | [`LoginPage.tsx`](iwms-ui/src/pages/LoginPage.tsx)<br>[`AuthContext.tsx`](iwms-ui/src/context/AuthContext.tsx) | Responsive login screen with 1-click Admin, Manager, and Employee credential fillers, secure token storage |
+| **3D Motion Telemetry Stack** | [`MotionStack.tsx`](iwms-ui/src/components/common/MotionStack.tsx) | Jitter-inspired 3D card stack with spring physics, circular z-index elevation, and real-time offline telemetry cards |
+| **Dynamic Vector Motion Graphic** | [`VectorGraphic.tsx`](iwms-ui/src/components/common/VectorGraphic.tsx) | Hardware-accelerated SVG retro-futuristic emblem with clover backdrop, 20-point rotating starburst, and central cyber diamond |
+| **Futuristic Glassmorphic Shell** | [`App.tsx`](iwms-ui/src/App.tsx)<br>[`index.css`](iwms-ui/src/index.css) | Dark `#070912` cyber theme, frosted glass panels (`blur(16px)`), subtle violet/cyan ambient glow, and cubic-bezier transitions |
+| **Floating Glass Dock** | [`Dock.tsx`](iwms-ui/src/components/layout/Dock.tsx) | macOS-inspired floating navigation dock with sliding spring pill (`layoutId`), active tab scaling, and pending sync badges |
+| **Glassmorphic Auth Terminal** | [`LoginPage.tsx`](iwms-ui/src/pages/LoginPage.tsx)<br>[`AuthContext.tsx`](iwms-ui/src/context/AuthContext.tsx) | Futuristic split-screen auth terminal with role switcher tabs (`Admin`, `Manager`, `Staff`), 1-click credential presets, and RFID/Biometric SSO |
 | **PWA Offline Storage & Sync Engine** | [`db.ts`](iwms-ui/src/storage/db.ts)<br>[`sync.ts`](iwms-ui/src/storage/sync.ts) | IndexedDB (`idb`) outbox queue, optimistic offline stock mutations, automated LAN reconnect flush, deficit conflict triage |
 | **2D Warehouse Topology Map** | [`WarehouseMapPage.tsx`](iwms-ui/src/pages/WarehouseMapPage.tsx) | Interactive 2D floor grid visualizing Zones, Bins, utilization fill percentages, and item inspection drawer |
 | **Real-time Inventory Management** | [`DashboardPage.tsx`](iwms-ui/src/pages/DashboardPage.tsx)<br>[`InventoryPage.tsx`](iwms-ui/src/pages/InventoryPage.tsx) | Recharts category analytics, low stock radar, glass data table with search, category/status filters, and stock In/Out/Transfer modal |

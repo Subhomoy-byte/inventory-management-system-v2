@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Warehouse, Bin, Product } from '../types';
 import { api } from '../services/api';
 import { OfflineSyncManager } from '../storage/sync';
 import { GlassCard } from '../components/common/GlassCard';
 import { StatusChip } from '../components/common/StatusChip';
+import { VectorGraphic } from '../components/common/VectorGraphic';
 import {
   MapPin,
   Box,
   X,
   ArrowRight,
+  Layers,
+  Radio,
 } from 'lucide-react';
 
 interface WarehouseMapPageProps {
@@ -58,36 +62,40 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
 
   const currentWarehouse = warehouses.find((w) => w.id === selectedWarehouseId) || warehouses[0];
 
-  // Helper to find products stored in a bin
   const getProductsInBin = (binCode: string) => {
     return products.filter((p) => p.binLocation === binCode);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
-            <MapPin className="w-8 h-8 text-indigo-500" />
-            <span>2D Warehouse Floor Map</span>
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Visual facility layout (Warehouse &rarr; Zones &rarr; Storage Shelves) with real-time capacity and occupancy tracking.
+          <div className="flex items-center gap-2">
+            <h1 className="font-heading text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
+              <MapPin className="w-7 h-7 text-[#7C6CFF]" />
+              <span>2D Warehouse Floor Topology</span>
+            </h1>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#7C6CFF]/20 text-[#7C6CFF] border border-[#7C6CFF]/40 font-bold">
+              6x4 MATRIX
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-white/60 font-mono mt-0.5">
+            Coordinate layout (Facility &rarr; Zones A/B/C &rarr; Storage Shelves) with real-time occupancy.
           </p>
         </div>
 
-        {/* Warehouse Selector */}
+        {/* Facility Selector */}
         {warehouses.length > 1 && (
           <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-400 font-semibold">Facility:</span>
+            <span className="text-xs text-white/50 font-mono">Facility:</span>
             <select
               value={selectedWarehouseId}
               onChange={(e) => setSelectedWarehouseId(e.target.value)}
-              className="glass-input text-sm py-2"
+              className="glass-input text-xs sm:text-sm py-2 font-mono"
             >
               {warehouses.map((w) => (
-                <option key={w.id} value={w.id} className="bg-slate-900 text-white">
+                <option key={w.id} value={w.id} className="bg-[#070912] text-white">
                   {w.name} ({w.location})
                 </option>
               ))}
@@ -98,32 +106,33 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
 
       {/* Main Floor Grid */}
       {currentWarehouse ? (
-        <div className="space-y-8">
+        <div className="space-y-6">
           {currentWarehouse.zones.map((zone) => (
-            <GlassCard key={zone.id} className="p-6">
+            <GlassCard key={zone.id} className="p-5 sm:p-6">
               {/* Zone Header */}
-              <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-200/50 dark:border-slate-800">
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-extrabold text-base">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#7C6CFF]/30 to-[#22D3EE]/30 border border-white/15 text-white flex items-center justify-center font-heading font-extrabold text-base">
                     {zone.name.charAt(0)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    <h3 className="font-heading text-lg font-bold text-white">
                       {zone.name}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                      Category Preference: <span className="font-semibold text-indigo-600 dark:text-indigo-400">{zone.categoryPreference}</span>
+                    <p className="text-xs text-white/50 font-mono mt-0.5">
+                      Preference: <span className="font-bold text-[#22D3EE]">{zone.categoryPreference}</span>
                     </p>
                   </div>
                 </div>
 
-                <span className="text-sm font-mono font-bold text-slate-400">
-                  {zone.bins.length} Storage Shelves
-                </span>
+                <div className="flex items-center gap-3 text-xs font-mono text-white/50">
+                  <span className="w-2 h-2 rounded-full bg-[#34D399] animate-pulse" />
+                  <span>{zone.bins.length} Shelves Online</span>
+                </div>
               </div>
 
               {/* Bins Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {zone.bins.map((bin) => {
                   const binProducts = getProductsInBin(bin.code);
                   const currentUnits = binProducts.reduce((acc, p) => acc + p.quantity, 0);
@@ -132,14 +141,18 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
                     Math.round((currentUnits / (bin.capacityQuantity || 100)) * 100)
                   );
 
-                  let fillBg = 'bg-emerald-500';
-                  let ringColor = 'hover:ring-emerald-500/50';
+                  // Colors: Violet (normal), Amber (low), Red (critical)
+                  let fillBg = 'bg-[#7C6CFF]';
+                  let ringColor = 'hover:ring-[#7C6CFF]/50';
+                  let badgeColor = 'text-[#7C6CFF]';
                   if (fillPercent > 85) {
-                    fillBg = 'bg-rose-500';
-                    ringColor = 'hover:ring-rose-500/50';
-                  } else if (fillPercent > 60) {
-                    fillBg = 'bg-amber-500';
-                    ringColor = 'hover:ring-amber-500/50';
+                    fillBg = 'bg-[#F87171]';
+                    ringColor = 'hover:ring-[#F87171]/50';
+                    badgeColor = 'text-[#F87171]';
+                  } else if (fillPercent > 50) {
+                    fillBg = 'bg-[#FBBF24]';
+                    ringColor = 'hover:ring-[#FBBF24]/50';
+                    badgeColor = 'text-[#FBBF24]';
                   }
 
                   const isSelected = selectedBin?.id === bin.id;
@@ -148,32 +161,32 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
                     <button
                       key={bin.id}
                       onClick={() => setSelectedBin(bin)}
-                      className={`p-3.5 rounded-2xl border text-left transition-all hover:scale-[1.02] hover:shadow-lg hover:ring-2 ${ringColor} ${
+                      className={`p-3.5 rounded-2xl border text-left transition-all duration-200 hover:scale-[1.03] hover:shadow-xl hover:ring-2 ${ringColor} ${
                         isSelected
-                          ? 'bg-indigo-500/15 border-indigo-500 ring-2 ring-indigo-500/50'
-                          : 'bg-white/40 dark:bg-slate-800/40 border-slate-200/60 dark:border-slate-700/60'
+                          ? 'bg-[#7C6CFF]/20 border-[#7C6CFF] ring-2 ring-[#7C6CFF]/50 shadow-lg shadow-[#7C6CFF]/20'
+                          : 'bg-white/[0.03] border-white/10 hover:bg-white/[0.06]'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono font-bold text-sm text-slate-900 dark:text-white">
+                        <span className="font-mono font-bold text-xs text-white">
                           {bin.code}
                         </span>
-                        <span className="text-xs font-mono font-semibold text-slate-400">
+                        <span className={`text-[10px] font-mono font-bold ${badgeColor}`}>
                           {fillPercent}%
                         </span>
                       </div>
 
                       {/* Fill Progress Bar */}
-                      <div className="w-full h-2 rounded-full bg-slate-200/70 dark:bg-slate-700/70 overflow-hidden mb-2">
+                      <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden mb-2">
                         <div
                           className={`h-full rounded-full transition-all duration-300 ${fillBg}`}
                           style={{ width: `${fillPercent}%` }}
                         />
                       </div>
 
-                      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-medium">
-                        <span className="font-mono">{currentUnits} / {bin.capacityQuantity} u</span>
-                        <span className="font-semibold text-indigo-500">{binProducts.length} items</span>
+                      <div className="flex items-center justify-between text-[10px] text-white/50 font-mono">
+                        <span>{currentUnits}/{bin.capacityQuantity}u</span>
+                        <span className="font-bold text-[#22D3EE]">{binProducts.length} items</span>
                       </div>
                     </button>
                   );
@@ -183,95 +196,103 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
           ))}
         </div>
       ) : (
-        <GlassCard className="py-12 text-center text-slate-400">
-          Loading warehouse zones...
+        <GlassCard className="py-12 text-center text-white/40 font-mono text-xs">
+          Loading floor coordinates...
         </GlassCard>
       )}
 
       {/* Bin Detail Inspection Modal / Drawer */}
-      {selectedBin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg glass-panel p-6 shadow-2xl ring-1 ring-white/20 relative">
-            <button
-              onClick={() => setSelectedBin(null)}
-              className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-800/40 transition-all"
+      <AnimatePresence>
+        {selectedBin && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+              className="w-full max-w-lg glass-panel p-6 sm:p-7 shadow-2xl relative"
             >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-                <Box className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white font-mono">
-                  Storage Shelf Inspection: {selectedBin.code}
-                </h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                  Maximum Capacity: {selectedBin.capacityQuantity} units &bull; Weight Limit: {selectedBin.maxWeightKg} kg
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-5">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-                Products Stored On This Shelf:
-              </h4>
-
-              <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
-                {getProductsInBin(selectedBin.code).length === 0 ? (
-                  <div className="p-8 text-center text-sm text-slate-400 bg-white/30 dark:bg-slate-800/30 rounded-2xl">
-                    This storage shelf is currently empty.
-                  </div>
-                ) : (
-                  getProductsInBin(selectedBin.code).map((p) => (
-                    <div
-                      key={p.id}
-                      className="p-3.5 rounded-xl bg-white/40 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-700/50 flex items-center justify-between text-sm"
-                    >
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-white">
-                          {p.name}
-                        </div>
-                        <div className="text-xs font-mono font-semibold text-indigo-500 mt-0.5">
-                          Code: {p.sku} &bull; {p.category}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="font-mono font-bold text-slate-900 dark:text-white text-base">
-                          {p.quantity} units
-                        </span>
-                        <div className="mt-1">
-                          <StatusChip status={p.status} />
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-slate-200/60 dark:border-slate-800">
               <button
                 onClick={() => setSelectedBin(null)}
-                className="glass-button-secondary text-sm py-2.5 px-4"
+                className="absolute top-5 right-5 p-2 rounded-xl text-white/40 hover:text-white hover:bg-white/10 transition-colors"
               >
-                Close
+                <X className="w-5 h-5" />
               </button>
-              <button
-                onClick={() => {
-                  setSelectedBin(null);
-                  onOpenMovementModal('IN');
-                }}
-                className="glass-button-primary text-sm py-2.5 px-4"
-              >
-                <span>Receive Stock to this Shelf</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-2xl bg-[#7C6CFF]/20 border border-[#7C6CFF]/40 text-[#7C6CFF]">
+                  <Box className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-extrabold text-xl text-white">
+                    Shelf Inspection: {selectedBin.code}
+                  </h3>
+                  <p className="text-xs text-white/50 font-mono mt-0.5">
+                    Max Capacity: {selectedBin.capacityQuantity} units &bull; Weight Cap: {selectedBin.maxWeightKg} kg
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-white/40 mb-3">
+                  Products Stored On This Shelf:
+                </h4>
+
+                <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                  {getProductsInBin(selectedBin.code).length === 0 ? (
+                    <div className="p-6 text-center text-xs font-mono text-white/40 bg-white/[0.02] border border-white/5 rounded-2xl">
+                      This storage shelf is currently empty.
+                    </div>
+                  ) : (
+                    getProductsInBin(selectedBin.code).map((p) => (
+                      <div
+                        key={p.id}
+                        className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between text-xs font-mono"
+                      >
+                        <div>
+                          <div className="font-bold text-white font-sans text-sm">
+                            {p.name}
+                          </div>
+                          <div className="text-[11px] font-mono text-[#7C6CFF] mt-0.5">
+                            SKU: {p.sku} &bull; {p.category}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-extrabold text-white text-sm">
+                            {p.quantity} units
+                          </span>
+                          <div className="mt-1">
+                            <StatusChip status={p.status} />
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-white/10">
+                <button
+                  onClick={() => setSelectedBin(null)}
+                  className="glass-button-secondary text-xs py-2 px-3.5"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedBin(null);
+                    onOpenMovementModal('IN');
+                  }}
+                  className="glass-button-primary text-xs py-2 px-3.5"
+                >
+                  <span>Receive Stock Here</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 };
