@@ -87,11 +87,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 w-full px-4 sm:px-6 py-3.5 backdrop-blur-xl bg-[#070912]/80 border-b border-white/10 transition-colors">
+    <header className="sticky top-0 z-40 w-full px-4 sm:px-6 py-3.5 backdrop-blur-2xl bg-[#060810]/85 border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.6)] transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand & System Status */}
         <div className="flex items-center gap-3">
-          <div className="icon-slot w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#7C6CFF] to-[#22D3EE] flex items-center justify-center text-[#070912] shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20">
+          <div className="icon-slot w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#7C6CFF] to-[#22D3EE] flex items-center justify-center text-[#060810] shadow-lg shadow-[#7C6CFF]/30 ring-1 ring-white/30 border-t border-white/40">
             <Boxes className="w-5 h-5 stroke-[2.5]" />
           </div>
 
@@ -102,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
               </span>
 
               {/* Pulsing live status badge */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-[10px] font-mono font-bold text-[#22D3EE]">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-mono font-bold text-[#22D3EE] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)]">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" />
                 <span>Offline-first &bull; Live</span>
               </div>
@@ -116,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
         {/* Global Search Bar Trigger */}
         <button
           onClick={onOpenCommandPalette}
-          className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white/60 hover:text-white text-xs transition-all shadow-inner font-mono"
+          className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-white/20 text-white/60 hover:text-white text-xs transition-all shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] font-mono"
         >
           <Search className="w-3.5 h-3.5 text-[#22D3EE]" />
           <span>Quick command search or jump to screen...</span>

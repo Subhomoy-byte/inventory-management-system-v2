@@ -144,9 +144,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#070912] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-x-hidden selection:bg-[#7C6CFF] selection:text-white">
+    <div className="min-h-screen w-full bg-[#060810] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-x-hidden selection:bg-[#7C6CFF] selection:text-white">
       {/* Background ambient lighting */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute inset-0 cyber-grid opacity-60" />
         <div
           className="absolute -top-32 -left-32 w-[36rem] h-[36rem] rounded-full bg-[#7C6CFF]/15 blur-[120px]"
           style={{ animation: 'float 12s ease-in-out infinite' }}

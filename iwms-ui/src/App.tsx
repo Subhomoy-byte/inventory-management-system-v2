@@ -101,9 +101,10 @@ const MainLayout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#070912] text-white flex flex-col pb-28 relative overflow-x-hidden selection:bg-[#7C6CFF] selection:text-white">
-      {/* Background ambient lighting */}
+    <div className="min-h-screen bg-[#060810] text-white flex flex-col pb-28 relative overflow-x-hidden selection:bg-[#7C6CFF] selection:text-white">
+      {/* Background ambient lighting & cyber grid */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute inset-0 cyber-grid opacity-60" />
         <div
           className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full bg-[#7C6CFF]/12 blur-[120px]"
           style={{ animation: 'float 12s ease-in-out infinite' }}
