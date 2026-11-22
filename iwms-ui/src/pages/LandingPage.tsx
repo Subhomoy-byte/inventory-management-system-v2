@@ -170,25 +170,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#070912] text-slate-100 font-sans relative selection:bg-[#7C6CFF] selection:text-white overflow-x-hidden">
-      {/* Background ambient lighting - strictly transform-only animated blobs for 90+ Lighthouse mobile */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div
-          className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full bg-[#7C6CFF]/15 blur-[120px] will-change-transform"
-          style={{ animation: 'float 12s ease-in-out infinite' }}
-        />
-        <div
-          className="absolute top-1/3 -right-32 w-[30rem] h-[30rem] rounded-full bg-[#22D3EE]/12 blur-[120px] will-change-transform"
-          style={{ animation: 'float 15s ease-in-out infinite reverse' }}
-        />
-        <div
-          className="absolute bottom-1/4 left-1/4 w-[28rem] h-[28rem] rounded-full bg-[#7C6CFF]/10 blur-[130px] will-change-transform"
-          style={{ animation: 'float 18s ease-in-out infinite' }}
-        />
-      </div>
-
-      {/* Sticky Glass Navbar */}
-      <header className="sticky top-0 z-50 w-full px-6 py-4 backdrop-blur-xl bg-[#070912]/80 border-b border-white/10 transition-colors">
+    <div className="min-h-screen bg-[#090D14] text-white font-sans relative selection:bg-indigo-600 selection:text-white overflow-x-hidden">
+      {/* Sticky Tactical Navbar */}
+      <header className="sticky top-0 z-50 w-full px-6 py-3.5 bg-[#090D14]/90 backdrop-blur-md border-b border-white/[0.08] transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#060810] flex items-center justify-center shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20 border-t border-white/30 p-1.5">
@@ -274,7 +258,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
 
               <h1 className="font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.08] text-white">
                 The warehouse that <br className="hidden sm:inline" />
-                <span className="bg-gradient-to-r from-[#7C6CFF] via-white to-[#22D3EE] bg-clip-text text-transparent">
+                <span className="text-indigo-400 font-extrabold">
                   never goes offline.
                 </span>
               </h1>

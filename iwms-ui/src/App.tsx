@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/layout/Navbar';
-import { Dock, type NavTab } from './components/layout/Dock';
+import { Sidebar } from './components/layout/Sidebar';
+import { MobileNav } from './components/layout/MobileNav';
+import type { NavTab } from './components/layout/Dock';
 import { LoginPage } from './pages/LoginPage';
 import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -21,18 +23,61 @@ import { OfflineSyncManager } from './storage/sync';
 import { api } from './services/api';
 import type { Product, MovementType } from './types';
 
+const TAB_TITLES: Record<NavTab, string> = {
+  dashboard: 'Warehouse Command Center',
+  inventory: 'Stock Catalog & Inventory',
+  warehouse: '2D Floor Topology & Bins',
+  movements: 'Audit Transaction Ledger',
+  orders: 'Inbound Purchase Orders',
+  cyclecount: 'Cycle Count & Reconciliation',
+  reports: 'Manifests & PDF Reports',
+  conflicts: 'Sync Outbox & Queue',
+};
+
 const MainLayout: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const [hash, setHash] = useState<string>(() => window.location.hash);
   const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem('iwms_sidebar_collapsed') === 'true';
+  });
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [pendingSyncCount, setPendingSyncCount] = useState<number>(0);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+
+  // Movement modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<MovementType>('IN');
+  const [modalProduct, setModalProduct] = useState<Product | null>(null);
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem('iwms_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
 
   useEffect(() => {
     const handleHash = () => setHash(window.location.hash);
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  // Keyboard shortcut Ctrl+B or Cmd+B to toggle sidebar, Cmd+K for command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const navigateToLogin = () => {
@@ -47,11 +92,6 @@ const MainLayout: React.FC = () => {
     }
     setHash('');
   };
-
-  // Movement modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<MovementType>('IN');
-  const [modalProduct, setModalProduct] = useState<Product | null>(null);
 
   const refreshCatalog = async () => {
     try {
@@ -101,79 +141,86 @@ const MainLayout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#060810] text-white flex flex-col pb-28 relative overflow-x-hidden selection:bg-[#7C6CFF] selection:text-white">
-      {/* Background ambient lighting & cyber grid */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 cyber-grid opacity-60" />
-        <div
-          className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full bg-[#7C6CFF]/12 blur-[120px]"
-          style={{ animation: 'float 12s ease-in-out infinite' }}
+    <div className="h-screen w-screen bg-[#090D14] text-white flex overflow-hidden selection:bg-indigo-600 selection:text-white">
+      {/* Tactical Left Sidebar for Desktop and Tablet */}
+      <Sidebar
+        currentTab={currentTab}
+        onSelectTab={setCurrentTab}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebar}
+        pendingSyncCount={pendingSyncCount}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+      />
+
+      {/* Main Content Workspace Column */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        {/* Sticky Tactical Header */}
+        <Navbar
+          currentTabTitle={TAB_TITLES[currentTab]}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          onOpenMovementModal={handleOpenMovementModal}
+          onToggleSidebar={toggleSidebar}
         />
-        <div
-          className="absolute top-1/3 -right-32 w-[30rem] h-[30rem] rounded-full bg-[#22D3EE]/10 blur-[130px]"
-          style={{ animation: 'float 16s ease-in-out infinite reverse' }}
-        />
-        <div
-          className="absolute bottom-1/4 left-1/4 w-[28rem] h-[28rem] rounded-full bg-[#7C6CFF]/8 blur-[140px]"
-          style={{ animation: 'float 20s ease-in-out infinite' }}
-        />
+
+        {/* Scrollable Main Workspace Stage */}
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-8">
+          <div className="max-w-7xl mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentTab}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
+              >
+                {currentTab === 'dashboard' && (
+                  <DashboardPage
+                    onOpenMovementModal={handleOpenMovementModal}
+                    onNavigateToTab={setCurrentTab}
+                  />
+                )}
+
+                {currentTab === 'inventory' && (
+                  <InventoryPage onOpenMovementModal={handleOpenMovementModal} />
+                )}
+
+                {currentTab === 'warehouse' && (
+                  <WarehouseMapPage onOpenMovementModal={handleOpenMovementModal} />
+                )}
+
+                {currentTab === 'movements' && (
+                  <MovementsPage />
+                )}
+
+                {currentTab === 'orders' && (
+                  <OrdersPage products={allProducts} onRefreshCatalog={refreshCatalog} />
+                )}
+
+                {currentTab === 'cyclecount' && (
+                  <CycleCountPage products={allProducts} onRefreshCatalog={refreshCatalog} />
+                )}
+
+                {currentTab === 'reports' && (
+                  <ReportsPage products={allProducts} />
+                )}
+
+                {currentTab === 'conflicts' && (
+                  <ConflictReviewPanel />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </main>
       </div>
 
-      <Navbar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
-
-      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
-          >
-            {currentTab === 'dashboard' && (
-              <DashboardPage
-                onOpenMovementModal={handleOpenMovementModal}
-                onNavigateToTab={setCurrentTab}
-              />
-            )}
-
-            {currentTab === 'inventory' && (
-              <InventoryPage onOpenMovementModal={handleOpenMovementModal} />
-            )}
-
-            {currentTab === 'warehouse' && (
-              <WarehouseMapPage onOpenMovementModal={handleOpenMovementModal} />
-            )}
-
-            {currentTab === 'movements' && (
-              <MovementsPage />
-            )}
-
-            {currentTab === 'orders' && (
-              <OrdersPage products={allProducts} onRefreshCatalog={refreshCatalog} />
-            )}
-
-            {currentTab === 'cyclecount' && (
-              <CycleCountPage products={allProducts} onRefreshCatalog={refreshCatalog} />
-            )}
-
-            {currentTab === 'reports' && (
-              <ReportsPage products={allProducts} />
-            )}
-
-            {currentTab === 'conflicts' && (
-              <ConflictReviewPanel />
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </main>
-
-      <Dock
+      {/* Mobile Bottom Navigation (< 768px) */}
+      <MobileNav
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
         pendingSyncCount={pendingSyncCount}
       />
 
+      {/* Shared Modals */}
       <StockMovementModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

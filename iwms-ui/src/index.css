@@ -4,130 +4,93 @@
 
 @layer base {
   :root {
-    --bg-dark: #060810;
-    --accent-violet: #7C6CFF;
-    --accent-cyan: #22D3EE;
-    --surface-glass: rgba(14, 18, 32, 0.65);
-    --surface-border: rgba(255, 255, 255, 0.08);
-    --surface-border-top: rgba(255, 255, 255, 0.18);
+    --bg-canvas: #090D14;
+    --bg-surface: #0F1523;
+    --bg-surface-elevated: #151D2E;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --accent-indigo: #4F46E5;
+    --accent-cyan: #06B6D4;
+    --status-emerald: #10B981;
+    --status-amber: #F59E0B;
+    --status-crimson: #EF4444;
   }
 
   body {
-    @apply m-0 p-0 font-sans antialiased text-white bg-[#060810] transition-colors duration-300 min-h-screen selection:bg-[#7C6CFF] selection:text-white;
-    background-color: #060810;
-    background-image: 
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 108, 255, 0.18), transparent 70%),
-      radial-gradient(ellipse 60% 40% at 90% 20%, rgba(34, 211, 238, 0.12), transparent 60%),
-      radial-gradient(ellipse 50% 30% at 10% 80%, rgba(124, 108, 255, 0.1), transparent 50%);
-    background-attachment: fixed;
+    @apply m-0 p-0 font-sans antialiased text-white bg-[#090D14] min-h-screen selection:bg-indigo-600 selection:text-white;
+    background-color: #090D14;
+    color: #F8FAFC;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Browser Focus Ring Standard */
+  :focus-visible {
+    outline: 2px solid #6366F1;
+    outline-offset: 2px;
+  }
+
+  /* Tabular Numerals for Inventory Units, Prices, and Coordinates */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
 @layer components {
-  /* Engineering Cyber Matrix Grid */
-  .cyber-grid {
-    background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 50%, transparent 95%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 50%, transparent 95%);
-  }
-
-  /* Precision Engineered Glass Card */
-  .glass-card, .story-glass-card {
+  /* High-Precision Tactical Surface Card */
+  .glass-card, .surface-card {
     position: relative;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(10, 14, 26, 0.65);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: #0F1523;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 28px;
-    box-shadow: 
-      0 20px 45px -15px rgba(0, 0, 0, 0.7),
-      0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-      0 1px 0 0 rgba(255, 255, 255, 0.14) inset;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
 
   .glass-card-hover {
-    @apply hover:border-[#7C6CFF]/40 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[#7C6CFF]/15 hover:-translate-y-1;
+    @apply hover:border-indigo-500/40 hover:bg-[#12192A] hover:shadow-lg hover:shadow-black/60;
   }
 
   /* High Density Surface Panel (for Modals, Flyouts, Palettes) */
-  .glass-panel {
-    background: linear-gradient(180deg, rgba(20, 26, 46, 0.85) 0%, rgba(10, 14, 26, 0.95) 100%);
-    backdrop-filter: blur(28px) saturate(200%);
-    -webkit-backdrop-filter: blur(28px) saturate(200%);
+  .glass-panel, .surface-panel {
+    background: #111726;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-top: 1px solid rgba(255, 255, 255, 0.24);
-    border-radius: 28px;
-    box-shadow: 
-      0 25px 60px -12px rgba(0, 0, 0, 0.85),
-      0 0 40px -10px rgba(124, 108, 255, 0.15),
-      0 1px 0 0 rgba(255, 255, 255, 0.2) inset;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.85);
   }
 
-  /* Linear-Grade Inputs */
-  .glass-input {
-    @apply w-full px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/10 text-base text-white placeholder-white/35 focus:outline-none focus:ring-1 focus:ring-[#7C6CFF] focus:border-[#7C6CFF] focus:bg-white/[0.06] transition-all backdrop-blur-md;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Precision Form Inputs */
+  .glass-input, .surface-input {
+    @apply w-full px-3.5 py-2.5 rounded-xl bg-[#141B2D] border border-white/10 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-[#172036] transition-all;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) inset;
   }
 
-  /* Primary High-Contrast Button with Refraction */
-  .glass-button-primary {
-    @apply relative px-5 py-3 rounded-2xl font-bold text-[#060810] text-base shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 overflow-hidden;
-    background: linear-gradient(135deg, #7C6CFF 0%, #6366F1 50%, #22D3EE 100%);
-    border-top: 1px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 
-      0 10px 25px -5px rgba(124, 108, 255, 0.35),
-      0 1px 0 0 rgba(255, 255, 255, 0.3) inset;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Primary High-Contrast Button */
+  .glass-button-primary, .btn-primary {
+    @apply relative px-4 py-2.5 rounded-xl font-semibold text-white text-sm shadow-md transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+    background-color: #4F46E5;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 8px -1px rgba(79, 70, 229, 0.4);
   }
 
-  .glass-button-primary:hover {
-    box-shadow: 
-      0 15px 35px -5px rgba(124, 108, 255, 0.5),
-      0 0 25px rgba(34, 211, 238, 0.35),
-      0 1px 0 0 rgba(255, 255, 255, 0.4) inset;
-    filter: brightness(1.08);
-    transform: translateY(-1px);
+  .glass-button-primary:hover, .btn-primary:hover {
+    background-color: #4338CA;
+    box-shadow: 0 4px 14px -1px rgba(79, 70, 229, 0.55);
   }
 
   /* Secondary Structured Button */
-  .glass-button-secondary {
-    @apply px-5 py-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10 hover:border-white/20 text-base font-semibold shadow-sm hover:shadow active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 backdrop-blur-md;
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* Tactical Floating Dock */
-  .glass-dock {
-    background: rgba(8, 11, 20, 0.88);
-    backdrop-filter: blur(24px) saturate(200%);
-    -webkit-backdrop-filter: blur(24px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 9999px;
-    box-shadow: 
-      0 20px 50px 0 rgba(0, 0, 0, 0.75),
-      0 0 30px 0 rgba(124, 108, 255, 0.12),
-      0 1px 0 0 rgba(255, 255, 255, 0.15) inset;
+  .glass-button-secondary, .btn-secondary {
+    @apply px-4 py-2.5 rounded-xl bg-[#141B2D] hover:bg-[#1A233A] text-slate-200 hover:text-white border border-white/10 hover:border-white/20 text-sm font-medium shadow-sm active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
   }
 
   /* Developer Telemetry Chip */
   .telemetry-chip {
-    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold tracking-wide border backdrop-blur-md;
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono font-medium tracking-wide border;
     background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.1);
-    border-top-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset;
+    border-color: rgba(255, 255, 255, 0.08);
   }
 
   .badge-glow {
-    @apply relative inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide border;
+    @apply relative inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium tracking-tight border;
   }
 
   .icon-slot {
@@ -144,21 +107,21 @@
   }
 }
 
-/* Custom Linear-Grade Scrollbar */
+/* Custom Tactical Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #090D14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.14);
-  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(124, 108, 255, 0.5);
+  background: rgba(99, 102, 241, 0.6);
 }

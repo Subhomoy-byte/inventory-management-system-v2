@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { VectorGraphic } from '../components/common/VectorGraphic';
-import { MotionStack } from '../components/common/MotionStack';
 import {
   Lock,
   User,
@@ -15,6 +13,9 @@ import {
   KeyRound,
   Radio,
   Fingerprint,
+  Boxes,
+  Database,
+  Wifi,
 } from 'lucide-react';
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
@@ -56,7 +57,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
     const trimmedUser = username.trim().toLowerCase();
     const trimmedPass = password.trim();
 
-    // Verify credentials for standard demo accounts
     if (trimmedUser === 'admin' && trimmedPass !== 'admin123') {
       setError('Invalid demo credentials. For Admin, use: admin123');
       return;
@@ -109,7 +109,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
       } else if (response.status === 423) {
         throw new Error('Account locked due to consecutive failed attempts (5 min cooldown)');
       } else if (response.status === 404 || response.status === 405 || response.status >= 500) {
-        // Static hosting environment (Vercel / Netlify) fallback
         authenticateDemoUser();
         return;
       } else {
@@ -140,26 +139,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#060810] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-x-hidden selection:bg-[#7C6CFF] selection:text-white">
-      {/* Background ambient lighting */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 cyber-grid opacity-60" />
-        <div
-          className="absolute -top-32 -left-32 w-[36rem] h-[36rem] rounded-full bg-[#7C6CFF]/15 blur-[120px]"
-          style={{ animation: 'float 12s ease-in-out infinite' }}
-        />
-        <div
-          className="absolute top-1/2 -right-32 w-[32rem] h-[32rem] rounded-full bg-[#22D3EE]/12 blur-[130px]"
-          style={{ animation: 'float 16s ease-in-out infinite reverse' }}
-        />
-        <div
-          className="absolute bottom-[-10rem] left-1/3 w-[30rem] h-[30rem] rounded-full bg-[#7C6CFF]/10 blur-[140px]"
-          style={{ animation: 'float 20s ease-in-out infinite' }}
-        />
-      </div>
-
-      {/* Top Bar Navigation */}
-      <header className="relative z-20 max-w-7xl w-full mx-auto flex items-center justify-between pb-6">
+    <div className="min-h-screen w-full bg-[#090D14] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative selection:bg-indigo-600 selection:text-white">
+      {/* Top Header */}
+      <header className="relative z-20 max-w-7xl w-full mx-auto flex items-center justify-between pb-6 border-b border-white/[0.06]">
         <button
           onClick={() => {
             if (onBackToOverview) {
@@ -168,28 +150,25 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
               window.location.hash = '';
             }
           }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-mono font-semibold text-white/80 hover:text-white transition-all shadow-sm"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#111726] hover:bg-[#161E30] border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-colors"
           title="Return to Story Overview"
         >
-          <ArrowLeft className="w-4 h-4 text-[#7C6CFF]" />
-          <span>← Back to Overview</span>
+          <ArrowLeft className="w-4 h-4 text-indigo-400" />
+          <span>Back to Product Story</span>
         </button>
 
-        <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-[#22D3EE]">
-            <span className="w-2 h-2 rounded-full bg-[#34D399] animate-pulse" />
-            <span>LAN Online • Zero Cloud DB</span>
-          </div>
+        <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs font-mono text-emerald-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span>Local Engine &bull; Zero External DB</span>
         </div>
       </header>
 
-      {/* Main Dual Stage Container */}
-      <main className="relative z-10 max-w-7xl w-full mx-auto my-auto py-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        {/* Left Column: Futuristic Motion Stage (Jitter Stack + Vector Animation) */}
+      {/* Main Container */}
+      <main className="relative z-10 max-w-6xl w-full mx-auto my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        {/* Left Column: Industrial Proposition */}
         <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
-          {/* Brand Eyebrow with Micro Vector Graphic */}
           <div className="flex items-center gap-3">
-            <div className="icon-slot w-12 h-12 rounded-2xl bg-[#060810] flex items-center justify-center shadow-lg shadow-[#7C6CFF]/30 ring-1 ring-white/20 border-t border-white/30 p-2">
+            <div className="w-12 h-12 rounded-xl bg-[#111726] border border-white/10 flex items-center justify-center p-2.5 shadow-sm">
               <img src="/favicon.svg" alt="IWMS Pro Warehouse Logo" className="w-full h-full object-contain" />
             </div>
             <div>
@@ -197,63 +176,66 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                 <span className="font-heading font-extrabold text-2xl tracking-tight text-white">
                   IWMS Pro
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-[#7C6CFF]/20 text-[#7C6CFF] border border-[#7C6CFF]/40">
+                <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
                   v2.0
                 </span>
               </div>
-              <p className="text-xs text-white/50 font-medium">
+              <p className="text-xs text-slate-400">
                 Industrial Warehouse Management Terminal
               </p>
             </div>
           </div>
 
-          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight leading-tight">
-            High-velocity inventory.{' '}
-            <span className="bg-gradient-to-r from-[#7C6CFF] via-[#22D3EE] to-[#34D399] bg-clip-text text-transparent">
-              Zero downtime.
-            </span>
-          </h2>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            High-velocity inventory operations with zero cloud dependencies.
+          </h1>
 
-          <p className="text-sm text-white/70 leading-relaxed max-w-lg">
-            Engineered with thread-safe pure Java memory models, crash-proof append-only Write-Ahead Logs, and an offline Progressive Web App client.
+          <p className="text-sm text-slate-300 leading-relaxed max-w-lg">
+            Engineered with thread-safe pure Java memory models, crash-proof append-only Write-Ahead Logs, and an offline-first Progressive Web App client for Wi-Fi dead zones.
           </p>
 
-          {/* Interactive 3D Motion Stack with Vector Background Accent */}
-          <div className="relative pt-2">
-            {/* Background Ambient Vector Animation */}
-            <div className="absolute -top-10 -right-6 pointer-events-none opacity-40">
-              <VectorGraphic size={160} variant="ambient" colorScheme="cyber" />
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <div className="p-3 rounded-xl bg-[#111726] border border-white/[0.06]">
+              <div className="flex items-center gap-2 text-indigo-400 text-xs font-semibold mb-1">
+                <Database className="w-4 h-4" />
+                <span>Append-Only WAL</span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Immutable fsync ledger logging all movements without SQL overhead.
+              </p>
             </div>
 
-            {/* Jitter Template 1 3D Stack */}
-            <MotionStack />
+            <div className="p-3 rounded-xl bg-[#111726] border border-white/[0.06]">
+              <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
+                <Wifi className="w-4 h-4" />
+                <span>IndexedDB Outbox</span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Floor associate transactions queue locally and sync automatically.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Glassmorphic Auth Terminal */}
+        {/* Right Column: Tactical Auth Terminal */}
         <div className="lg:col-span-6 w-full max-w-md mx-auto">
-          <div className="glass-panel p-7 sm:p-9 shadow-2xl relative">
-            {/* Corner Decorative Vector Slot */}
-            <div className="absolute top-4 right-4 pointer-events-none opacity-60">
-              <VectorGraphic size={48} variant="badge" colorScheme="cyber" />
-            </div>
-
+          <div className="surface-panel p-6 sm:p-8 shadow-2xl">
             {/* Header */}
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-[11px] font-mono text-[#22D3EE] mb-2">
-                <Radio className="w-3 h-3 animate-pulse" />
-                <span>Secure Authentication Terminal</span>
+            <div className="mb-5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-[11px] font-mono text-indigo-400 mb-2">
+                <Radio className="w-3 h-3 text-indigo-400" />
+                <span>Operator Terminal Auth</span>
               </div>
-              <h3 className="font-heading font-extrabold text-2xl text-white tracking-tight">
-                Sign in to Warehouse
-              </h3>
-              <p className="text-xs text-white/50 mt-1">
-                Select your operational role and credentials to proceed.
+              <h2 className="text-xl font-bold text-white tracking-tight">
+                Sign in to Warehouse OS
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Select your assigned workstation role and enter credentials.
               </p>
             </div>
 
             {/* Role Switcher Tabs */}
-            <div className="mb-6 p-1 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center gap-1 relative">
+            <div className="mb-5 p-1 rounded-xl bg-[#090D14] border border-white/[0.08] flex items-center gap-1">
               {(
                 [
                   { id: 'ADMIN', label: 'Admin', sub: 'Full Access' },
@@ -267,19 +249,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                     key={tab.id}
                     type="button"
                     onClick={() => handleSelectRoleTab(tab.id)}
-                    className={`relative flex-1 py-2 px-2 rounded-xl text-xs font-semibold transition-all duration-200 text-center z-10 ${
+                    className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all text-center ${
                       isSelected
-                        ? 'text-[#070912] font-bold'
-                        : 'text-white/60 hover:text-white hover:bg-white/[0.03]'
+                        ? 'bg-indigo-600 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                     }`}
                   >
-                    {isSelected && (
-                      <motion.div
-                        layoutId="activeRoleIndicator"
-                        className="absolute inset-0 bg-gradient-to-r from-[#7C6CFF] to-[#22D3EE] rounded-xl shadow-md shadow-[#7C6CFF]/30 -z-10"
-                        transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-                      />
-                    )}
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -290,10 +265,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
             <AnimatePresence>
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -8 }}
+                  initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  className="mb-5 p-3.5 rounded-2xl bg-[#F87171]/15 border border-[#F87171]/30 text-[#F87171] text-xs font-semibold flex items-center gap-2.5"
+                  exit={{ opacity: 0, y: -6 }}
+                  className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/25 text-rose-400 text-xs font-medium flex items-center gap-2"
                 >
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
@@ -302,42 +277,43 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
             </AnimatePresence>
 
             {/* Auth Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-1.5">
-                  Email or Username
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Operator Username
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                   <input
                     type="text"
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="glass-input pl-10 text-sm"
-                    placeholder="operator@iwmspro.local"
+                    className="surface-input pl-9 text-xs"
+                    placeholder="operator"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-1.5">
-                  Password
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Security Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="glass-input pl-10 pr-10 text-sm"
+                    className="surface-input pl-9 pr-9 text-xs"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -346,27 +322,27 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
 
               {/* Remember Session Checkbox */}
               <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-white/70 hover:text-white select-none">
+                <label className="flex items-center gap-2 cursor-pointer text-slate-400 hover:text-slate-200 select-none">
                   <input
                     type="checkbox"
                     checked={rememberSession}
                     onChange={(e) => setRememberSession(e.target.checked)}
-                    className="w-4 h-4 rounded bg-white/10 border-white/20 text-[#7C6CFF] focus:ring-[#7C6CFF] focus:ring-offset-0"
+                    className="w-3.5 h-3.5 rounded bg-[#141B2D] border-white/20 text-indigo-600 focus:ring-indigo-500"
                   />
-                  <span>Remember session on local device</span>
+                  <span>Store session locally</span>
                 </label>
 
-                <span className="text-[11px] font-mono text-[#7C6CFF]">PBKDF2 Salted</span>
+                <span className="text-[11px] font-mono text-slate-500">PBKDF2 Salted</span>
               </div>
 
               {/* Primary Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full glass-button-primary mt-2 py-3 text-sm font-heading font-extrabold"
+                className="w-full btn-primary mt-2 py-2.5 text-xs font-semibold"
               >
                 {loading ? (
-                  <span className="inline-block w-4 h-4 border-2 border-[#070912] border-t-transparent rounded-full animate-spin" />
+                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
                     <span>Initialize Session</span>
@@ -377,23 +353,23 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
             </form>
 
             {/* Quick Demo Login Presets */}
-            <div className="mt-6 pt-5 border-t border-white/10">
-              <div className="flex items-center justify-between text-xs text-white/50 font-mono mb-2.5">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#7C6CFF]" />
+            <div className="mt-5 pt-4 border-t border-white/[0.08]">
+              <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+                <span className="flex items-center gap-1.5 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
                   <span>1-Click Preset Roles:</span>
                 </span>
-                <span className="text-[10px] text-white/40">Auto-fills pass</span>
+                <span className="text-[10px] text-slate-500">Auto-fills credentials</span>
               </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={() => handleSelectRoleTab('ADMIN')}
-                  className={`px-2.5 py-2 rounded-xl text-xs font-mono transition-all border text-center ${
+                  className={`p-2 rounded-lg text-xs font-mono transition-all border text-center ${
                     activeRole === 'ADMIN'
-                      ? 'bg-[#7C6CFF]/20 border-[#7C6CFF] text-white'
-                      : 'bg-white/[0.03] border-white/10 text-white/60 hover:text-white hover:bg-white/[0.06]'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
+                      : 'bg-[#090D14] border-white/[0.06] text-slate-400 hover:text-white'
                   }`}
                 >
                   <span className="block font-bold">Admin</span>
@@ -403,10 +379,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                 <button
                   type="button"
                   onClick={() => handleSelectRoleTab('MANAGER')}
-                  className={`px-2.5 py-2 rounded-xl text-xs font-mono transition-all border text-center ${
+                  className={`p-2 rounded-lg text-xs font-mono transition-all border text-center ${
                     activeRole === 'MANAGER'
-                      ? 'bg-[#22D3EE]/20 border-[#22D3EE] text-white'
-                      : 'bg-white/[0.03] border-white/10 text-white/60 hover:text-white hover:bg-white/[0.06]'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
+                      : 'bg-[#090D14] border-white/[0.06] text-slate-400 hover:text-white'
                   }`}
                 >
                   <span className="block font-bold">Manager</span>
@@ -416,10 +392,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                 <button
                   type="button"
                   onClick={() => handleSelectRoleTab('EMPLOYEE')}
-                  className={`px-2.5 py-2 rounded-xl text-xs font-mono transition-all border text-center ${
+                  className={`p-2 rounded-lg text-xs font-mono transition-all border text-center ${
                     activeRole === 'EMPLOYEE'
-                      ? 'bg-[#34D399]/20 border-[#34D399] text-white'
-                      : 'bg-white/[0.03] border-white/10 text-white/60 hover:text-white hover:bg-white/[0.06]'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
+                      : 'bg-[#090D14] border-white/[0.06] text-slate-400 hover:text-white'
                   }`}
                 >
                   <span className="block font-bold">Staff</span>
@@ -428,22 +404,22 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
               </div>
 
               {/* Alternative Sign-In Options */}
-              <div className="mt-4 pt-3 flex items-center justify-between gap-2 text-[11px] text-white/50">
+              <div className="mt-3 pt-2.5 flex items-center justify-between gap-2 text-xs text-slate-400">
                 <button
                   type="button"
                   onClick={() => handleSimulateSSO('RFID')}
-                  className="flex-1 py-1.5 px-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 flex items-center justify-center gap-1.5 transition-colors"
+                  className="flex-1 py-1.5 px-2 rounded-lg bg-[#090D14] hover:bg-[#141B2D] border border-white/[0.06] flex items-center justify-center gap-1.5 transition-colors"
                 >
-                  <KeyRound className="w-3 h-3 text-[#22D3EE]" />
+                  <KeyRound className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Keycard RFID</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleSimulateSSO('Biometric')}
-                  className="flex-1 py-1.5 px-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 flex items-center justify-center gap-1.5 transition-colors"
+                  className="flex-1 py-1.5 px-2 rounded-lg bg-[#090D14] hover:bg-[#141B2D] border border-white/[0.06] flex items-center justify-center gap-1.5 transition-colors"
                 >
-                  <Fingerprint className="w-3 h-3 text-[#7C6CFF]" />
+                  <Fingerprint className="w-3.5 h-3.5 text-indigo-400" />
                   <span>Biometric</span>
                 </button>
               </div>
@@ -453,8 +429,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-20 max-w-7xl w-full mx-auto text-center text-xs text-white/40 font-mono py-4 border-t border-white/5">
-        IWMS Pro &bull; Offline-First Progressive Web App &bull; Zero Cloud Database Requirement &bull; 100% Free Open-Source
+      <footer className="relative z-20 max-w-7xl w-full mx-auto text-center text-xs text-slate-500 font-mono py-3 border-t border-white/[0.06]">
+        IWMS Pro &bull; Offline-First Progressive Web App &bull; Zero External Database Requirement &bull; 100% Free Open-Source
       </footer>
     </div>
   );

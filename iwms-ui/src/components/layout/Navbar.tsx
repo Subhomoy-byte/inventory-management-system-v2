@@ -2,20 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { OfflineSyncManager } from '../../storage/sync';
 import { StatusChip } from '../common/StatusChip';
-import { VectorGraphic } from '../common/VectorGraphic';
 import {
   LogOut,
   Wifi,
   WifiOff,
   Search,
   RefreshCw,
+  ArrowDownRight,
+  ArrowUpRight,
+  ArrowLeftRight,
+  Menu,
 } from 'lucide-react';
+import type { MovementType } from '../../types';
 
 interface NavbarProps {
   onOpenCommandPalette?: () => void;
+  onOpenMovementModal?: (type: MovementType) => void;
+  onToggleSidebar?: () => void;
+  currentTabTitle?: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onOpenCommandPalette,
+  onOpenMovementModal,
+  onToggleSidebar,
+  currentTabTitle = 'Command Center',
+}) => {
   const { user, logout } = useAuth();
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [pendingCount, setPendingCount] = useState<number>(0);
@@ -81,71 +93,91 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 w-full px-4 sm:px-6 py-3.5 backdrop-blur-2xl bg-[#060810]/85 border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.6)] transition-all">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Brand & System Status */}
+    <header className="sticky top-0 z-20 w-full px-4 sm:px-6 py-2.5 bg-[#090D14]/90 backdrop-blur-md border-b border-white/[0.08] transition-all">
+      <div className="flex items-center justify-between gap-4">
+        {/* Left: Mobile Toggle & Breadcrumb */}
         <div className="flex items-center gap-3">
-          <div className="icon-slot w-10 h-10 rounded-2xl bg-[#060810] flex items-center justify-center shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20 border-t border-white/30 p-1.5">
-            <img src="/favicon.svg" alt="IWMS Pro Warehouse Logo" className="w-full h-full object-contain" />
-          </div>
+          {onToggleSidebar && (
+            <button
+              onClick={onToggleSidebar}
+              className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06]"
+              aria-label="Toggle navigation"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-heading font-extrabold text-lg tracking-tight text-white">
-                IWMS Pro
-              </span>
-
-              {/* Pulsing live status badge */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-mono font-bold text-[#22D3EE] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" />
-                <span>Offline-first &bull; Live</span>
+              <h1 className="font-heading font-bold text-base sm:text-lg text-white tracking-tight">
+                {currentTabTitle}
+              </h1>
+              <div className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-mono font-medium text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span>Live WAL Ledger</span>
               </div>
             </div>
-            <p className="text-[11px] text-white/50 hidden sm:block font-mono">
-              Industrial Warehouse Terminal
-            </p>
           </div>
         </div>
 
-        {/* Global Search Bar Trigger */}
-        <button
-          onClick={onOpenCommandPalette}
-          className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-white/20 text-white/60 hover:text-white text-xs transition-all shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] font-mono"
-        >
-          <Search className="w-3.5 h-3.5 text-[#22D3EE]" />
-          <span>Quick command search or jump to screen...</span>
-          <kbd className="px-2 py-0.5 rounded-lg bg-white/[0.08] text-white font-mono text-[10px] shadow-sm border border-white/10 font-bold">
-            Ctrl + K
-          </kbd>
-        </button>
+        {/* Center: Global Search & Quick Movements */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {onOpenMovementModal && (
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <button
+                onClick={() => onOpenMovementModal('IN')}
+                className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
+                title="Receive Inbound Stock"
+              >
+                <ArrowDownRight className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline">Receive</span>
+              </button>
+              <button
+                onClick={() => onOpenMovementModal('OUT')}
+                className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-[#141B2D] hover:bg-[#1C253D] text-slate-200 hover:text-white border border-white/10 text-xs font-medium flex items-center gap-1.5 active:scale-95 transition-all"
+                title="Dispatch Outbound Stock"
+              >
+                <ArrowUpRight className="w-3.5 h-3.5 text-rose-400" />
+                <span className="hidden xs:inline">Dispatch</span>
+              </button>
+              <button
+                onClick={() => onOpenMovementModal('TRANSFER')}
+                className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-[#141B2D] hover:bg-[#1C253D] text-slate-200 hover:text-white border border-white/10 text-xs font-medium flex items-center gap-1.5 active:scale-95 transition-all"
+                title="Transfer Bin to Bin"
+              >
+                <ArrowLeftRight className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden xs:inline">Transfer</span>
+              </button>
+            </div>
+          )}
 
-        {/* Right Actions: Connection, Clock, Role & Logout */}
-        <div className="flex items-center gap-3">
-          {/* Micro Vector Graphic status indicator */}
-          <div className="hidden lg:block opacity-75">
-            <VectorGraphic size={28} variant="badge" colorScheme="cyber" />
-          </div>
+          {/* Search Trigger */}
+          <button
+            onClick={onOpenCommandPalette}
+            className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#111726] hover:bg-[#161E30] border border-white/10 text-slate-400 hover:text-slate-200 text-xs transition-colors"
+            title="Search products and bins (Cmd+K)"
+          >
+            <Search className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="text-slate-400">Search SKUs, Bins...</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-[10px] text-slate-300 font-mono">
+              ⌘K
+            </kbd>
+          </button>
+        </div>
 
-          {/* LAN Status Pill */}
+        {/* Right: Sync Status & Shift Clock */}
+        <div className="flex items-center gap-2.5">
+          {/* LAN & Sync status */}
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono font-bold border backdrop-blur-md transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-medium border ${
               !isOnline
-                ? 'bg-[#FBBF24]/15 text-[#FBBF24] border-[#FBBF24]/40 animate-pulse'
+                ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                 : isSyncing
-                ? 'bg-[#22D3EE]/15 text-[#22D3EE] border-[#22D3EE]/40'
+                ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
                 : pendingCount > 0
-                ? 'bg-[#7C6CFF]/15 text-[#7C6CFF] border-[#7C6CFF]/40'
-                : 'bg-[#34D399]/15 text-[#34D399] border-[#34D399]/30'
+                ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30'
+                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
             }`}
-            title={
-              !isOnline
-                ? `Offline Mode (${pendingCount} queued action${pendingCount === 1 ? '' : 's'})`
-                : isSyncing
-                ? `Synchronizing ${pendingCount} offline action${pendingCount === 1 ? '' : 's'} with server...`
-                : pendingCount > 0
-                ? `${pendingCount} action${pendingCount === 1 ? '' : 's'} queued in local outbox`
-                : 'Network Online (Connected)'
-            }
           >
             {!isOnline ? (
               <>
@@ -155,45 +187,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
             ) : isSyncing ? (
               <>
                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                <span>Syncing{pendingCount > 0 ? ` (${pendingCount})` : ''}...</span>
+                <span>Syncing...</span>
               </>
             ) : pendingCount > 0 ? (
               <>
-                <Wifi className="w-3.5 h-3.5 text-[#7C6CFF]" />
-                <span>Online ({pendingCount} queued)</span>
+                <Wifi className="w-3.5 h-3.5 text-indigo-400" />
+                <span>{pendingCount} queued</span>
               </>
             ) : (
               <>
-                <Wifi className="w-3.5 h-3.5 text-[#34D399]" />
-                <span className="hidden sm:inline">LAN Connected</span>
+                <Wifi className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden sm:inline">LAN Sync</span>
               </>
             )}
           </div>
 
-          {/* Telemetry Clock */}
-          <span className="text-xs font-mono text-white/50 hidden xl:inline">
+          {/* Shift Clock */}
+          <span className="text-xs font-mono text-slate-400 tabular-nums hidden sm:inline">
             {time}
           </span>
-
-          {/* User & Role Badge */}
-          {user && (
-            <div className="flex items-center gap-2.5 pl-2 border-l border-white/10">
-              <div className="hidden sm:flex flex-col items-end">
-                <span className="text-xs font-bold text-white font-mono">
-                  {user.username}
-                </span>
-                <StatusChip status={user.role} />
-              </div>
-
-              <button
-                onClick={logout}
-                className="p-2.5 rounded-2xl bg-[#F87171]/10 hover:bg-[#F87171]/20 text-[#F87171] border border-[#F87171]/20 transition-all shadow-sm active:scale-95"
-                title="Log Out of Warehouse Terminal"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </header>
