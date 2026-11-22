@@ -157,10 +157,10 @@ The dataset ingestion engine features an intelligent fuzzy matching synonym dict
 - **Reactive Global State:** Dispatches global DOM sync events (`iwms:sync-complete`) so all dashboard telemetry charts, low stock alerts, catalog tables, and PDF report generators update instantly without a manual page refresh.
 
 ### 2.5 Sample CSV Testing Guide
-A pre-formatted sample CSV file is provided in the repository at [`data/kaggle_warehouse_sample.csv`](data/kaggle_warehouse_sample.csv). To test custom dataset ingestion:
+A pre-formatted sample CSV file is provided in the repository at [`docs/kaggle_warehouse_sample.csv`](docs/kaggle_warehouse_sample.csv) and [`iwms-ui/public/sample/kaggle_warehouse_sample.csv`](iwms-ui/public/sample/kaggle_warehouse_sample.csv). To test custom dataset ingestion:
 1. Log in to the management terminal as `admin` (`admin123`).
 2. Navigate to **Dashboard** or **Inventory Catalog** and click **"Upload CSV / Dataset"**.
-3. Drag and drop [`data/kaggle_warehouse_sample.csv`](data/kaggle_warehouse_sample.csv) onto the upload modal.
+3. Drag and drop [`docs/kaggle_warehouse_sample.csv`](docs/kaggle_warehouse_sample.csv) onto the upload modal.
 4. Verify the auto-detected column mappings in the live preview table and click **"Ingest Items"**.
 5. Observe the live stock levels, category distribution charts, and shelf locations update immediately.
 
