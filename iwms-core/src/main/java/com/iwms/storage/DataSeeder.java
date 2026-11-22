@@ -25,7 +25,14 @@ public class DataSeeder {
 
     public synchronized void seedIfEmpty() throws Exception {
         if (productRepository.count() > 0) {
-            return; // Already seeded, maintain idempotency
+            if (inventoryService.getWarehouses().isEmpty()) {
+                Warehouse warehouse = createWarehouseTopology();
+                inventoryService.addWarehouse(warehouse);
+            }
+            for (Product p : productRepository.findAll()) {
+                inventoryService.registerOrUpdateProduct(p);
+            }
+            return; // Already seeded, populated into in-memory service
         }
 
         // 1. Seed Warehouse Topology
