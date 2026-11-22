@@ -17,14 +17,20 @@ Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS 
 
 ## Table of Contents
 1. [Introduction & Dual-Mode Architecture](#1-introduction--dual-mode-architecture)
-2. [Cinematic Public Story Landing Experience](#2-cinematic-public-story-landing-experience)
-3. [Visual System Architecture](#3-visual-system-architecture)
-4. [Colourful Graphic Detailed Workflows](#4-colourful-graphic-detailed-workflows)
+2. [Kaggle Warehouse Dataset & Drag-and-Drop Ingestion Portal](#2-kaggle-warehouse-dataset--drag-and-drop-ingestion-portal)
+   - [2.1 The Post-Login Drag-and-Drop Portal](#21-the-post-login-drag-and-drop-portal)
+   - [2.2 1-Click Pre-Packaged Kaggle Dataset (520 Enterprise Items)](#22-1-click-pre-packaged-kaggle-dataset-520-enterprise-items)
+   - [2.3 Intelligent Fuzzy Column Auto-Mapping Engine](#23-intelligent-fuzzy-column-auto-mapping-engine)
+   - [2.4 Zero-Breaking-Changes Guarantees](#24-zero-breaking-changes-guarantees)
+   - [2.5 Sample CSV Testing Guide](#25-sample-csv-testing-guide)
+3. [Cinematic Public Story Landing Experience](#3-cinematic-public-story-landing-experience)
+4. [Visual System Architecture](#4-visual-system-architecture)
+5. [Colourful Graphic Detailed Workflows](#5-colourful-graphic-detailed-workflows)
    - [Workflow A: Complete Stock Movement & Persistence Lifecycle](#workflow-a-complete-stock-movement--persistence-lifecycle)
    - [Workflow B: PWA Offline Outbox & LAN Auto-Sync Engine](#workflow-b-pwa-offline-outbox--lan-auto-sync-engine)
    - [Workflow C: Time-Travel Inventory Reconstruction (`TreeMap.headMap`)](#workflow-c-time-travel-inventory-reconstruction-treemapheadmap)
    - [Workflow D: Dynamic RBAC Financial Masking & Price Redaction](#workflow-d-dynamic-rbac-financial-masking--price-redaction)
-5. [Step-by-Step Setup Guide on Any Device](#5-step-by-step-setup-guide-on-any-device)
+6. [Step-by-Step Setup Guide on Any Device](#6-step-by-step-setup-guide-on-any-device)
    - [Step 1: Check System Requirements](#step-1-check-system-requirements)
    - [Step 2: Clone the Repository (`v2` on `redesign`)](#step-2-clone-the-repository-v2-on-redesign)
    - [Step 3: Build & Package (Single Command)](#step-3-build--package-single-command)
@@ -32,15 +38,15 @@ Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS 
    - [Step 5: Access the Web Application & Landing Page](#step-5-access-the-web-application--landing-page)
    - [Step 6: Connect Mobile Phones & Tablets over LAN](#step-6-connect-mobile-phones--tablets-over-lan)
    - [Step 7: Testing the Offline Mode & Outbox Auto-Sync](#step-7-testing-the-offline-mode--outbox-auto-sync)
-6. [Pre-Seeded Demo User Profiles](#6-pre-seeded-demo-user-profiles)
-7. [Academic Java OOP & CS Concept Mapping](#7-academic-java-oop--cs-concept-mapping)
-8. [Comprehensive REST API Reference](#8-comprehensive-rest-api-reference)
-9. [Automated Verification & Test Suite](#9-automated-verification--test-suite)
-10. [Troubleshooting & FAQ](#10-troubleshooting--faq)
-11. [Cloud & Vercel Deployment ($0 Free Hosting)](#11-cloud--vercel-deployment-0-free-hosting)
+7. [Pre-Seeded Demo User Profiles](#7-pre-seeded-demo-user-profiles)
+8. [Academic Java OOP & CS Concept Mapping](#8-academic-java-oop--cs-concept-mapping)
+9. [Comprehensive REST API Reference](#8-comprehensive-rest-api-reference)
+10. [Automated Verification & Test Suite](#9-automated-verification--test-suite)
+11. [Troubleshooting & FAQ](#10-troubleshooting--faq)
+12. [Cloud & Vercel Deployment ($0 Free Hosting)](#11-cloud--vercel-deployment-0-free-hosting)
     - [Option A: Deploy Frontend to Vercel (Interactive Demo / Web PWA)](#option-a-deploy-frontend-to-vercel-interactive-demo--web-pwa)
     - [Option B: Deploy Full-Stack to Render ($0 Free)](#option-b-deploy-full-stack-java-backend--react-frontend-to-render-0-free)
-12. [License & Credits](#12-license--credits)
+13. [License & Credits](#12-license--credits)
 
 ---
 
@@ -79,7 +85,88 @@ IWMS Pro solves these operational bottlenecks with zero recurring license costs 
 
 ---
 
-## 2. Cinematic Public Story Landing Experience
+## 2. Kaggle Warehouse Dataset & Drag-and-Drop Ingestion Portal
+
+IWMS Pro incorporates a **Kaggle Supply Chain & Warehouse Ingestion Engine** that eliminates static mock data demos and empowers users to load realistic enterprise datasets or drag-and-drop their own Kaggle CSV/JSON files directly into the live management portal with **zero code modifications**.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│              KAGGLE WAREHOUSE DATASET INGESTION & AUTO-MAPPING                  │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   [Drag & Drop Kaggle CSV / JSON]       OR       [1-Click Load 520 Kaggle Items]│
+│                  │                                              │               │
+│                  ▼                                              ▼               │
+│   ┌──────────────────────────────┐              ┌───────────────────────────┐   │
+│   │  Fuzzy Synonym Auto-Mapper   │              │ Curated Enterprise Series │   │
+│   │  (SKU, Stock, Margin, Bins)  │              │ (5 Enterprise Categories) │   │
+│   └──────────────┬───────────────┘              └─────────────┬─────────────┘   │
+│                  │                                            │                 │
+│                  ▼                                            ▼                 │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                     Dual-Mode State Synchronization                     │   │
+│   │  • Client IndexedDB: Instant Offline & Vercel Preview (cached_products) │   │
+│   │  • Spring Boot Host: POST /api/products/import (FileBackedRepository)   │   │
+│   │  • 2D Matrix Provisioning: Dynamically creates new bins & zones         │   │
+│   └────────────────────────────────────┬────────────────────────────────────┘   │
+│                                        │                                        │
+│                                        ▼                                        │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                  Zero-Breaking-Changes Live Propagation                 │   │
+│   │  • Dashboard KPIs (Total SKUs, Valuation, Category Distribution Charts) │   │
+│   │  • Inventory Catalog (Paginated, Searchable, Filtered, CSV Export)      │   │
+│   │  • 2D Warehouse Map (Occupancy Heatmap, Capacity, Bins populated)       │   │
+│   │  • Dynamic RBAC Financial Masking (Cost Price redacted for Floor Staff) │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 2.1 The Post-Login Drag-and-Drop Portal
+Immediately upon logging in as `ADMIN` or `MANAGER`, the **Warehouse Command Center** features an animated neon ingestion banner with:
+- **Interactive Drag & Drop Zone:** Drag any `.csv` or `.json` dataset file straight from your computer into the browser. Powered by **Framer Motion**, the dropzone features spring micro-interactions, pulsing border highlights, and real-time validation.
+- **Header Selection & Live Preview:** Displays the first detected rows with smart dropdowns, letting you inspect or re-align column assignments before committing the dataset.
+- **Instant Processing:** Seamlessly ingests hundreds or thousands of products within milliseconds without refreshing the browser.
+
+### 2.2 1-Click Pre-Packaged Kaggle Dataset (520 Enterprise Items)
+If you don't have a dataset CSV file ready, click **"1-Click 520 Kaggle Data"** to instantly inject a pre-packaged, enterprise supply chain dataset featuring 520 items across 5 distinct categories:
+1. **PERISHABLE:** Cold-chain dairy, yogurts, fresh hydroponic produce, and vacuum-sealed seafood with realistic shelf lives and expiry dates (`BIN-B1` to `BIN-B4`).
+2. **ELECTRONICS:** IoT sensors, thermal barcode label printers, handheld PDA terminals, lithium power packs, and high-precision laser meters (`BIN-C1` to `BIN-C4`).
+3. **FRAGILE:** Borosilicate laboratory beakers, optical lenses, high-voltage ceramic insulators, and quartz glass heating tubes (`BIN-A1` to `BIN-A2`).
+4. **BULK:** Industrial galvanized fasteners, high-tension pallet strapping, shrink-wrap rolls, and corrugated boxes (`BIN-A3` to `BIN-A4`).
+5. **STANDARD:** Hi-vis reflective safety jackets, nitrile coated work gloves, thermal ribbons, and industrial markers (`BIN-A5` to `BIN-A6`).
+
+### 2.3 Intelligent Fuzzy Column Auto-Mapping Engine
+The dataset ingestion engine features an intelligent fuzzy matching synonym dictionary that automatically recognizes diverse column naming conventions across Kaggle, ERP, and WMS datasets:
+
+| Target Domain Field | Recognized Synonyms & CSV Column Headers |
+|---|---|
+| **SKU / Product ID** | `sku`, `product_id`, `item_code`, `code`, `id`, `part_number`, `barcode` |
+| **Product Name** | `name`, `product_name`, `item_name`, `title`, `description`, `label` |
+| **Category** | `category`, `dept`, `department`, `type`, `commodity`, `classification` |
+| **Current Stock** | `quantity`, `qty`, `stock`, `stock_on_hand`, `units`, `on_hand`, `inventory` |
+| **Safety Stock / Min** | `reorder_point`, `reorder_level`, `safety_stock`, `min_stock`, `threshold` |
+| **Selling Price** | `selling_price`, `unit_price`, `price`, `retail_price`, `mrp`, `sale_price` |
+| **Unit Cost** | `cost_price`, `unit_cost`, `cost`, `purchase_price`, `wholesale_price` |
+| **Shelf Bin Location**| `bin_location`, `bin`, `shelf`, `location`, `rack`, `storage_bin`, `bay` |
+
+*Note: Missing or partial fields are gracefully defaulted (e.g. if cost price is omitted, it auto-computes using standard margin ratios; if a shelf bin is omitted, items are automatically slotted into the corresponding category's warehouse zone).*
+
+### 2.4 Zero-Breaking-Changes Guarantees
+- **Warehouse 2D Topology Auto-Slotting:** Any custom bin listed in an imported dataset (e.g. `BIN-X9-01`) is dynamically registered in the warehouse topology. The 2D Floor Map matrix renders all items with zero null-pointer exceptions or empty references.
+- **Role-Based Financial Masking:** Cost price data remains strictly concealed from `EMPLOYEE` users while fully accessible to `ADMIN` and `MANAGER` roles.
+- **Reactive Global State:** Dispatches global DOM sync events (`iwms:sync-complete`) so all dashboard telemetry charts, low stock alerts, catalog tables, and PDF report generators update instantly without a manual page refresh.
+
+### 2.5 Sample CSV Testing Guide
+A pre-formatted sample CSV file is provided in the repository at [`data/kaggle_warehouse_sample.csv`](data/kaggle_warehouse_sample.csv). To test custom dataset ingestion:
+1. Log in to the management terminal as `admin` (`admin123`).
+2. Navigate to **Dashboard** or **Inventory Catalog** and click **"Upload CSV / Dataset"**.
+3. Drag and drop [`data/kaggle_warehouse_sample.csv`](data/kaggle_warehouse_sample.csv) onto the upload modal.
+4. Verify the auto-detected column mappings in the live preview table and click **"Ingest Items"**.
+5. Observe the live stock levels, category distribution charts, and shelf locations update immediately.
+
+---
+
+## 3. Cinematic Public Story Landing Experience
 
 The frontend introduces an 11-section cinematic public landing experience at `/` designed to showcase the platform's engineering story, operational workflow, and computer science architecture before transitioning to the live management terminal.
 
@@ -467,6 +554,8 @@ Authorization: Bearer <session-token>
 | `GET` | `/api/products` | Retrieve catalog (costs masked for Employee) | Authenticated |
 | `GET` | `/api/products/{id}` | Retrieve single product details | Authenticated |
 | `GET` | `/api/products/search?query=...` | Search catalog by SKU or title | Authenticated |
+| `POST` | `/api/products/import` | Bulk ingest Kaggle / CSV datasets with dynamic bin provisioning | Manager, Admin |
+| `DELETE` | `/api/products/{id}` | Permanently delete product from catalog | Manager, Admin |
 | `POST` | `/api/stock/in` | Record inbound stock arrival | Authenticated |
 | `POST` | `/api/stock/out` | Record outbound stock dispatch | Authenticated |
 | `POST` | `/api/stock/transfer` | Move inventory between bins | Authenticated |
