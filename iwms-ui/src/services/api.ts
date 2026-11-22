@@ -48,6 +48,18 @@ export const api = {
     return handleResponse<Product[]>(res);
   },
 
+  async importProducts(products: Partial<Product>[]): Promise<{ importedCount: number; message: string }> {
+    const res = await fetch(`${API_BASE}/products/import`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader(),
+      },
+      body: JSON.stringify(products),
+    });
+    return handleResponse<{ importedCount: number; message: string }>(res);
+  },
+
   // Warehouses
   async getWarehouses(): Promise<Warehouse[]> {
     const res = await fetch(`${API_BASE}/warehouses`, {

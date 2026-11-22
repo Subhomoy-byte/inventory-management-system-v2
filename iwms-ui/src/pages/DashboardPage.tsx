@@ -6,6 +6,9 @@ import { useAuth } from '../context/AuthContext';
 import { GlassCard } from '../components/common/GlassCard';
 import { StatusChip } from '../components/common/StatusChip';
 import { VectorGraphic } from '../components/common/VectorGraphic';
+import { DatasetUploadBanner } from '../components/dashboard/DatasetUploadBanner';
+import { DatasetUploadModal } from '../components/modals/DatasetUploadModal';
+import { PRELOADED_KAGGLE_DATASET } from '../utils/kaggleDataset';
 import {
   Boxes,
   DollarSign,
@@ -16,7 +19,6 @@ import {
   TrendingUp,
   RefreshCw,
   Layers,
-  Sparkles,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -41,6 +43,27 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [products, setProducts] = useState<Product[]>([]);
   const [movements, setMovements] = useState<StockMovement[]>([]);
   const [, setLoading] = useState(true);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  const handleQuickLoadKaggle = async () => {
+    setUploadLoading(true);
+    try {
+      await OfflineSyncManager.cacheProducts(PRELOADED_KAGGLE_DATASET);
+      if (navigator.onLine) {
+        try {
+          await api.importProducts(PRELOADED_KAGGLE_DATASET);
+        } catch (e) {
+          console.warn('Backend sync deferred:', e);
+        }
+      }
+      window.dispatchEvent(new CustomEvent('iwms:outbox-updated'));
+      window.dispatchEvent(new CustomEvent('iwms:sync-complete'));
+      await loadData();
+    } finally {
+      setUploadLoading(false);
+    }
+  };
 
   const loadData = async () => {
     setLoading(true);
@@ -157,6 +180,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Post-Login Animated Dataset Upload Portal Banner */}
+      <DatasetUploadBanner
+        onOpenUploadModal={() => setIsUploadModalOpen(true)}
+        onQuickLoadKaggle={handleQuickLoadKaggle}
+        isLoading={uploadLoading}
+      />
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -399,6 +429,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </table>
         </div>
       </GlassCard>
+
+      {/* Dataset Upload Modal */}
+      <DatasetUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSuccess={() => loadData()}
+      />
     </div>
   );
 };

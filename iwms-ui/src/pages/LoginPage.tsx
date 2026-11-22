@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import { VectorGraphic } from '../components/common/VectorGraphic';
 import { MotionStack } from '../components/common/MotionStack';
 import {
-  Boxes,
   Lock,
   User,
   ArrowRight,
@@ -17,7 +15,6 @@ import {
   KeyRound,
   Radio,
   Fingerprint,
-  Check,
 } from 'lucide-react';
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
@@ -30,7 +27,6 @@ type RoleTab = 'ADMIN' | 'MANAGER' | 'EMPLOYEE';
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
   const { login } = useAuth();
-  const { theme } = useTheme();
 
   const [activeRole, setActiveRole] = useState<RoleTab>('ADMIN');
   const [username, setUsername] = useState('admin');
@@ -138,7 +134,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
     }
   };
 
-  const handleSimulateSSO = (methodName: string) => {
+  const handleSimulateSSO = (_methodName?: string) => {
     setError(null);
     authenticateDemoUser();
   };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { WifiOff, Database, ShieldCheck, ChevronRight, Zap } from 'lucide-react';
+import { WifiOff, Database, ShieldCheck, ChevronRight } from 'lucide-react';
 
 interface CardItem {
   id: string;

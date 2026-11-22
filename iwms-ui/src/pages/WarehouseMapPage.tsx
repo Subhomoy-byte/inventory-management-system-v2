@@ -5,14 +5,11 @@ import { api } from '../services/api';
 import { OfflineSyncManager } from '../storage/sync';
 import { GlassCard } from '../components/common/GlassCard';
 import { StatusChip } from '../components/common/StatusChip';
-import { VectorGraphic } from '../components/common/VectorGraphic';
 import {
   MapPin,
   Box,
   X,
   ArrowRight,
-  Layers,
-  Radio,
 } from 'lucide-react';
 
 interface WarehouseMapPageProps {

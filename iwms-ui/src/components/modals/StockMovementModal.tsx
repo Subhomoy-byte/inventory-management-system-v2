@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { Product, MovementType } from '../../types';
 import { api } from '../../services/api';
 import { OfflineSyncManager } from '../../storage/sync';
@@ -68,7 +68,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
             await api.stockIn({
               productId: selectedProductId,
               quantity,
-              unitCost: unitPrice,
+              unitPrice: unitPrice,
               targetBin,
               reason,
             });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { NavTab } from './layout/Dock';
 import type { Product } from '../types';
 import {
@@ -53,6 +53,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const tabs: { id: NavTab; label: string; icon: React.ReactNode; desc: string }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" />, desc: 'System overview, KPI cards & telemetry charts' },
     { id: 'inventory', label: 'Inventory Catalog', icon: <Boxes className="w-4 h-4" />, desc: 'Live catalog, filtering & movements' },
+    { id: 'inventory', label: 'Upload / Import Dataset', icon: <Boxes className="w-4 h-4 text-[#22D3EE]" />, desc: 'Ingest Kaggle supply chain CSV or load 520 items' },
     { id: 'warehouse', label: 'Floor Map', icon: <MapPin className="w-4 h-4" />, desc: '2D Zone and storage shelf capacity matrix' },
     { id: 'movements', label: 'Time-Travel Ledger', icon: <History className="w-4 h-4" />, desc: 'Transaction history and historical state' },
     { id: 'orders', label: 'Purchase Orders', icon: <ShoppingCart className="w-4 h-4" />, desc: 'Supplier orders and inbound receiving' },

@@ -7,7 +7,6 @@ import { VectorGraphic } from '../common/VectorGraphic';
 import {
   RefreshCw,
   AlertOctagon,
-  CheckCircle2,
   Clock,
   Wifi,
   WifiOff,

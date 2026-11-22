@@ -5,12 +5,14 @@ import { OfflineSyncManager } from '../storage/sync';
 import { useAuth } from '../context/AuthContext';
 import { GlassCard } from '../components/common/GlassCard';
 import { StatusChip } from '../components/common/StatusChip';
+import { DatasetUploadModal } from '../components/modals/DatasetUploadModal';
 import {
   Search,
   ArrowDownRight,
   ArrowUpRight,
   ArrowLeftRight,
   FileSpreadsheet,
+  UploadCloud,
   ChevronLeft,
   ChevronRight,
   Boxes,
@@ -29,6 +31,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const pageSize = 12;
 
   const loadProducts = async () => {
@@ -118,6 +121,14 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
         </div>
 
         <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setIsUploadModalOpen(true)}
+            className="glass-button-secondary text-xs sm:text-sm py-2 px-3.5 border-[#7C6CFF]/40 text-[#A78BFA] hover:text-white"
+            title="Upload CSV / Kaggle Dataset"
+          >
+            <UploadCloud className="w-4 h-4 text-[#22D3EE]" />
+            <span>Import Dataset</span>
+          </button>
           <button
             onClick={handleExportCsv}
             className="glass-button-secondary text-xs sm:text-sm py-2 px-3.5"
@@ -384,6 +395,13 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
           </div>
         </div>
       </GlassCard>
+
+      {/* Dataset Upload Modal */}
+      <DatasetUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSuccess={() => loadProducts()}
+      />
     </div>
   );
 };

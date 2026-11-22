@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 import { OfflineSyncManager } from '../../storage/sync';
 import { StatusChip } from '../common/StatusChip';
 import { VectorGraphic } from '../common/VectorGraphic';
 import {
-  Sun,
-  Moon,
   LogOut,
   Wifi,
   WifiOff,
-  Boxes,
   Search,
   RefreshCw,
-  Radio,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -22,7 +17,6 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
