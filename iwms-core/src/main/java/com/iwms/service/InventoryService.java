@@ -120,6 +120,45 @@ public class InventoryService {
         }
     }
 
+    public void registerOrUpdateProduct(Product product) {
+        writeLock.lock();
+        try {
+            Objects.requireNonNull(product, "Product cannot be null");
+            productCatalog.put(product.getSku(), product);
+            productBatches.putIfAbsent(product.getSku(), new ArrayList<>());
+        } finally {
+            writeLock.unlock();
+        }
+    }
+
+    public Bin ensureBinExists(String binId, String zoneName, Category category) {
+        writeLock.lock();
+        try {
+            if (binIndex.containsKey(binId)) {
+                return binIndex.get(binId);
+            }
+            Warehouse wh = warehouses.values().stream().findFirst().orElseGet(() -> {
+                Warehouse newWh = new Warehouse("WH-MAIN", "Central Fulfillment Hub", "100 Industrial Parkway");
+                warehouses.put(newWh.getId(), newWh);
+                return newWh;
+            });
+            Zone zone = wh.getZones().stream()
+                    .filter(z -> (zoneName != null && z.getName().equalsIgnoreCase(zoneName)) || z.getCategoryPreference() == category)
+                    .findFirst()
+                    .orElseGet(() -> {
+                        Zone newZone = new Zone("ZONE-" + (wh.getZones().size() + 1), zoneName != null ? zoneName : "General Storage", category != null ? category : Category.GENERAL);
+                        wh.addZone(newZone);
+                        return newZone;
+                    });
+            Bin newBin = new Bin(binId, binId, 1000, 2000.0);
+            zone.addBin(newBin);
+            binIndex.put(binId, newBin);
+            return newBin;
+        } finally {
+            writeLock.unlock();
+        }
+    }
+
     public Product getProduct(String sku) {
         readLock.lock();
         try {
