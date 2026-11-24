@@ -24,13 +24,17 @@ Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS 
    - [2.4 Zero-Breaking-Changes Guarantees](#24-zero-breaking-changes-guarantees)
    - [2.5 Sample CSV Testing Guide](#25-sample-csv-testing-guide)
 3. [Cinematic Public Story Landing Experience](#3-cinematic-public-story-landing-experience)
-4. [Visual System Architecture](#4-visual-system-architecture)
-5. [Colourful Graphic Detailed Workflows](#5-colourful-graphic-detailed-workflows)
+4. [Interactive ThreeUI Shader Architecture & Motion Engines](#4-interactive-threeui-shader-architecture--motion-engines)
+   - [4.1 Hyperspace Warp Jump Sequence (`WarpFieldBackground`)](#41-hyperspace-warp-jump-sequence-warpfieldbackground)
+   - [4.2 Gateway Flow Trajectories (`ConstellationField`)](#42-gateway-flow-trajectories-constellationfield)
+5. [Visual Interface & High-Quality Image Renders](#5-visual-interface--high-quality-image-renders)
+6. [Visual System Architecture](#6-visual-system-architecture)
+7. [Colourful Graphic Detailed Workflows](#7-colourful-graphic-detailed-workflows)
    - [Workflow A: Complete Stock Movement & Persistence Lifecycle](#workflow-a-complete-stock-movement--persistence-lifecycle)
    - [Workflow B: PWA Offline Outbox & LAN Auto-Sync Engine](#workflow-b-pwa-offline-outbox--lan-auto-sync-engine)
    - [Workflow C: Time-Travel Inventory Reconstruction (`TreeMap.headMap`)](#workflow-c-time-travel-inventory-reconstruction-treemapheadmap)
    - [Workflow D: Dynamic RBAC Financial Masking & Price Redaction](#workflow-d-dynamic-rbac-financial-masking--price-redaction)
-6. [Step-by-Step Setup Guide on Any Device](#6-step-by-step-setup-guide-on-any-device)
+8. [Step-by-Step Setup Guide on Any Device](#8-step-by-step-setup-guide-on-any-device)
    - [Step 1: Check System Requirements](#step-1-check-system-requirements)
    - [Step 2: Clone the Repository (`v2` on `redesign`)](#step-2-clone-the-repository-v2-on-redesign)
    - [Step 3: Build & Package (Single Command)](#step-3-build--package-single-command)
@@ -38,15 +42,15 @@ Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS 
    - [Step 5: Access the Web Application & Landing Page](#step-5-access-the-web-application--landing-page)
    - [Step 6: Connect Mobile Phones & Tablets over LAN](#step-6-connect-mobile-phones--tablets-over-lan)
    - [Step 7: Testing the Offline Mode & Outbox Auto-Sync](#step-7-testing-the-offline-mode--outbox-auto-sync)
-7. [Pre-Seeded Demo User Profiles](#7-pre-seeded-demo-user-profiles)
-8. [Academic Java OOP & CS Concept Mapping](#8-academic-java-oop--cs-concept-mapping)
-9. [Comprehensive REST API Reference](#8-comprehensive-rest-api-reference)
-10. [Automated Verification & Test Suite](#9-automated-verification--test-suite)
-11. [Troubleshooting & FAQ](#10-troubleshooting--faq)
-12. [Cloud & Vercel Deployment ($0 Free Hosting)](#11-cloud--vercel-deployment-0-free-hosting)
+9. [Pre-Seeded Demo User Profiles](#9-pre-seeded-demo-user-profiles)
+10. [Academic Java OOP & CS Concept Mapping](#10-academic-java-oop--cs-concept-mapping)
+11. [Comprehensive REST API Reference](#11-comprehensive-rest-api-reference)
+12. [Automated Verification & Test Suite](#12-automated-verification--test-suite)
+13. [Troubleshooting & FAQ](#13-troubleshooting--faq)
+14. [Cloud & Vercel Deployment ($0 Free Hosting)](#14-cloud--vercel-deployment-0-free-hosting)
     - [Option A: Deploy Frontend to Vercel (Interactive Demo / Web PWA)](#option-a-deploy-frontend-to-vercel-interactive-demo--web-pwa)
     - [Option B: Deploy Full-Stack to Render ($0 Free)](#option-b-deploy-full-stack-java-backend--react-frontend-to-render-0-free)
-13. [License & Credits](#12-license--credits)
+15. [License & Credits](#15-license--credits)
 
 ---
 
@@ -210,11 +214,107 @@ The frontend introduces an 11-section cinematic public landing experience at `/`
 
 ---
 
-## 3. Visual System Architecture
+## 4. Interactive ThreeUI Shader Architecture & Motion Engines
+
+IWMS Pro incorporates hardware-accelerated shaders and canvas motion fields from ThreeUI to elevate spatial depth, tactical HUD telemetry, and navigation choreography.
+
+### 4.1 Hyperspace Warp Jump Sequence (`WarpFieldBackground`)
+- **Variant:** Hyperspace (`hyperspace`)
+- **Engine:** Three.js r128 (`three128` module alias)
+- **Visual Formulation:** 1,200 ice-blue luminance streaks streaming down an expanding cylindrical tunnel toward a pulsing jump core (`#01020a` deep space backdrop).
+- **Interactive Triggers:**
+  1. **Live Demo Launch:** When a visitor clicks *"Try the live demo"* on the public landing showcase, the UI initiates a 1.4-second warp vector sequence (`ENGAGING HYPERSPACE // ROUTING TO TERMINAL AUTH`), transitioning directly to the authentication terminal.
+  2. **Post-Authentication Jump:** Upon signing in with credentials or clicking any 1-click demo profile (`Admin`, `Manager`, `Employee`), the camera plunges into the warp corridor (`AUTHENTICATION VERIFIED // JUMPING TO COMMAND CENTER`) before smoothly landing on the Warehouse Command Center dashboard.
+
+```tsx
+import { WarpFieldBackground } from "@designcodeio/threeui";
+import "@designcodeio/threeui/style.css";
+
+<div className="shader-frame">
+  <WarpFieldBackground
+    variant="hyperspace"
+    speed={15.0}
+    streakOpacity={0.60}
+    tileOpacity={0.90}
+    fov={75}
+    hue={0}
+    saturation={1.00}
+    brightness={1.00}
+  />
+</div>
+```
+
+### 4.2 Gateway Flow Trajectories (`ConstellationField`)
+- **Variant:** Gateway Flow (`gateway-flow`)
+- **Engine:** Canvas 2D + Raw WebGL
+- **Visual Formulation:** A black-stage flow canvas with fluid logarithmic path curves and streaming particle vector coordinates.
+- **Application:** Acts as the dynamic backdrop for the **3D Smart Facility Shelf & Floor Topology** (`InteractiveShelf3D.tsx` & `WarehouseMapPage.tsx`). The 3D rack structure and glowing bins float seamlessly above the streaming flow canvas without obstructing orbital camera interaction.
+
+```tsx
+import { ConstellationField } from "@designcodeio/threeui";
+import "@designcodeio/threeui/style.css";
+
+<div className="shader-frame pointer-events-none absolute inset-0 z-0 overflow-hidden">
+  <ConstellationField
+    variant="gateway-flow"
+    mode="dark"
+    speed={1.00}
+    size={1.00}
+    length={1.00}
+    density={1.00}
+    opacity={1.00}
+    hue={0}
+    saturation={1.00}
+    brightness={1.00}
+  />
+</div>
+```
+
+---
+
+## 5. Visual Interface & High-Quality Image Renders
+
+All UI previews and architectural assets are rendered in high fidelity and served locally from the repository assets catalog.
+
+### System Overview & Command Center
+<p align="center">
+  <img src="docs/assets/images/og-image.png" alt="IWMS Pro Command Center Overview" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.4);" />
+  <br />
+  <em>Figure 1: IWMS Pro Desktop Executive Workspace, Real-time Stock Telemetry, and Floating Dock</em>
+</p>
+
+### 3D Interactive Facility Shelf & Glassmorphic Warehouse Twin
+<p align="center">
+  <img src="docs/assets/images/hero-warehouse-glass-01.jpg" alt="3D Interactive Facility Shelf" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.4);" />
+  <br />
+  <em>Figure 2: Three.js Interactive 3D Smart Rack with Volumetric Density, Category Lighting, and Real-Time Bin Raycasting</em>
+</p>
+
+### Ingestion Portal & Holographic System Diagnostics
+<p align="center">
+  <img src="docs/assets/images/underhood-warehouse-hologram-01.jpg" alt="Holographic System Diagnostics" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.4);" />
+  <br />
+  <em>Figure 3: Intelligent Fuzzy Dataset Ingestion, Concurrency Diagnostics, and Memory Topology Inspection</em>
+</p>
+
+### Industrial Floor Logistics & Automated Material Flow
+<p align="center">
+  <img src="docs/assets/images/final-warehouse-night-01.jpg" alt="Facility Floor Operations" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.4);" />
+  <br />
+  <em>Figure 4: Automated Pallet Staging, Conveyor Routing, and Real-Time RF Inbound Ledger</em>
+</p>
+
+---
+
+## 6. Visual System Architecture
 
 IWMS Pro is structured into four decoupled architectural tiers:
 
-![IWMS System Architecture](docs/assets/architecture-overview.svg)
+<p align="center">
+  <img src="docs/assets/architecture-overview.svg" alt="IWMS System Architecture" width="100%" />
+  <br />
+  <a href="docs/assets/architecture-overview.svg"><em>[Click to open full-resolution SVG diagram]</em></a>
+</p>
 
 ```mermaid
 graph TD
@@ -253,13 +353,17 @@ graph TD
 
 ---
 
-## 4. Colourful Graphic Detailed Workflows
+## 7. Colourful Graphic Detailed Workflows
 
 ### Workflow A: Complete Stock Movement & Persistence Lifecycle
 
 Every stock transaction (Inbound, Outbound, Transfer, or Adjustment) follows a strict ACID-compliant pipeline:
 
-![Transaction Lifecycle](docs/assets/workflow-lifecycle.svg)
+<p align="center">
+  <img src="docs/assets/workflow-lifecycle.svg" alt="Transaction Lifecycle" width="100%" />
+  <br />
+  <a href="docs/assets/workflow-lifecycle.svg"><em>[Click to open full-resolution SVG diagram]</em></a>
+</p>
 
 ```mermaid
 sequenceDiagram
@@ -295,7 +399,11 @@ sequenceDiagram
 
 When warehouse floor staff enter areas without Wi-Fi coverage, the app switches to offline queueing without interrupting work:
 
-![Offline PWA Sync Engine](docs/assets/offline-sync-engine.svg)
+<p align="center">
+  <img src="docs/assets/offline-sync-engine.svg" alt="Offline PWA Sync Engine" width="100%" />
+  <br />
+  <a href="docs/assets/offline-sync-engine.svg"><em>[Click to open full-resolution SVG diagram]</em></a>
+</p>
 
 ```mermaid
 flowchart LR
@@ -362,11 +470,15 @@ flowchart TD
 
 ---
 
-## 5. Step-by-Step Setup Guide on Any Device
+## 8. Step-by-Step Setup Guide on Any Device
 
 Follow these instructions to run IWMS Pro on any computer (Windows, macOS, or Linux).
 
-![Device Setup Guide](docs/assets/device-setup-guide.svg)
+<p align="center">
+  <img src="docs/assets/device-setup-guide.svg" alt="Device Setup Guide" width="100%" />
+  <br />
+  <a href="docs/assets/device-setup-guide.svg"><em>[Click to open full-resolution SVG diagram]</em></a>
+</p>
 
 ### Step 1: Check System Requirements
 IWMS requires only the standard Java Runtime Environment:
@@ -477,7 +589,7 @@ You can test the offline capabilities in 30 seconds:
 
 ---
 
-## 6. Pre-Seeded Demo User Profiles
+## 9. Pre-Seeded Demo User Profiles
 
 On startup, IWMS Pro automatically provisions three user profiles:
 
@@ -491,7 +603,7 @@ On startup, IWMS Pro automatically provisions three user profiles:
 
 ---
 
-## 7. Academic Java OOP & CS Concept Mapping
+## 10. Academic Java OOP & CS Concept Mapping
 
 This codebase is specifically architected to serve as a textbook-quality showcase of Java Object-Oriented Programming and Computer Science algorithms:
 
@@ -540,7 +652,7 @@ This codebase is specifically architected to serve as a textbook-quality showcas
 
 ---
 
-## 8. Comprehensive REST API Reference
+## 11. Comprehensive REST API Reference
 
 All requests (except `/api/auth/login`) require the HTTP header:
 ```
@@ -571,7 +683,7 @@ Authorization: Bearer <session-token>
 
 ---
 
-## 9. Automated Verification & Test Suite
+## 12. Automated Verification & Test Suite
 
 IWMS Pro maintains a **100% test pass rate across 44 unit and integration tests**:
 
@@ -615,7 +727,7 @@ dist/assets/index-XXXX.js       488.20 kB │ gzip: 142.10 kB
 
 ---
 
-## 10. Troubleshooting & FAQ
+## 13. Troubleshooting & FAQ
 
 #### Q: Port 8443 is already in use by another service. How can I change it?
 **A:** You can override the port at launch using standard Spring Boot arguments:
@@ -635,7 +747,7 @@ Then access at `http://localhost:9090`.
 
 ---
 
-## 11. Cloud & Vercel Deployment ($0 Free Hosting)
+## 14. Cloud & Vercel Deployment ($0 Free Hosting)
 
 IWMS Pro can be deployed to the cloud for free ($0) in two ways:
 
@@ -685,7 +797,7 @@ To run the complete system (including the Spring Boot REST API, WAL persistence,
 
 ---
 
-## 12. License & Credits
+## 15. License & Credits
 
 - **License:** Open-source academic college project. Free for educational, commercial, and personal use under the [MIT License](LICENSE).
 - **Visuals Attribution:** Warehouse floor and logistics visual media generated with AI (Google Flow) for the IWMS Pro cinematic landing presentation.

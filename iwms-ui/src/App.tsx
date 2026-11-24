@@ -19,6 +19,7 @@ import { ConflictReviewPanel } from './components/sync/ConflictReviewPanel';
 import { StockMovementModal } from './components/modals/StockMovementModal';
 import { CommandPalette } from './components/CommandPalette';
 import { ReloadPrompt } from './components/common/ReloadPrompt';
+import { WarpTransitionOverlay } from './components/common/WarpTransitionOverlay';
 import { OfflineSyncManager } from './storage/sync';
 import { api } from './services/api';
 import type { Product, MovementType } from './types';
@@ -80,9 +81,43 @@ const MainLayout: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Warp transition overlay state
+  const [warpConfig, setWarpConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    subtitle: string;
+    onComplete: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    subtitle: '',
+    onComplete: () => {},
+  });
+
   const navigateToLogin = () => {
-    window.location.hash = '#login';
-    setHash('#login');
+    setWarpConfig({
+      isOpen: true,
+      title: 'ENGAGING HYPERSPACE JUMP',
+      subtitle: 'ROUTING FROM LIVE DEMO TO AUTHENTICATION TERMINAL',
+      onComplete: () => {
+        window.location.hash = '#login';
+        setHash('#login');
+        setWarpConfig((prev) => ({ ...prev, isOpen: false }));
+      },
+    });
+  };
+
+  const handleLoginRequest = (performLogin: () => void) => {
+    setWarpConfig({
+      isOpen: true,
+      title: 'AUTHENTICATION VERIFIED',
+      subtitle: 'JUMPING TO WAREHOUSE COMMAND CENTER',
+      onComplete: () => {
+        performLogin();
+        setCurrentTab('dashboard');
+        setWarpConfig((prev) => ({ ...prev, isOpen: false }));
+      },
+    });
   };
 
   const navigateToStory = () => {
@@ -134,10 +169,21 @@ const MainLayout: React.FC = () => {
   };
 
   if (!isAuthenticated) {
-    if (hash === '#login') {
-      return <LoginPage onBackToOverview={navigateToStory} />;
-    }
-    return <LandingPage onLaunchApp={navigateToLogin} />;
+    return (
+      <>
+        {hash === '#login' ? (
+          <LoginPage onBackToOverview={navigateToStory} onLoginRequest={handleLoginRequest} />
+        ) : (
+          <LandingPage onLaunchApp={navigateToLogin} />
+        )}
+        <WarpTransitionOverlay
+          isOpen={warpConfig.isOpen}
+          title={warpConfig.title}
+          subtitle={warpConfig.subtitle}
+          onComplete={warpConfig.onComplete}
+        />
+      </>
+    );
   }
 
   return (
@@ -235,6 +281,13 @@ const MainLayout: React.FC = () => {
         onClose={() => setIsCommandPaletteOpen(false)}
         onSelectTab={setCurrentTab}
         products={allProducts}
+      />
+
+      <WarpTransitionOverlay
+        isOpen={warpConfig.isOpen}
+        title={warpConfig.title}
+        subtitle={warpConfig.subtitle}
+        onComplete={warpConfig.onComplete}
       />
     </div>
   );

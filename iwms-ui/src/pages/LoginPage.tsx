@@ -24,14 +24,23 @@ const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
 
 interface LoginPageProps {
   onBackToOverview?: () => void;
+  onLoginRequest?: (performLogin: () => void) => void;
 }
 
 type RoleTab = 'ADMIN' | 'MANAGER' | 'EMPLOYEE';
 
-export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
+export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview, onLoginRequest }) => {
   const { login } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === 'dark';
+
+  const executeLogin = (token: string, user: any) => {
+    if (onLoginRequest) {
+      onLoginRequest(() => login(token, user));
+    } else {
+      login(token, user);
+    }
+  };
 
   const [activeRole, setActiveRole] = useState<RoleTab>('ADMIN');
   const [username, setUsername] = useState('admin');
@@ -79,7 +88,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
     else if (trimmedUser.includes('manager')) role = 'MANAGER';
     else if (trimmedUser.includes('emp')) role = 'EMPLOYEE';
 
-    login('demo-offline-token-' + Date.now(), {
+    executeLogin('demo-offline-token-' + Date.now(), {
       id: 'user-' + (trimmedUser || 'demo'),
       username: username.trim() || 'Demo Operator',
       role,
@@ -103,7 +112,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
         const contentType = response.headers.get('content-type') || '';
         if (!contentType.includes('text/html')) {
           const data = await response.json();
-          login(data.token, data.user);
+          executeLogin(data.token, data.user);
           return;
         }
       }

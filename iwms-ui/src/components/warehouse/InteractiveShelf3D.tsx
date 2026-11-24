@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
+import { ConstellationField } from '@designcodeio/threeui';
+import '@designcodeio/threeui/style.css';
 import { useTheme } from '../../context/ThemeContext';
 import { StatusChip } from '../common/StatusChip';
 import {
@@ -738,10 +740,26 @@ export const InteractiveShelf3D: React.FC<InteractiveShelf3DProps> = ({
           : 'bg-white border-slate-200/80 shadow-xl shadow-slate-200/60'
       } ${isFullscreen ? 'fixed inset-4 z-50 h-auto' : 'h-[520px] sm:h-[580px]'} ${className}`}
     >
+      {/* Configured ThreeUI ConstellationField (Gateway Flow Variant) Backdrop */}
+      <div className="shader-frame pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-85">
+        <ConstellationField
+          variant="gateway-flow"
+          mode={isDark ? "dark" : "light"}
+          speed={1.00}
+          size={1.00}
+          length={1.00}
+          density={1.00}
+          opacity={1.00}
+          hue={0}
+          saturation={1.00}
+          brightness={1.00}
+        />
+      </div>
+
       {/* 3D WebGL Canvas */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full block cursor-grab active:cursor-grabbing outline-none"
+        className="relative z-10 w-full h-full block cursor-grab active:cursor-grabbing outline-none"
       />
 
       {/* Top Glass Control Toolbar */}

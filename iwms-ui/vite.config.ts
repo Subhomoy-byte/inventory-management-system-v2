@@ -1,9 +1,20 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://vite.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      'three128': 'three',
+      '@designcodeio/threeui/style.css': path.resolve(__dirname, 'src/shaders/threeui.css'),
+      '@designcodeio/threeui': path.resolve(__dirname, 'src/shaders/index.ts'),
+    },
+  },
   plugins: [
     react(),
     VitePWA({
