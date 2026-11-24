@@ -27,6 +27,8 @@ Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS 
 4. [Interactive ThreeUI Shader Architecture & Motion Engines](#4-interactive-threeui-shader-architecture--motion-engines)
    - [4.1 Hyperspace Warp Jump Sequence (`WarpFieldBackground`)](#41-hyperspace-warp-jump-sequence-warpfieldbackground)
    - [4.2 Gateway Flow Trajectories (`ConstellationField`)](#42-gateway-flow-trajectories-constellationfield)
+   - [4.3 Interactive 3D Audit Folio (`<Folder />` from React Bits)](#43-interactive-3d-audit-folio-folder-from-react-bits)
+   - [4.4 Direct Structured PDF Download Engine (`pdfGenerator.ts`)](#44-direct-structured-pdf-download-engine-pdfgeneratorts)
 5. [Visual Interface & High-Quality Image Renders](#5-visual-interface--high-quality-image-renders)
 6. [Visual System Architecture](#6-visual-system-architecture)
 7. [Colourful Graphic Detailed Workflows](#7-colourful-graphic-detailed-workflows)
@@ -270,6 +272,51 @@ import "@designcodeio/threeui/style.css";
   />
 </div>
 ```
+
+### 4.3 Interactive 3D Audit Folio (`<Folder />` from React Bits)
+- **Component:** `Folder` (`Folder.tsx` & `Folder.css`)
+- **Variant:** Glass 3D Flap Mode (`mode="flap"`, `variant="glass"`)
+- **Physics & Graphics Engine:** Custom WebGL2 shader pipeline (`VERTEX`, `PAINT`, `SCREEN`, `BLUR`, `GLASS`) with 3D matrix projection, cursor perspective tilt, spring-damper overshoot physics, and touch/pointer drag-and-drop.
+- **Application:** Embedded within the **Reports & Audit Center** (`ReportsPage.tsx`). Provides an interactive tactile dossier containing 4 physical audit document cards (Cycle Count Sheet, Valuation & Cost Ledger, Discrepancy Variance Sheet, Facility Audit Dossier).
+- **Tactile Document Inspection:** Operators can hover to peek pages, drag documents out of the folder across the screen, click to zoom documents, or click the primary count sheet to trigger instant structured PDF export.
+
+```tsx
+import { Folder } from '../components/common/Folder';
+
+<Folder
+  label="WH-MAIN Audit"
+  variant="glass"
+  color="#4f46e5"
+  paperColor="#ffffff"
+  items={[
+    { title: 'Cycle Count Sheet', description: '520 SKUs prepared for A4 audit verification. Click to download.' },
+    { title: 'Valuation & Cost Ledger', description: 'Total inventory valuation and cost margins ledger.' },
+    { title: 'Discrepancy Sheet', description: 'Physical audit variance fields and supervisory sign-off block.' },
+    { title: 'Facility Audit Dossier', description: 'WH-MAIN Central Logistics Hub official tracking manifest.' }
+  ]}
+  mode="flap"
+  layout="spread"
+  size={1.05}
+  theme="dark"
+  openOn="click"
+  draggable={true}
+  zoomOnClick={true}
+  peek={true}
+  onItemClick={(_item, index) => {
+    if (index === 0) handleDownloadPdf();
+  }}
+/>
+```
+
+### 4.4 Direct Structured PDF Download Engine (`pdfGenerator.ts`)
+- **Architecture:** Client-side vector document compiler leveraging `jsPDF` and `jspdf-autotable` with deterministic Blob streaming (`generateWarehousePdfBlob` & `triggerBlobDownload`).
+- **Zero-Redirect Reliability:** Eliminates server roundtrips and page reload loops by synthesizing clean A4 landscape count sheets entirely in-browser from present live catalog state.
+- **Enterprise Features:**
+  - **Dynamic Scope Filtering:** Instantly filters count sheets by warehouse category with SKU counts.
+  - **RBAC Financial Masking:** Enforces strict role-based data governance—unit cost prices and total valuation metrics are clearly displayed for Administrators and Managers, but strictly masked as `[ RESTRICTED ]` for floor warehouse staff.
+  - **Audit Verification Block:** Pre-populates Location Bin IDs, Category tags, SKU identifiers, Product titles, Present Stock quantities, and empty verification checkbox fields `[      ]` for manual physical tallying.
+  - **Dual Supervisory Sign-Off:** Provides formal Auditor Signature and Floor Supervisor verification sign-off blocks.
+  - **Instant Live Preview:** Embedded high-contrast PDF reader preview frame (`<iframe src={previewBlobUrl}>`) displaying real-time formatted sheets side-by-side with direct download.
 
 ---
 
@@ -803,9 +850,9 @@ To run the complete system (including the Spring Boot REST API, WAL persistence,
 This project includes a comprehensive, queryable knowledge graph generated via [`graphify`](https://github.com/safishamsi/graphify), mapping every module, domain model, REST controller, persistence file writer, and ThreeUI shader component across both Java and TypeScript codebases.
 
 ### 📊 Graph Metrics
-- **Nodes:** 4,301 extracted and structured entities
-- **Edges:** 11,163 relationships (calls, imports, references, contains, inherits)
-- **Detected Communities:** 136 semantic subsystem clusters (covering ThreeJS graphics, Java core models, REST APIs, WAL file storage, RBAC auth filters, and state stores)
+- **Nodes:** 13,686 extracted and structured entities
+- **Edges:** 33,876 relationships (calls, imports, references, contains, inherits)
+- **Detected Communities:** 378 semantic subsystem clusters (covering ThreeUI graphics, React Bits physics components, Java core models, REST APIs, WAL file storage, RBAC auth filters, and state stores)
 - **Top Core Hub (God Node):** `InventoryService` (72 direct edges across storage, validation, transactions, and REST controllers)
 
 ### 🗺️ Navigating the Graph

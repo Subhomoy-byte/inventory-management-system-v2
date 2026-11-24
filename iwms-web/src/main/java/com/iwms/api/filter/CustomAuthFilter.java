@@ -40,14 +40,20 @@ public class CustomAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 2. Extract Bearer token from Authorization header
+        // 2. Extract Bearer token from Authorization header or token query parameter
+        String token = null;
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7).trim();
+        } else if (request.getParameter("token") != null && !request.getParameter("token").isBlank()) {
+            token = request.getParameter("token").trim();
+        }
+
+        if (token == null) {
             sendUnauthorized(response, "Missing or invalid Authorization header");
             return;
         }
 
-        String token = authHeader.substring(7).trim();
         Optional<User> userOpt = sessionManager.validateSession(token);
 
         if (userOpt.isEmpty()) {

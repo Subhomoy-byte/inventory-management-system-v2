@@ -32,7 +32,7 @@ public class ReportController {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"warehouse_floor_summary.pdf\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"warehouse_floor_summary.pdf\"")
                 .body(pdfBytes);
     }
 

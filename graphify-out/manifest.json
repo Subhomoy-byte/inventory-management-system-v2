@@ -432,10 +432,10 @@
     "semantic_hash": "029f4905006c1fffd96bc863e2d98d3e"
   },
   "iwms-ui/package.json": {
-    "mtime": 1795537206.2896895,
-    "seen": 1795558957.7806013,
-    "ast_hash": "fb279598af12d1e24e092a63c3c26b80",
-    "semantic_hash": "fb279598af12d1e24e092a63c3c26b80"
+    "mtime": 1795561370.850635,
+    "seen": 1795563541.4250824,
+    "ast_hash": "f124888d0937003e411e154813ea355a",
+    "semantic_hash": ""
   },
   "iwms-ui/postcss.config.js": {
     "mtime": 1794088431.314191,
@@ -606,10 +606,10 @@
     "semantic_hash": "747cd1e12a4ce3f6fed99dc9b3be9663"
   },
   "iwms-ui/src/pages/ReportsPage.tsx": {
-    "mtime": 1795537206.3483367,
-    "seen": 1795558957.7806013,
-    "ast_hash": "e270de729a2cad45b76947d93567070f",
-    "semantic_hash": "e270de729a2cad45b76947d93567070f"
+    "mtime": 1795563236.676492,
+    "seen": 1795563541.4250824,
+    "ast_hash": "937b6dde434a7816d20a7ed889199e1d",
+    "semantic_hash": ""
   },
   "iwms-ui/src/pages/WarehouseMapPage.tsx": {
     "mtime": 1795537206.3522556,
@@ -720,10 +720,10 @@
     "semantic_hash": "2e154cc57ea1ad4eb2e82aec029594f0"
   },
   "iwms-ui/vite.config.ts": {
-    "mtime": 1795537206.39238,
-    "seen": 1795558957.7806013,
-    "ast_hash": "80f0658c1e443a5fad1cdf3721ad6445",
-    "semantic_hash": "80f0658c1e443a5fad1cdf3721ad6445"
+    "mtime": 1795562531.9603202,
+    "seen": 1795563541.4250824,
+    "ast_hash": "79cf4c534a3ff3d5fe65219426af96e9",
+    "semantic_hash": ""
   },
   "iwms-web/pom.xml": {
     "mtime": 1794081769.8820245,
@@ -762,10 +762,10 @@
     "semantic_hash": "98d5e0388f7689adc880da3a012a5407"
   },
   "iwms-web/src/main/java/com/iwms/api/controller/ReportController.java": {
-    "mtime": 1794085811.23888,
-    "seen": 1795558957.7806013,
-    "ast_hash": "7323dfd756d07811cb6a41a197298fb3",
-    "semantic_hash": "7323dfd756d07811cb6a41a197298fb3"
+    "mtime": 1795561397.6818013,
+    "seen": 1795563541.4250824,
+    "ast_hash": "961ca0550504c3f050f0be100bd78f6f",
+    "semantic_hash": ""
   },
   "iwms-web/src/main/java/com/iwms/api/controller/StockController.java": {
     "mtime": 1794086221.9240892,
@@ -834,10 +834,10 @@
     "semantic_hash": "0f00e8b2c0bf870bcf8e38b18a50415d"
   },
   "iwms-web/src/main/java/com/iwms/api/filter/CustomAuthFilter.java": {
-    "mtime": 1794085714.0817933,
-    "seen": 1795558957.7806013,
-    "ast_hash": "2164b1ce37b373644e43669df3d6cdea",
-    "semantic_hash": "2164b1ce37b373644e43669df3d6cdea"
+    "mtime": 1795561388.812526,
+    "seen": 1795563541.4250824,
+    "ast_hash": "6e254606f85b92860d50e2c0b67e6315",
+    "semantic_hash": ""
   },
   "iwms-web/src/main/resources/application.yml": {
     "mtime": 1794085824.2582097,
@@ -928,5 +928,587 @@
     "seen": 1795558957.7806013,
     "ast_hash": "953697001a3c51f7b80bada95b47349e",
     "semantic_hash": "953697001a3c51f7b80bada95b47349e"
+  },
+  "iwms-ui/src/components/common/Folder.tsx": {
+    "mtime": 1795562371.7425928,
+    "seen": 1795563541.4250824,
+    "ast_hash": "eac2983e7e8379063f08d9fcd7051230",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/services/pdfGenerator.ts": {
+    "mtime": 1795561438.7943554,
+    "seen": 1795563541.4250824,
+    "ast_hash": "70ccba14a2e10e16131cefea9f4be27e",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/assets/html2canvas.esm-QH1iLAAe.js": {
+    "mtime": 1795562589.0486798,
+    "seen": 1795563541.4250824,
+    "ast_hash": "4f0dcfc6e1ed8d707ea736f1dcde69d4",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/assets/index-CSdqEJPy.js": {
+    "mtime": 1795561595.3145328,
+    "seen": 1795563541.4250824,
+    "ast_hash": "da9a785983ee3e1aaf65b1ae7d7dd6f5",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/assets/index-or80JevL.js": {
+    "mtime": 1795562589.0839572,
+    "seen": 1795563541.4250824,
+    "ast_hash": "9299651cfdd964e6f9fe5b47e2f59c27",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/assets/index.es-Cj0VPXNK.js": {
+    "mtime": 1795562589.0486798,
+    "seen": 1795563541.4250824,
+    "ast_hash": "ca7f593809f303b8fd2504f029eb646c",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/assets/index.es-DeiY0jaW.js": {
+    "mtime": 1795561595.3076503,
+    "seen": 1795563541.4250824,
+    "ast_hash": "1a5c9ff3f5ee6529f63e81dcbf520d50",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/assets/purify.es-BKvm9NlY.js": {
+    "mtime": 1795562589.0486798,
+    "seen": 1795563541.4250824,
+    "ast_hash": "da6cb765170b5f67dbe49bf43ae9a067",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/assets/workbox-window.prod.es5-BBnX5xw4.js": {
+    "mtime": 1795562589.0486798,
+    "seen": 1795563541.4250824,
+    "ast_hash": "b63a6c814e11c0837136540cf08ca10f",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/sw.js": {
+    "mtime": 1795562597.6074576,
+    "seen": 1795563541.4250824,
+    "ast_hash": "f1afd0b0bae79a0cc6f83fc6c2673890",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/workbox-35e397ac.js": {
+    "mtime": 1795562597.6094775,
+    "seen": 1795563541.4250824,
+    "ast_hash": "73e87bdb116f3751bbee6e56d4aed815",
+    "semantic_hash": ""
+  },
+  ".impeccable/surfaces/iwms-ui-src-app-tsx.md": {
+    "mtime": 1795537206.2211647,
+    "seen": 1795563541.4250824,
+    "ast_hash": "06652e07f0c5504c85d25b71a2f2670f",
+    "semantic_hash": ""
+  },
+  "DESIGN.md": {
+    "mtime": 1795537206.2211647,
+    "seen": 1795563541.4250824,
+    "ast_hash": "367e8534da068a4a8dbd80d0fbf0959d",
+    "semantic_hash": ""
+  },
+  "PRODUCT.md": {
+    "mtime": 1795537206.2271695,
+    "seen": 1795563541.4250824,
+    "ast_hash": "96e3f1d9d9d6da9210f971d0e71efb36",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1795559874.0730693,
+    "seen": 1795563541.4250824,
+    "ast_hash": "9a73a3dcf2a947aed9116eeaf90c5346",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-08-inventory-warehouse-management-system.md": {
+    "mtime": 1794081414.5453331,
+    "seen": 1795563541.4250824,
+    "ast_hash": "fb73780b9c8752af9cdadb7c77ba0175",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-22-kaggle-warehouse-dataset-upload.md": {
+    "mtime": 1795537206.2706428,
+    "seen": 1795563541.4250824,
+    "ast_hash": "b607a2bed7c71a49b7ee35cf7d463d00",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-08-inventory-warehouse-management-system-design.md": {
+    "mtime": 1794081236.3952644,
+    "seen": 1795563541.4250824,
+    "ast_hash": "01e87719418c14d1ceea7db5418c47ae",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-22-kaggle-warehouse-dataset-upload-design.md": {
+    "mtime": 1795537206.27267,
+    "seen": 1795563541.4250824,
+    "ast_hash": "d537675c6845e80887b6e4a72ae12fe5",
+    "semantic_hash": ""
+  },
+  "iwms-ui/README.md": {
+    "mtime": 1794086669.0427315,
+    "seen": 1795563541.4250824,
+    "ast_hash": "10495bfcc6c568eca4dab6dd5df795d3",
+    "semantic_hash": ""
+  },
+  "iwms-ui/index.html": {
+    "mtime": 1795537206.2830384,
+    "seen": 1795563541.4250824,
+    "ast_hash": "606a645df8f52a1cf1996520ce20f8f1",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/amber-halftone.html": {
+    "mtime": 1795537206.3599343,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/connectivity-graph.html": {
+    "mtime": 1795537206.3599343,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/constellation-field.html": {
+    "mtime": 1795537206.3619463,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/defense-lines.html": {
+    "mtime": 1795537206.3644702,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/diagnostics-panel.html": {
+    "mtime": 1795537206.366015,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/flow-field.html": {
+    "mtime": 1795537206.366015,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/flux-vortex.html": {
+    "mtime": 1795537206.3683555,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/gateway-flow.html": {
+    "mtime": 1795537206.3689418,
+    "seen": 1795563541.4250824,
+    "ast_hash": "734fcba4134f672bb3172b4b5733dde4",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/interface-lines.html": {
+    "mtime": 1795537206.3689418,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/matrix-field.html": {
+    "mtime": 1795537206.3689418,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/override-grid.html": {
+    "mtime": 1795537206.3689418,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/particle-drift.html": {
+    "mtime": 1795537206.3689418,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/particle-network.html": {
+    "mtime": 1795537206.3744452,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/portal-field.html": {
+    "mtime": 1795537206.3754723,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/signal-particles.html": {
+    "mtime": 1795537206.3769858,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/skeuomorphic-toggle.html": {
+    "mtime": 1795537206.377565,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/topo-field.html": {
+    "mtime": 1795537206.3790953,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/shaders/neuform-isolated/sources/wireframe-forms.html": {
+    "mtime": 1795537206.3814304,
+    "seen": 1795563541.4250824,
+    "ast_hash": "17814e943d578eae336525fc82354900",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/index.html": {
+    "mtime": 1795562589.0486798,
+    "seen": 1795563541.4250824,
+    "ast_hash": "d63219a6b6af13e86db697d202972d1d",
+    "semantic_hash": ""
+  },
+  "docs/assets/architecture-overview.svg": {
+    "mtime": 1794092025.4041545,
+    "seen": 1795563541.4250824,
+    "ast_hash": "fbf77205793a4a7ee5b3b9c3094a4ef6",
+    "semantic_hash": ""
+  },
+  "docs/assets/device-setup-guide.svg": {
+    "mtime": 1794092100.2027314,
+    "seen": 1795563541.4250824,
+    "ast_hash": "f053506d3dca46f753c0139dd9503652",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/final-warehouse-night-01.jpg": {
+    "mtime": 1795537206.234925,
+    "seen": 1795563541.4250824,
+    "ast_hash": "5f4335d1de7f042ce9cd1e8fa66ae4a7",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/floor-conveyor-boxes-01.jpg": {
+    "mtime": 1795537206.238743,
+    "seen": 1795563541.4250824,
+    "ast_hash": "ba8d3dcabd60c062990089286402bc8f",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/hero-warehouse-glass-01.jpg": {
+    "mtime": 1795537206.2436748,
+    "seen": 1795563541.4250824,
+    "ast_hash": "7a7f2f753a41db5b42e1b2f4ac4cfee2",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/logistics-truck-hero-01.jpg": {
+    "mtime": 1795537206.2471526,
+    "seen": 1795563541.4250824,
+    "ast_hash": "3ea8091e7e3bfa703f66a3ba02ca2b97",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/logistics-trucks-dock-side-01.jpg": {
+    "mtime": 1795537206.251941,
+    "seen": 1795563541.4250824,
+    "ast_hash": "8c96213b73939f0a6a1019888944eac8",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/logistics-trucks-dock-top-01.jpg": {
+    "mtime": 1795537206.255626,
+    "seen": 1795563541.4250824,
+    "ast_hash": "ee0c7311d1dd62371e7213fe0acd56bb",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/og-image.png": {
+    "mtime": 1795537206.2589514,
+    "seen": 1795563541.4250824,
+    "ast_hash": "d392b9b47a3b28645eaf3de554939802",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/orders-pallet-glow-01.jpg": {
+    "mtime": 1795537206.262092,
+    "seen": 1795563541.4250824,
+    "ast_hash": "6108d493119dad1a323ca752b68e5753",
+    "semantic_hash": ""
+  },
+  "docs/assets/images/underhood-warehouse-hologram-01.jpg": {
+    "mtime": 1795537206.2661023,
+    "seen": 1795563541.4250824,
+    "ast_hash": "9692fa8ec409ed862c2e24d9ce2f870f",
+    "semantic_hash": ""
+  },
+  "docs/assets/offline-sync-engine.svg": {
+    "mtime": 1794092078.094279,
+    "seen": 1795563541.4250824,
+    "ast_hash": "1a43dcc3cb5a2d3fb66461c3f15be9eb",
+    "semantic_hash": ""
+  },
+  "docs/assets/workflow-lifecycle.svg": {
+    "mtime": 1794092056.1249263,
+    "seen": 1795563541.4250824,
+    "ast_hash": "7b4bb21b2160dd59d700154bc4cd9cf4",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/favicon.svg": {
+    "mtime": 1795537206.2953157,
+    "seen": 1795563541.4250824,
+    "ast_hash": "a2b7a64cb09d83361b458a515bedeb2e",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/icons.svg": {
+    "mtime": 1794086669.6166534,
+    "seen": 1795563541.4250824,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/final-warehouse-night-01.jpg": {
+    "mtime": 1794429227.687088,
+    "seen": 1795563541.4250824,
+    "ast_hash": "5f4335d1de7f042ce9cd1e8fa66ae4a7",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/floor-conveyor-boxes-01.jpg": {
+    "mtime": 1794429227.6891036,
+    "seen": 1795563541.4250824,
+    "ast_hash": "ba8d3dcabd60c062990089286402bc8f",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/hero-warehouse-glass-01.jpg": {
+    "mtime": 1794429227.6994884,
+    "seen": 1795563541.4250824,
+    "ast_hash": "7a7f2f753a41db5b42e1b2f4ac4cfee2",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/logistics-truck-hero-01.jpg": {
+    "mtime": 1794429227.7050407,
+    "seen": 1795563541.4250824,
+    "ast_hash": "3ea8091e7e3bfa703f66a3ba02ca2b97",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/logistics-trucks-dock-side-01.jpg": {
+    "mtime": 1794429227.725137,
+    "seen": 1795563541.4250824,
+    "ast_hash": "8c96213b73939f0a6a1019888944eac8",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/logistics-trucks-dock-top-01.jpg": {
+    "mtime": 1794429227.732399,
+    "seen": 1795563541.4250824,
+    "ast_hash": "ee0c7311d1dd62371e7213fe0acd56bb",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/orders-pallet-glow-01.jpg": {
+    "mtime": 1794429227.73837,
+    "seen": 1795563541.4250824,
+    "ast_hash": "6108d493119dad1a323ca752b68e5753",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/images/underhood-warehouse-hologram-01.jpg": {
+    "mtime": 1794429227.7457666,
+    "seen": 1795563541.4250824,
+    "ast_hash": "9692fa8ec409ed862c2e24d9ce2f870f",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/maskable-icon-512x512.png": {
+    "mtime": 1795537206.297032,
+    "seen": 1795563541.4250824,
+    "ast_hash": "85b265254aa6d2c8051a21fb1299064c",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/og-image.png": {
+    "mtime": 1795537206.3011312,
+    "seen": 1795563541.4250824,
+    "ast_hash": "d392b9b47a3b28645eaf3de554939802",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/pwa-192x192.png": {
+    "mtime": 1795537206.3011312,
+    "seen": 1795563541.4250824,
+    "ast_hash": "eff581c752add6745e17fa17d9fa9f43",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/pwa-512x512.png": {
+    "mtime": 1795537206.305492,
+    "seen": 1795563541.4250824,
+    "ast_hash": "a3d72de9e443083bbba8c3233e68a41e",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/videos/floor-conveyor-boxes-poster.webp": {
+    "mtime": 1794429227.7581053,
+    "seen": 1795563541.4250824,
+    "ast_hash": "8e1e5583fa6cf635083152ba2a9c2877",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/videos/hero-warehouse-build-poster.webp": {
+    "mtime": 1794429227.7828276,
+    "seen": 1795563541.4250824,
+    "ast_hash": "2a8ae70b958c5fd123244605fb40c55f",
+    "semantic_hash": ""
+  },
+  "iwms-ui/public/videos/problem-truck-drive-poster.webp": {
+    "mtime": 1794429227.820534,
+    "seen": 1795563541.4250824,
+    "ast_hash": "77fdd6e47ccb6d964cc6f06ab5133a7c",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/assets/hero.png": {
+    "mtime": 1794086669.22401,
+    "seen": 1795563541.4250824,
+    "ast_hash": "aead493361b27e7510691c5d7072dfc1",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/assets/react.svg": {
+    "mtime": 1794086669.8023906,
+    "seen": 1795563541.4250824,
+    "ast_hash": "f0402b67b6ce880f65666bb49e841696",
+    "semantic_hash": ""
+  },
+  "iwms-ui/src/assets/vite.svg": {
+    "mtime": 1794086670.2613986,
+    "seen": 1795563541.4250824,
+    "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/favicon.svg": {
+    "mtime": 1795537206.2953157,
+    "seen": 1795563541.4250824,
+    "ast_hash": "a2b7a64cb09d83361b458a515bedeb2e",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/icons.svg": {
+    "mtime": 1794086669.6166534,
+    "seen": 1795563541.4250824,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/final-warehouse-night-01.jpg": {
+    "mtime": 1794429227.687088,
+    "seen": 1795563541.4250824,
+    "ast_hash": "5f4335d1de7f042ce9cd1e8fa66ae4a7",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/floor-conveyor-boxes-01.jpg": {
+    "mtime": 1794429227.6891036,
+    "seen": 1795563541.4250824,
+    "ast_hash": "ba8d3dcabd60c062990089286402bc8f",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/hero-warehouse-glass-01.jpg": {
+    "mtime": 1794429227.6994884,
+    "seen": 1795563541.4250824,
+    "ast_hash": "7a7f2f753a41db5b42e1b2f4ac4cfee2",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/logistics-truck-hero-01.jpg": {
+    "mtime": 1794429227.7050407,
+    "seen": 1795563541.4250824,
+    "ast_hash": "3ea8091e7e3bfa703f66a3ba02ca2b97",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/logistics-trucks-dock-side-01.jpg": {
+    "mtime": 1794429227.725137,
+    "seen": 1795563541.4250824,
+    "ast_hash": "8c96213b73939f0a6a1019888944eac8",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/logistics-trucks-dock-top-01.jpg": {
+    "mtime": 1794429227.732399,
+    "seen": 1795563541.4250824,
+    "ast_hash": "ee0c7311d1dd62371e7213fe0acd56bb",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/orders-pallet-glow-01.jpg": {
+    "mtime": 1794429227.73837,
+    "seen": 1795563541.4250824,
+    "ast_hash": "6108d493119dad1a323ca752b68e5753",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/images/underhood-warehouse-hologram-01.jpg": {
+    "mtime": 1794429227.7457666,
+    "seen": 1795563541.4250824,
+    "ast_hash": "9692fa8ec409ed862c2e24d9ce2f870f",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/maskable-icon-512x512.png": {
+    "mtime": 1795537206.297032,
+    "seen": 1795563541.4250824,
+    "ast_hash": "85b265254aa6d2c8051a21fb1299064c",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/og-image.png": {
+    "mtime": 1795537206.3011312,
+    "seen": 1795563541.4250824,
+    "ast_hash": "d392b9b47a3b28645eaf3de554939802",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/pwa-192x192.png": {
+    "mtime": 1795537206.3011312,
+    "seen": 1795563541.4250824,
+    "ast_hash": "eff581c752add6745e17fa17d9fa9f43",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/pwa-512x512.png": {
+    "mtime": 1795537206.305492,
+    "seen": 1795563541.4250824,
+    "ast_hash": "a3d72de9e443083bbba8c3233e68a41e",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/floor-conveyor-boxes-poster.webp": {
+    "mtime": 1794429227.7581053,
+    "seen": 1795563541.4250824,
+    "ast_hash": "8e1e5583fa6cf635083152ba2a9c2877",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/hero-warehouse-build-poster.webp": {
+    "mtime": 1794429227.7828276,
+    "seen": 1795563541.4250824,
+    "ast_hash": "2a8ae70b958c5fd123244605fb40c55f",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/problem-truck-drive-poster.webp": {
+    "mtime": 1794429227.820534,
+    "seen": 1795563541.4250824,
+    "ast_hash": "77fdd6e47ccb6d964cc6f06ab5133a7c",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/floor-conveyor-boxes-720.mp4": {
+    "mtime": 1794429227.7581053,
+    "seen": 1795563541.4250824,
+    "ast_hash": "977162dc21a59631322d5d60d89ea562",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/floor-conveyor-boxes.mp4": {
+    "mtime": 1794429227.7663655,
+    "seen": 1795563541.4250824,
+    "ast_hash": "4e8de3d45fe3e3afc06c868b42974c40",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/hero-warehouse-build-720.mp4": {
+    "mtime": 1794429227.7786684,
+    "seen": 1795563541.4250824,
+    "ast_hash": "b6a931e7c7342e189fadded7a9355c06",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/hero-warehouse-build.mp4": {
+    "mtime": 1794429227.8119261,
+    "seen": 1795563541.4250824,
+    "ast_hash": "13e81203042994a286263da792b5a8e0",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/problem-truck-drive-720.mp4": {
+    "mtime": 1794429227.8184938,
+    "seen": 1795563541.4250824,
+    "ast_hash": "d45bbc6ea11cab8245e00b343f8a9db1",
+    "semantic_hash": ""
+  },
+  "iwms-web/src/main/resources/static/videos/problem-truck-drive.mp4": {
+    "mtime": 1794429227.8357184,
+    "seen": 1795563541.4250824,
+    "ast_hash": "953697001a3c51f7b80bada95b47349e",
+    "semantic_hash": ""
+  },
+  "iwms-ui/package-lock.json": {
+    "mtime": 1795561371.069107,
+    "seen": 1795563541.4250824,
+    "ast_hash": "125292252088c69f24e6adf1799ec4d3",
+    "semantic_hash": ""
   }
 }

@@ -56,6 +56,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         // Precache app shell: html, js, css, fonts, and small icons
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,ttf,eot}'],
         // Strictly exclude videos and large Flow images from precaching

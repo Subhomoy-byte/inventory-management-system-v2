@@ -19,6 +19,8 @@
     "clsx": "^2.1.1",
     "framer-motion": "^14.10.1",
     "idb": "^8.0.4",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
     "lucide-react": "^1.70.0",
     "postcss": "^8.5.32",
     "react": "^19.3.1",
