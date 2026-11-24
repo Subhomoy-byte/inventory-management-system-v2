@@ -50,7 +50,8 @@ Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS 
 14. [Cloud & Vercel Deployment ($0 Free Hosting)](#14-cloud--vercel-deployment-0-free-hosting)
     - [Option A: Deploy Frontend to Vercel (Interactive Demo / Web PWA)](#option-a-deploy-frontend-to-vercel-interactive-demo--web-pwa)
     - [Option B: Deploy Full-Stack to Render ($0 Free)](#option-b-deploy-full-stack-java-backend--react-frontend-to-render-0-free)
-15. [License & Credits](#15-license--credits)
+15. [Architecture Knowledge Graph & GraphRAG](#15-architecture-knowledge-graph--graphrag)
+16. [License & Credits](#16-license--credits)
 
 ---
 
@@ -797,7 +798,24 @@ To run the complete system (including the Spring Boot REST API, WAL persistence,
 
 ---
 
-## 15. License & Credits
+## 15. Architecture Knowledge Graph & GraphRAG
+
+This project includes a comprehensive, queryable knowledge graph generated via [`graphify`](https://github.com/safishamsi/graphify), mapping every module, domain model, REST controller, persistence file writer, and ThreeUI shader component across both Java and TypeScript codebases.
+
+### 📊 Graph Metrics
+- **Nodes:** 4,301 extracted and structured entities
+- **Edges:** 11,163 relationships (calls, imports, references, contains, inherits)
+- **Detected Communities:** 136 semantic subsystem clusters (covering ThreeJS graphics, Java core models, REST APIs, WAL file storage, RBAC auth filters, and state stores)
+- **Top Core Hub (God Node):** `InventoryService` (72 direct edges across storage, validation, transactions, and REST controllers)
+
+### 🗺️ Navigating the Graph
+- **Interactive Visualizer:** Open [`graphify-out/graph.html`](graphify-out/graph.html) directly in any web browser to explore clusters, trace dependency paths, and inspect node relationships with zero server overhead.
+- **Audit & Graph Report:** Review [`graphify-out/GRAPH_REPORT.md`](graphify-out/GRAPH_REPORT.md) for full metrics, community breakdown, cohesion scores, and cross-subsystem bridges.
+- **Raw Graph Data:** Available in [`graphify-out/graph.json`](graphify-out/graph.json) for GraphRAG queries and agent traversals.
+
+---
+
+## 16. License & Credits
 
 - **License:** Open-source academic college project. Free for educational, commercial, and personal use under the [MIT License](LICENSE).
 - **Visuals Attribution:** Warehouse floor and logistics visual media generated with AI (Google Flow) for the IWMS Pro cinematic landing presentation.
