@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { InteractiveShelf3D } from '../components/warehouse/InteractiveShelf3D';
 import {
   Layers,
   ArrowRight,
@@ -15,6 +17,8 @@ import {
   Sparkles,
   Server,
   Zap,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -162,6 +166,9 @@ const ResponsiveVideo: React.FC<ResponsiveVideoProps> = ({
 };
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -170,66 +177,76 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090D14] text-white font-sans relative selection:bg-indigo-600 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#090D14] text-slate-900 dark:text-white font-sans relative selection:bg-indigo-600 selection:text-white overflow-x-hidden transition-colors duration-200">
       {/* Sticky Tactical Navbar */}
-      <header className="sticky top-0 z-50 w-full px-6 py-3.5 bg-[#090D14]/90 backdrop-blur-md border-b border-white/[0.08] transition-colors">
+      <header className="sticky top-0 z-50 w-full px-6 py-3.5 bg-white/90 dark:bg-[#090D14]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-white/[0.08] transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#060810] flex items-center justify-center shadow-lg shadow-[#7C6CFF]/25 ring-1 ring-white/20 border-t border-white/30 p-1.5">
+            <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-[#060810] flex items-center justify-center shadow-lg shadow-indigo-500/10 ring-1 ring-slate-200 dark:ring-white/20 p-1.5">
               <img src="/favicon.svg" alt="IWMS Pro Warehouse Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-heading font-extrabold text-lg tracking-tight text-white">
+                <span className="font-heading font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
                   IWMS Pro
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-[#7C6CFF]/15 text-[#7C6CFF] border border-[#7C6CFF]/30">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-indigo-500/15 text-indigo-600 dark:text-[#7C6CFF] border border-indigo-500/30">
                   Java Core
                 </span>
               </div>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-400 font-medium">
+          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-600 dark:text-slate-400 font-medium">
             <button
               onClick={() => scrollToSection('problem')}
-              className="hover:text-white transition-colors"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               The Problem
             </button>
             <button
               onClick={() => scrollToSection('architecture')}
-              className="hover:text-white transition-colors"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               One Command
             </button>
             <button
+              onClick={() => scrollToSection('interactive-shelf')}
+              className="hover:text-slate-900 dark:hover:text-white transition-colors text-indigo-600 dark:text-cyan-400 font-semibold"
+            >
+              3D Smart Shelf
+            </button>
+            <button
               onClick={() => scrollToSection('floormap')}
-              className="hover:text-white transition-colors"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               Floor Map
             </button>
             <button
               onClick={() => scrollToSection('offline')}
-              className="hover:text-white transition-colors"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               Offline PWA
             </button>
             <button
-              onClick={() => scrollToSection('timetravel')}
-              className="hover:text-white transition-colors"
-            >
-              Time Travel
-            </button>
-            <button
               onClick={() => scrollToSection('underthehood')}
-              className="hover:text-white transition-colors"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               Under The Hood
             </button>
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* Light / Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-[#111726] hover:bg-slate-200 dark:hover:bg-[#182035] text-slate-700 dark:text-slate-200 transition-all active:scale-95 shadow-xs"
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle theme mode"
+            >
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-600" />}
+            </button>
+
             <button
               onClick={onLaunchApp}
               className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#7C6CFF] to-[#22D3EE] text-[#070912] font-heading font-bold text-sm shadow-md hover:shadow-lg hover:shadow-[#7C6CFF]/30 hover:scale-[1.02] active:scale-95 transition-all"
@@ -450,45 +467,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchApp }) => {
         </section>
 
         {/* ========================================================
-            SECTION 4: LIVE DASHBOARD (PLACEHOLDER)
+            SECTION 4: INTERACTIVE 3D SMART FACILITY SHELF
             ======================================================== */}
         <section
-          id="dashboard-preview"
+          id="interactive-shelf"
           className="min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-24 max-w-7xl mx-auto"
         >
-          <div className="space-y-4 mb-12">
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-[#7C6CFF]">
-              04 / Operations Command
+          <div className="space-y-4 mb-8">
+            <span className="text-xs font-mono font-bold tracking-widest uppercase text-indigo-500 dark:text-[#7C6CFF]">
+              04 / Spatial Intelligence &bull; Live 3D Glider
             </span>
-            <h2 className="font-heading font-bold text-3xl sm:text-5xl text-white tracking-tight">
-              High-density glass dashboard.
+            <h2 className="font-heading font-bold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
+              Interactive 3D warehouse smart shelf.
             </h2>
-            <p className="text-slate-400 text-base sm:text-lg max-w-3xl">
-              Real-time warehouse occupancy, valuation totals, low-stock reorder triggers, and velocity trends grouped into a focused single pane.
+            <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg max-w-3xl">
+              Glides naturally with your mouse pointer movement and dynamically illuminates individual bins and metallic racks upon hover. Test drive the physics right here:
             </p>
           </div>
 
-          <div className="story-glass-card p-6 sm:p-10 border-dashed border-white/20 relative">
-            <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#7C6CFF]/15 border border-[#7C6CFF]/30 text-[#7C6CFF] flex items-center justify-center">
-                <Layers className="w-7 h-7" />
-              </div>
-              <div className="space-y-1">
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#7C6CFF]/20 text-[#7C6CFF] border border-[#7C6CFF]/40">
-                  DASHBOARD SCREENSHOT PLACEHOLDER
-                </span>
-                <p className="text-sm text-slate-400 max-w-md">
-                  Active operations monitor: KPI Cards (Total Products, Stock Counts, Low Stock Warnings, Valuation), Recharts Category Distribution, and Recent Movement Activity.
-                </p>
-              </div>
-              <button
-                onClick={onLaunchApp}
-                className="mt-2 text-xs font-heading font-bold text-[#22D3EE] hover:underline flex items-center gap-1.5"
-              >
-                <span>Preview live interface in demo mode</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+          <div className="relative">
+            <InteractiveShelf3D
+              className="h-[520px] sm:h-[600px] shadow-2xl"
+              onSelectBin={() => onLaunchApp()}
+            />
           </div>
         </section>
 

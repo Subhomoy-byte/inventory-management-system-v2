@@ -1,20 +1,30 @@
 ---
 name: IWMS Pro
-description: Tactical industrial warehouse operating system with high-precision scanability and zero cloud dependencies.
+description: Tactical industrial warehouse operating system with high-precision scanability, dual light/dark mode, anti-slop clarity, and interactive 3D facility shelf gliders.
+themes:
+  light:
+    canvas-bg: "#F8FAFC"
+    surface-card: "#FFFFFF"
+    surface-elevated: "#F1F5F9"
+    surface-border: "#E2E8F0"
+    text-primary: "#0F172A"
+    text-secondary: "#475569"
+    text-muted: "#64748B"
+  dark:
+    canvas-bg: "#090D16"
+    surface-card: "#0F1524"
+    surface-elevated: "#151E32"
+    surface-border: "rgba(255, 255, 255, 0.08)"
+    text-primary: "#F8FAFC"
+    text-secondary: "#94A3B8"
+    text-muted: "#64748B"
 colors:
-  canvas-bg: "#090D14"
-  surface-card: "#0F1523"
-  surface-elevated: "#151D2E"
-  surface-border: "rgba(255, 255, 255, 0.08)"
   primary-indigo: "#4F46E5"
   primary-indigo-hover: "#4338CA"
   status-emerald: "#10B981"
   status-amber: "#F59E0B"
   status-crimson: "#EF4444"
   accent-cyan: "#06B6D4"
-  text-primary: "#F8FAFC"
-  text-secondary: "#94A3B8"
-  text-muted: "#64748B"
 typography:
   heading:
     fontFamily: "Space Grotesk, system-ui, sans-serif"
@@ -41,71 +51,41 @@ spacing:
   lg: "24px"
   xl: "32px"
 components:
-  button-primary:
-    backgroundColor: "{colors.primary-indigo}"
-    textColor: "{colors.text-primary}"
-    rounded: "{rounded.md}"
-    padding: "8px 14px"
-  button-primary-hover:
-    backgroundColor: "{colors.primary-indigo-hover}"
+  interactive-shelf-3d:
+    physics: "Damped lerp glide with pointer coordinates"
+    lighting: "Ambient + Key directional + Follower point light + Bin hover spotlight"
+    hoverShader: "Emissive elevation & specular bloom"
 ---
 
-# Design System: IWMS Pro
+# Design System: IWMS Pro (Anti-Slop Craft Edition)
 
-## Overview
+## 1. Anti-Slop UI Principles
 
-IWMS Pro is an industrial warehouse management operating system designed for concrete tilt-up logistics centers, high-density racking facilities, and Wi-Fi dead zones. It prioritizes rapid physical floor execution (receiving, dispatch, bin-to-bin transfers), spatial awareness, and instant scanability under harsh industrial lighting.
+IWMS Pro follows uncompromising, production-grade frontend craft guidelines designed to prevent generic "AI Slop" aesthetics:
+- **No decorative blur on text surfaces:** Every panel, table row, and form input provides high contrast (>= 4.5:1 text-to-background ratio).
+- **No gratuitous rainbow gradients:** Functional, restrained color palette reserved for real operational semantics.
+- **Strict 4px/8px layout grid:** Rhythmic, harmonious padding with breathing room between controls and data surfaces.
+- **Tactile feedback:** All interactive buttons and cards provide instant 150ms state response, clear hover lifts, and subtle active depressions (`scale(0.98)`).
+- **Tabular numerals:** Quantities, currency, coordinates, and timestamps strictly utilize JetBrains Mono with `font-variant-numeric: tabular-nums` to eliminate column jitter.
 
-## Colors
+## 2. Dual Light and Dark Mode Color System
 
-- **Ground Canvas (`#090D14`):** Deep tactical slate foundation that reduces glare and eye fatigue during prolonged shift operations.
-- **Elevated Surfaces (`#0F1523` & `#151D2E`):** Crisp solid panels with subtle structural borders (`rgba(255, 255, 255, 0.08)`), replacing superficial glassmorphism.
-- **Primary Operational Indigo (`#4F46E5`):** Reserved for primary floor actions, active navigation tabs, and system confirmations.
-- **Semantic Status Signals:**
-  - **Optimal / Synced (`#10B981`):** In-stock buffer satisfied, LAN connection live, zero unsynced mutations.
-  - **Reorder Warning (`#F59E0B`):** Stock level at or approaching safety buffer, offline outbox queued.
-  - **Critical Shortage (`#EF4444`):** Stockout, outbox sync error, or urgent floor action required.
-  - **Spatial Focus (`#06B6D4`):** Active bin selection, telemetry highlights, and delta tracking.
+The application features full bidirectional theme switching with zero hardcoded visual traps:
 
-## Typography
+### Dark Mode (Shift Operations)
+- **Ground Canvas (`#090D16`):** Deep tactical slate foundation that minimizes eye strain in dark industrial environments.
+- **Elevated Surfaces (`#0F1524` & `#151E32`):** Solid charcoal cards with refined 1px structural borders (`rgba(255, 255, 255, 0.08)`).
+- **Text:** Crisp white (`#F8FAFC`) primary labels, cool slate (`#94A3B8`) secondary copy.
 
-- **Interface & Action Labels:** Inter (`sans-serif`) provides neutral, legible, high-contrast typography across labels, table headers, and form inputs.
-- **Headings:** Space Grotesk (`font-heading`) delivers strong industrial character without sacrificing structural rhythm.
-- **Telemetry & Data Numerals:** JetBrains Mono (`font-mono`) with `tabular-nums` (`font-variant-numeric: tabular-nums`) strictly reserved for quantities, SKUs, bin coordinates, timestamps, and ledger hashes to prevent column jitter.
+### Light Mode (Office & Sunlit Facility)
+- **Ground Canvas (`#F8FAFC`):** Clean, architectural neutral slate-50 base.
+- **Elevated Surfaces (`#FFFFFF` & `#F1F5F9`):** Pure white solid cards with subtle 1px border (`#E2E8F0`) and soft, layered shadow (`0 1px 3px rgba(0,0,0,0.05)`).
+- **Text:** Deep slate-900 (`#0F172A`) primary labels, slate-600 (`#475569`) secondary copy.
 
-## Layout
+## 3. Interactive 3D Smart Shelf System (`InteractiveShelf3D`)
 
-- **Tactical Left Sidebar:** Collapsible desktop/tablet navigation rail (64px collapsed, 256px expanded) that maximizes vertical table viewports and preserves floor operator focus.
-- **Native Bottom Bar on Mobile:** Compact bottom navigation for rugged handheld barcode scanners and mobile floor associates.
-- **Top Action Bar:** Persistent global search (`Cmd+K`), quick movement triggers (`Receive`, `Dispatch`, `Transfer`), LAN connectivity telemetry, and shift clock.
-
-## Elevation & Depth
-
-- Restrained physical depth: 1px structural borders combined with soft offset shadows (`box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5)`).
-- Zero blurry neon glowing halos or generic glassmorphic frosted glass.
-
-## Shapes
-
-- Consistent border radius: `10px` for buttons and form inputs, `16px` for cards and tables, `20px` for dialogs and modals.
-- Clean compact pills for status chips and telemetry tags.
-
-## Components
-
-- **Surface Card (`.surface-card`):** Solid `#0F1523` container with structural border and natural depth.
-- **Surface Input (`.surface-input`):** High-contrast inset input with instantaneous indigo focus ring.
-- **Tactile Button (`.btn-primary`, `.btn-secondary`):** Solid buttons with crisp 150ms state response and clear active scale feedback (`scale(0.98)`).
-- **Status Chip (`StatusChip`):** High-contrast semantic badge with accessible foreground contrast.
-
-## Do's and Don'ts
-
-### Do
-- Use `tabular-nums` on all quantities, currency values, and timestamps.
-- Maintain persistent access to primary stock actions (Receive, Dispatch, Transfer).
-- Keep text contrast >= 4.5:1 on dark canvas surfaces.
-- Use the left sidebar to preserve vertical data table height.
-
-### Don't
-- Don't use decorative blur or translucent frosted glass that compromises text legibility.
-- Don't use floating docks that obscure table rows and pagination controls.
-- Don't use gradient text or kicker/eyebrow headings.
-- Don't use monospace as a costume for ordinary prose, headings, or general body copy.
+Inspired by world-class 3D web experiences (Linear, Apple, Stripe Press, Lusion):
+- **Organic Pointer Glide Physics:** The 3D warehouse rack responds dynamically to the user's mouse arrow movements. Rotation and tilt are smoothed via damping lerp calculations (`lerp factor: 0.06`), producing an organic, physical weight feel.
+- **Real-Time Pointer Lighting:** A dynamic 3D follower point light tracks cursor coordinates across the metallic steel frame, casting authentic specular reflections.
+- **Hover Raycasting & Emissive Glow:** Bins under the cursor smoothly lift forward along the Z-axis, illuminate their status LED strips and emissive shaders, and present a floating inspection HUD with SKU data.
+- **Facility Integration:** Available in 3D Smart Shelf mode, 2D Floor Matrix mode, and Dual Spatial Twin mode on the Warehouse Floor Topology page, as well as an interactive live demo on the Landing Page.

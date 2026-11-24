@@ -79,12 +79,13 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
               sourceBin,
               reason,
             });
-          } else if (movementType === 'TRANSFER') {
-            await api.stockTransfer({
+          } else {
+            await api.transferBin({
               productId: selectedProductId,
+              quantity,
               sourceBin,
               targetBin,
-              quantity,
+              reason,
             });
           }
         } catch (apiErr) {
@@ -112,41 +113,42 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-        className="w-full max-w-lg glass-panel p-6 sm:p-7 shadow-2xl relative"
+        className="w-full max-w-lg surface-panel p-6 sm:p-7 shadow-2xl relative"
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+          aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
         <div className="mb-5">
-          <h3 className="font-heading font-extrabold text-2xl text-white tracking-tight">
+          <h3 className="font-heading font-extrabold text-2xl text-slate-900 dark:text-white tracking-tight">
             Record Stock Movement
           </h3>
-          <p className="text-xs text-white/50 font-mono mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
             Append-only WAL transaction with thread safety and offline outbox sync.
           </p>
         </div>
 
         {/* Movement Type Tabs */}
-        <div className="grid grid-cols-3 gap-2 mb-5 p-1 rounded-2xl bg-white/[0.04] border border-white/10">
+        <div className="grid grid-cols-3 gap-2 mb-5 p-1 rounded-2xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10">
           <button
             type="button"
             onClick={() => setMovementType('IN')}
             className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               movementType === 'IN'
-                ? 'bg-[#34D399] text-[#070912] shadow-md'
-                : 'text-white/60 hover:text-white'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <ArrowDownRight className="w-3.5 h-3.5" />
@@ -157,8 +159,8 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
             onClick={() => setMovementType('OUT')}
             className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               movementType === 'OUT'
-                ? 'bg-[#F87171] text-[#070912] shadow-md'
-                : 'text-white/60 hover:text-white'
+                ? 'bg-rose-600 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -169,8 +171,8 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
             onClick={() => setMovementType('TRANSFER')}
             className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               movementType === 'TRANSFER'
-                ? 'bg-[#7C6CFF] text-white shadow-md'
-                : 'text-white/60 hover:text-white'
+                ? 'bg-indigo-600 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <ArrowLeftRight className="w-3.5 h-3.5" />
@@ -180,7 +182,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-4 p-3 rounded-2xl bg-[#F87171]/15 border border-[#F87171]/30 text-[#F87171] text-xs font-mono font-semibold flex items-center gap-2">
+          <div className="mb-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/25 text-rose-600 dark:text-rose-400 text-xs font-mono font-semibold flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -190,16 +192,16 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs font-mono">
           {/* Product Select */}
           <div>
-            <label className="block uppercase text-white/60 mb-1">
+            <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
               Select Product SKU
             </label>
             <select
               value={selectedProductId}
               onChange={(e) => setSelectedProductId(e.target.value)}
-              className="glass-input text-xs"
+              className="surface-input text-xs"
             >
               {allProducts.map((p) => (
-                <option key={p.id} value={p.id} className="bg-[#070912] text-white">
+                <option key={p.id} value={p.id} className="bg-white dark:bg-[#111726] text-slate-900 dark:text-white">
                   [{p.sku}] {p.name} (Stock: {p.quantity} units)
                 </option>
               ))}
@@ -209,7 +211,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
           {/* Quantity & Location */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block uppercase text-white/60 mb-1">
+              <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
                 Quantity Units
               </label>
               <input
@@ -218,13 +220,13 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                 required
                 value={quantity}
                 onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-                className="glass-input font-bold text-xs"
+                className="surface-input font-bold text-xs"
               />
             </div>
 
             {movementType === 'IN' && (
               <div>
-                <label className="block uppercase text-white/60 mb-1">
+                <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
                   Destination Shelf
                 </label>
                 <input
@@ -232,7 +234,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={targetBin}
                   onChange={(e) => setTargetBin(e.target.value)}
-                  className="glass-input text-xs"
+                  className="surface-input text-xs"
                   placeholder="BIN-A1-01"
                 />
               </div>
@@ -240,7 +242,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
 
             {movementType === 'OUT' && (
               <div>
-                <label className="block uppercase text-white/60 mb-1">
+                <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
                   Origin Shelf
                 </label>
                 <input
@@ -248,7 +250,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={sourceBin}
                   onChange={(e) => setSourceBin(e.target.value)}
-                  className="glass-input text-xs"
+                  className="surface-input text-xs"
                   placeholder="BIN-A1-01"
                 />
               </div>
@@ -258,7 +260,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
           {movementType === 'TRANSFER' && (
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block uppercase text-white/60 mb-1">
+                <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
                   Origin Shelf
                 </label>
                 <input
@@ -266,12 +268,12 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={sourceBin}
                   onChange={(e) => setSourceBin(e.target.value)}
-                  className="glass-input text-xs"
+                  className="surface-input text-xs"
                   placeholder="BIN-A1-01"
                 />
               </div>
               <div>
-                <label className="block uppercase text-white/60 mb-1">
+                <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
                   Destination Shelf
                 </label>
                 <input
@@ -279,7 +281,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                   required
                   value={targetBin}
                   onChange={(e) => setTargetBin(e.target.value)}
-                  className="glass-input text-xs"
+                  className="surface-input text-xs"
                   placeholder="BIN-A2-04"
                 />
               </div>
@@ -288,7 +290,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
 
           {movementType === 'IN' && (
             <div>
-              <label className="block uppercase text-white/60 mb-1">
+              <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
                 Unit Purchase Price ($)
               </label>
               <input
@@ -297,28 +299,28 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
                 min="0"
                 value={unitPrice}
                 onChange={(e) => setUnitPrice(parseFloat(e.target.value) || 0)}
-                className="glass-input text-xs"
+                className="surface-input text-xs"
               />
             </div>
           )}
 
           <div>
-            <label className="block uppercase text-white/60 mb-1">
+            <label className="block uppercase text-slate-600 dark:text-slate-400 mb-1 font-semibold text-[11px]">
               Reason / Reference
             </label>
             <input
               type="text"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="glass-input text-xs"
+              className="surface-input text-xs"
               placeholder="e.g. Supplier delivery, floor dispatch, audit"
             />
           </div>
 
           {currentSelectedProduct && (
-            <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 text-white/70 flex justify-between items-center text-xs">
-              <span>On-Hand: <strong className="text-white font-mono">{currentSelectedProduct.quantity}u</strong></span>
-              <span>Projected: <strong className="text-[#22D3EE] font-mono">
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/70 flex justify-between items-center text-xs">
+              <span>On-Hand: <strong className="text-slate-900 dark:text-white font-mono">{currentSelectedProduct.quantity}u</strong></span>
+              <span>Projected: <strong className="text-indigo-600 dark:text-cyan-400 font-mono">
                 {movementType === 'IN'
                   ? currentSelectedProduct.quantity + quantity
                   : movementType === 'OUT'
@@ -332,17 +334,17 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="glass-button-secondary text-xs py-2 px-3.5"
+              className="btn-secondary text-xs py-2 px-3.5"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="glass-button-primary text-xs py-2 px-3.5"
+              className="btn-primary text-xs py-2 px-3.5"
             >
               {loading ? (
-                <span className="inline-block w-4 h-4 border-2 border-[#070912] border-t-transparent rounded-full animate-spin" />
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
                   <Check className="w-3.5 h-3.5" />

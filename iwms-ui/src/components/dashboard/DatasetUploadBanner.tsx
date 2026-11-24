@@ -32,11 +32,11 @@ export const DatasetUploadBanner: React.FC<DatasetUploadBannerProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       className="relative overflow-hidden rounded-2xl"
     >
-      <GlassCard className="p-5 sm:p-6 border border-white/15 bg-gradient-to-r from-[#7C6CFF]/15 via-white/[0.02] to-[#22D3EE]/15 relative overflow-hidden">
+      <GlassCard className="p-5 sm:p-6 border border-slate-200 dark:border-white/15 bg-gradient-to-r from-indigo-500/10 via-slate-500/[0.02] to-cyan-500/10 relative overflow-hidden shadow-xs">
         {/* Animated subtle glow */}
         <div
           className={`absolute -right-20 -bottom-20 w-72 h-72 rounded-full blur-3xl pointer-events-none transition-opacity duration-700 ${
-            isHovered ? 'opacity-40 bg-[#22D3EE]/30' : 'opacity-20 bg-[#7C6CFF]/20'
+            isHovered ? 'opacity-30 bg-cyan-500/25' : 'opacity-15 bg-indigo-500/20'
           }`}
         />
 
@@ -44,34 +44,34 @@ export const DatasetUploadBanner: React.FC<DatasetUploadBannerProps> = ({
           {/* Left info column */}
           <div className="space-y-1.5 max-w-xl">
             <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[#7C6CFF]/25 text-[#A78BFA] border border-[#7C6CFF]/40 shadow-sm">
-                <Sparkles className="w-3 h-3 text-[#22D3EE]" />
+              <span className="flex items-center gap-1.5 text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-[#A78BFA] border border-indigo-500/30 shadow-xs">
+                <Sparkles className="w-3 h-3 text-cyan-600 dark:text-[#22D3EE]" />
                 Kaggle Dataset Ready
               </span>
-              <span className="text-[10px] font-mono text-white/40 hidden sm:inline">
+              <span className="text-[10px] font-mono text-slate-500 dark:text-white/40 hidden sm:inline">
                 Drag-and-Drop Ingestion Portal
               </span>
             </div>
 
-            <h2 className="font-heading text-lg sm:text-xl font-bold text-white tracking-tight">
+            <h2 className="font-heading text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Replace Demo Mockups with Real Warehouse Datasets
             </h2>
 
-            <p className="text-xs sm:text-sm text-white/60 font-mono leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-mono leading-relaxed">
               Upload custom Kaggle CSV supply chain datasets or load our 520-item enterprise catalog. Columns auto-map directly to shelf bins, stock levels, and role-based prices without code changes.
             </p>
 
-            <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-white/50">
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-slate-500 dark:text-white/50">
               <span className="flex items-center gap-1">
-                <CheckCircle className="w-3 h-3 text-[#34D399]" /> Fuzzy Header Auto-Match
+                <CheckCircle className="w-3 h-3 text-emerald-500" /> Fuzzy Header Auto-Match
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <FileCheck className="w-3 h-3 text-[#22D3EE]" /> 2D Topology Bin Auto-Slot
+                <FileCheck className="w-3 h-3 text-cyan-600 dark:text-[#22D3EE]" /> 3D &amp; 2D Shelf Auto-Slot
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Database className="w-3 h-3 text-[#A78BFA]" /> IndexedDB Offline & Backend
+                <Database className="w-3 h-3 text-indigo-500 dark:text-[#A78BFA]" /> IndexedDB Offline &amp; Backend
               </span>
             </div>
           </div>
@@ -82,16 +82,16 @@ export const DatasetUploadBanner: React.FC<DatasetUploadBannerProps> = ({
               type="button"
               onClick={onQuickLoadKaggle}
               disabled={isLoading}
-              className="glass-button-secondary text-xs sm:text-sm py-2.5 px-4 flex items-center justify-center gap-2 border-[#22D3EE]/30 hover:border-[#22D3EE]"
+              className="btn-secondary text-xs sm:text-sm py-2.5 px-4 flex items-center justify-center gap-2 border-slate-200 dark:border-cyan-500/30 hover:border-cyan-500"
             >
-              <Database className="w-4 h-4 text-[#22D3EE]" />
+              <Database className="w-4 h-4 text-cyan-600 dark:text-[#22D3EE]" />
               <span>{isLoading ? 'Ingesting...' : '1-Click 520 Kaggle Data'}</span>
             </button>
 
             <button
               type="button"
               onClick={onOpenUploadModal}
-              className="glass-button-primary text-xs sm:text-sm py-2.5 px-5 flex items-center justify-center gap-2 shadow-lg shadow-[#7C6CFF]/25"
+              className="btn-primary text-xs sm:text-sm py-2.5 px-5 flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20"
             >
               <UploadCloud className="w-4 h-4" />
               <span>Upload CSV / Dataset</span>

@@ -3,7 +3,7 @@ import type { Product, StockMovement } from '../types';
 import { api } from '../services/api';
 import { OfflineSyncManager } from '../storage/sync';
 import { useAuth } from '../context/AuthContext';
-import { GlassCard } from '../components/common/GlassCard';
+import { useTheme } from '../context/ThemeContext';
 import { StatusChip } from '../components/common/StatusChip';
 import { DatasetUploadBanner } from '../components/dashboard/DatasetUploadBanner';
 import { DatasetUploadModal } from '../components/modals/DatasetUploadModal';
@@ -20,7 +20,7 @@ import {
   Layers,
   ShieldCheck,
   CheckCircle2,
-  Clock,
+  Sparkles,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -43,6 +43,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onNavigateToTab,
 }) => {
   const { isAdmin, isManager } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [products, setProducts] = useState<Product[]>([]);
   const [movements, setMovements] = useState<StockMovement[]>([]);
   const [, setLoading] = useState(true);
@@ -152,12 +155,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Action Bar & Status Overview */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-white/[0.06]">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+          <h2 className="text-xl sm:text-2xl font-heading font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
             Operational Overview
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Real-time floor velocity, stock reorder thresholds, and verified Write-Ahead Log transactions.
           </p>
         </div>
@@ -172,7 +175,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </button>
           <button
             onClick={() => onOpenMovementModal('OUT')}
-            className="btn-secondary text-xs py-2 px-3.5 hover:text-rose-400"
+            className="btn-secondary text-xs py-2 px-3.5 hover:text-rose-600 dark:hover:text-rose-400"
           >
             <ArrowUpRight className="w-4 h-4" />
             <span>Dispatch</span>
@@ -194,33 +197,33 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         isLoading={uploadLoading}
       />
 
-      {/* Primary Operational Vitals: 3 Structured Panels instead of 4 identical generic cards */}
+      {/* Primary Operational Vitals: 3 Structured Panels */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Panel 1: Inventory Health & Ratio Breakdown */}
         <div className="surface-card p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-                <Boxes className="w-4 h-4 text-indigo-400" />
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <Boxes className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                 Fleet Inventory Health
               </span>
-              <span className="text-[11px] font-mono text-emerald-400 font-medium px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+              <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-medium px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
                 100% Synced
               </span>
             </div>
 
             <div className="flex items-baseline gap-3 my-2">
-              <span className="text-3xl font-extrabold text-white tabular-nums tracking-tight">
+              <span className="text-3xl font-extrabold text-slate-900 dark:text-white tabular-nums tracking-tight">
                 {totalUnits.toLocaleString()}
               </span>
-              <span className="text-xs text-slate-400 font-medium">
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 total units across {totalSkus} SKUs
               </span>
             </div>
 
             {/* Segmented ratio bar */}
             <div className="mt-4 space-y-1.5">
-              <div className="h-2 w-full rounded-full bg-slate-800 flex overflow-hidden">
+              <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-800 flex overflow-hidden">
                 <div
                   style={{ width: `${optimalRatio}%` }}
                   className="bg-emerald-500 transition-all duration-300"
@@ -238,7 +241,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
+              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono pt-1">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500" />
                   {optimalProducts.length} Optimal
@@ -255,11 +258,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-            <span className="text-slate-400">Floor Density</span>
+          <div className="pt-4 mt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center justify-between text-xs">
+            <span className="text-slate-500 dark:text-slate-400">Floor Density</span>
             <button
               onClick={() => onNavigateToTab('inventory')}
-              className="text-indigo-400 hover:text-indigo-300 font-medium hover:underline"
+              className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
             >
               Inspect Catalog &rarr;
             </button>
@@ -270,40 +273,40 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="surface-card p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-                <AlertTriangle className={`w-4 h-4 ${lowStockProducts.length > 0 ? 'text-amber-400' : 'text-slate-500'}`} />
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <AlertTriangle className={`w-4 h-4 ${lowStockProducts.length > 0 ? 'text-amber-500 dark:text-amber-400' : 'text-slate-400'}`} />
                 Shortage Radar
               </span>
-              <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                 {lowStockProducts.length} items flagged
               </span>
             </div>
 
             <div className="space-y-2 mt-2 max-h-36 overflow-y-auto pr-1">
               {lowStockProducts.length === 0 ? (
-                <div className="flex items-center gap-2.5 py-4 text-xs text-slate-400">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="flex items-center gap-2.5 py-4 text-xs text-slate-500 dark:text-slate-400">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>All floor items maintain adequate buffer above reorder threshold.</span>
                 </div>
               ) : (
                 lowStockProducts.slice(0, 3).map((p) => (
                   <div
                     key={p.id}
-                    className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.06] flex items-center justify-between hover:bg-white/[0.04] transition-colors"
+                    className="p-2 rounded-lg bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.06] flex items-center justify-between hover:bg-slate-100 dark:hover:bg-white/[0.04] transition-colors"
                   >
                     <div className="truncate mr-2">
-                      <div className="text-xs font-semibold text-white truncate">{p.name}</div>
-                      <div className="text-[10px] font-mono text-slate-400">
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white truncate">{p.name}</div>
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
                         {p.sku} &bull; Bin {p.binLocation}
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="text-xs font-mono font-bold text-rose-400 tabular-nums">
+                      <div className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400 tabular-nums">
                         {p.quantity} / {p.reorderPoint}
                       </div>
                       <button
                         onClick={() => onOpenMovementModal('IN', p)}
-                        className="text-[10px] text-indigo-400 hover:underline font-medium block"
+                        className="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-medium block"
                       >
                         + Restock
                       </button>
@@ -314,11 +317,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-            <span className="text-slate-400">Action Required</span>
+          <div className="pt-4 mt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center justify-between text-xs">
+            <span className="text-slate-500 dark:text-slate-400">Action Required</span>
             <button
               onClick={() => onNavigateToTab('inventory')}
-              className="text-amber-400 hover:text-amber-300 font-medium hover:underline"
+              className="text-amber-600 dark:text-amber-400 hover:underline font-medium"
             >
               View All {lowStockProducts.length} Alerts &rarr;
             </button>
@@ -329,36 +332,36 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="surface-card p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <DollarSign className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                 Asset Valuation
               </span>
-              <span className="text-[11px] font-mono text-slate-400 px-2 py-0.5 rounded bg-white/[0.04] border border-white/10">
+              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10">
                 FIFO Cost Basis
               </span>
             </div>
 
             <div className="my-2">
               {isAdmin || isManager ? (
-                <div className="text-3xl font-extrabold text-white tabular-nums tracking-tight">
+                <div className="text-3xl font-extrabold text-slate-900 dark:text-white tabular-nums tracking-tight">
                   ${totalValuation.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </div>
               ) : (
-                <div className="flex items-center gap-2 text-slate-400 py-1">
-                  <ShieldCheck className="w-4 h-4 text-indigo-400" />
+                <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 py-1">
+                  <ShieldCheck className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                   <span className="text-sm font-medium">Role-Masked (Manager/Admin Only)</span>
                 </div>
               )}
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Dynamic RBAC redaction active across floor operator profiles.
               </p>
             </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-            <span className="text-slate-400">Audit Status</span>
-            <span className="text-emerald-400 font-medium flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <div className="pt-4 mt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center justify-between text-xs">
+            <span className="text-slate-500 dark:text-slate-400">Audit Status</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               Verified Clean
             </span>
           </div>
@@ -371,43 +374,43 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="surface-card p-5 lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-indigo-400" />
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                 Stock Units by Category
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Physical inventory volume allocated across active storage categories
               </p>
             </div>
-            <span className="text-xs font-mono text-slate-400">{categoryChartData.length} Categories</span>
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400">{categoryChartData.length} Categories</span>
           </div>
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={categoryChartData} margin={{ top: 10, right: 10, left: -15, bottom: 25 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.06)'} vertical={false} />
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: '#94A3B8', fontSize: 11 }}
+                  tick={{ fill: isDark ? '#94A3B8' : '#64748B', fontSize: 11 }}
                   interval={0}
                   angle={-15}
                   textAnchor="end"
                 />
                 <YAxis
-                  tick={{ fill: '#94A3B8', fontSize: 11 }}
+                  tick={{ fill: isDark ? '#94A3B8' : '#64748B', fontSize: 11 }}
                   tickFormatter={(val) => val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#111726',
+                    backgroundColor: isDark ? '#111726' : '#FFFFFF',
                     borderRadius: '12px',
-                    borderColor: 'rgba(255, 255, 255, 0.12)',
-                    color: '#F8FAFC',
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#E2E8F0',
+                    color: isDark ? '#F8FAFC' : '#0F172A',
                     fontSize: '12px',
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.6)',
+                    boxShadow: isDark ? '0 10px 25px rgba(0, 0, 0, 0.6)' : '0 10px 25px rgba(0, 0, 0, 0.1)',
                   }}
-                  itemStyle={{ color: '#F8FAFC' }}
-                  cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                  itemStyle={{ color: isDark ? '#F8FAFC' : '#0F172A' }}
+                  cursor={{ fill: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)' }}
                 />
                 <Bar dataKey="units" fill="#4F46E5" radius={[6, 6, 0, 0]}>
                   {categoryChartData.map((_, index) => (
@@ -419,49 +422,62 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
         </div>
 
-        {/* Rapid Navigation & Floor Spatial Mini-Map */}
+        {/* Rapid 3D Shelf Preview & Navigation Card */}
         <div className="surface-card p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Layers className="w-4 h-4 text-cyan-400" />
-                Floor Spatial Matrix
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
+                3D Smart Shelf Twin
               </h3>
-              <span className="text-xs font-mono text-slate-400">6x4 Matrix</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 font-bold">
+                GLIDE 3D
+              </span>
             </div>
-            <p className="text-xs text-slate-400 mb-4">
-              Visual coordinates across Zones A, B, and C with live shelf occupancy.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+              Real-time interactive 3D rack with cursor-following illumination and hover inspections.
             </p>
 
-            <div className="grid grid-cols-6 gap-1.5 p-3 rounded-xl bg-[#090D14] border border-white/[0.06]">
-              {Array.from({ length: 24 }).map((_, i) => {
-                const isOccupied = i % 3 !== 0;
-                const isWarning = i === 4 || i === 11;
-                return (
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#090D14] border border-slate-200 dark:border-white/[0.06] space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-600 dark:text-slate-400">Physics Motion</span>
+                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-[11px]">Damped Glider</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-600 dark:text-slate-400">Raycast Shader</span>
+                <span className="font-mono font-bold text-cyan-600 dark:text-cyan-400 text-[11px]">Dynamic Glow</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-600 dark:text-slate-400">Tier Capacity</span>
+                <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 text-[11px]">3 Levels &bull; 12 Bins</span>
+              </div>
+
+              {/* Visual 3D Mini Racks Grid */}
+              <div className="grid grid-cols-4 gap-1 pt-1">
+                {Array.from({ length: 12 }).map((_, i) => (
                   <div
                     key={i}
-                    className={`h-7 rounded flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
-                      isWarning
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                        : isOccupied
-                        ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                        : 'bg-white/[0.03] text-slate-600 border border-white/[0.04]'
+                    className={`h-5 rounded flex items-center justify-center text-[9px] font-mono font-bold ${
+                      i === 3
+                        ? 'bg-rose-500/20 text-rose-500 border border-rose-500/30'
+                        : i === 2 || i === 6
+                        ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30'
+                        : 'bg-indigo-500/20 text-indigo-500 border border-indigo-500/30'
                     }`}
-                    title={`Bin Position ${String.fromCharCode(65 + Math.floor(i / 8))}-${(i % 8) + 1}`}
                   >
-                    {(i % 8) + 1}
+                    {String.fromCharCode(65 + Math.floor(i / 4))}-{i % 4 + 1}
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-white/[0.06]">
+          <div className="pt-4 mt-4 border-t border-slate-200/80 dark:border-white/[0.06]">
             <button
               onClick={() => onNavigateToTab('warehouse')}
-              className="w-full btn-secondary text-xs py-2 text-center flex items-center justify-center gap-2"
+              className="w-full btn-primary text-xs py-2 text-center flex items-center justify-center gap-2"
             >
-              <span>Open 2D Warehouse Topology</span>
+              <span>Launch Full 3D Facility Rack</span>
               <span>&rarr;</span>
             </button>
           </div>
@@ -472,17 +488,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       <div className="surface-card p-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <RefreshCw className="w-4 h-4 text-indigo-400" />
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <RefreshCw className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
               Verified Write-Ahead Log Transactions
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Append-only audit stream tracking all receiving, dispatch, and bin relocation events.
             </p>
           </div>
           <button
             onClick={() => onNavigateToTab('movements')}
-            className="text-xs text-indigo-400 hover:text-indigo-300 hover:underline font-medium self-start sm:self-auto"
+            className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-medium self-start sm:self-auto"
           >
             Full Ledger History &rarr;
           </button>
@@ -491,7 +507,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-white/[0.08] text-slate-400 font-medium text-[11px]">
+              <tr className="border-b border-slate-200 dark:border-white/[0.08] text-slate-500 dark:text-slate-400 font-medium text-[11px]">
                 <th className="py-2.5 px-3">Type</th>
                 <th className="py-2.5 px-3">Product SKU / ID</th>
                 <th className="py-2.5 px-3">Delta Quantity</th>
@@ -500,7 +516,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 <th className="py-2.5 px-3 text-right">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
               {movements.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-xs text-slate-400">
@@ -509,23 +525,23 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 </tr>
               ) : (
                 movements.map((m) => (
-                  <tr key={m.movementId} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={m.movementId} className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
                     <td className="py-2.5 px-3">
                       <StatusChip status={m.movementType} />
                     </td>
-                    <td className="py-2.5 px-3 font-mono font-medium text-slate-200">
+                    <td className="py-2.5 px-3 font-mono font-medium text-slate-800 dark:text-slate-200">
                       {m.productId}
                     </td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-slate-100 tabular-nums">
+                    <td className="py-2.5 px-3 font-mono font-bold text-slate-900 dark:text-slate-100 tabular-nums">
                       {m.quantity > 0 ? `+${m.quantity}` : m.quantity} units
                     </td>
-                    <td className="py-2.5 px-3 text-slate-300 font-mono text-[11px]">
+                    <td className="py-2.5 px-3 text-slate-600 dark:text-slate-300 font-mono text-[11px]">
                       {m.sourceBin || 'Receiving Dock'} &rarr; {m.targetBin || 'Dispatch Bay'}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-400">
+                    <td className="py-2.5 px-3 text-slate-500 dark:text-slate-400">
                       {m.operatorId}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-400 text-right font-mono text-[11px] tabular-nums">
+                    <td className="py-2.5 px-3 text-slate-500 dark:text-slate-400 text-right font-mono text-[11px] tabular-nums">
                       {new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </td>
                   </tr>

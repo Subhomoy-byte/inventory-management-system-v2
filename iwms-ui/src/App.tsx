@@ -26,7 +26,7 @@ import type { Product, MovementType } from './types';
 const TAB_TITLES: Record<NavTab, string> = {
   dashboard: 'Warehouse Command Center',
   inventory: 'Stock Catalog & Inventory',
-  warehouse: '2D Floor Topology & Bins',
+  warehouse: '3D Smart Shelf & Facility Floor',
   movements: 'Audit Transaction Ledger',
   orders: 'Inbound Purchase Orders',
   cyclecount: 'Cycle Count & Reconciliation',
@@ -141,7 +141,7 @@ const MainLayout: React.FC = () => {
   }
 
   return (
-    <div className="h-screen w-screen bg-[#090D14] text-white flex overflow-hidden selection:bg-indigo-600 selection:text-white">
+    <div className="h-screen w-screen bg-slate-50 dark:bg-[#090D14] text-slate-900 dark:text-white flex overflow-hidden selection:bg-indigo-600 selection:text-white transition-colors duration-200">
       {/* Tactical Left Sidebar for Desktop and Tablet */}
       <Sidebar
         currentTab={currentTab}

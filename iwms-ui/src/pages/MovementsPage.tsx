@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import type { StockMovement, Product } from '../types';
 import { api } from '../services/api';
 import { OfflineSyncManager } from '../storage/sync';
-import { GlassCard } from '../components/common/GlassCard';
 import { StatusChip } from '../components/common/StatusChip';
 import {
   History,
@@ -88,20 +87,20 @@ export const MovementsPage: React.FC = () => {
   const timeTravelDate = new Date(Date.now() - timeTravelMinutesAgo * 60 * 1000);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-white/[0.06]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="font-heading text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-              <History className="w-7 h-7 text-[#7C6CFF]" />
-              <span>Transaction Ledger & Time-Travel</span>
+          <div className="flex items-center gap-2.5">
+            <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+              <History className="w-6 h-6 text-indigo-500 dark:text-indigo-400" />
+              <span>Transaction Ledger &amp; Time-Travel</span>
             </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#7C6CFF]/20 text-[#7C6CFF] border border-[#7C6CFF]/40 font-bold">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 font-bold">
               TREEMAP.HEADMAP
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-white/60 font-mono mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-mono mt-0.5">
             Immutable transaction record with 1-click LIFO undo and scrubbable historical state replay.
           </p>
         </div>
@@ -110,7 +109,7 @@ export const MovementsPage: React.FC = () => {
           <button
             onClick={handleUndo}
             disabled={undoLoading || movements.length === 0}
-            className="glass-button-secondary text-xs sm:text-sm py-2 px-3.5 hover:text-[#FBBF24] disabled:opacity-40"
+            className="btn-secondary text-xs py-2 px-3.5 hover:text-amber-500 disabled:opacity-40"
             title="Reverses the most recent inventory transaction"
           >
             <RotateCcw className={`w-4 h-4 ${undoLoading ? 'animate-spin' : ''}`} />
@@ -121,31 +120,31 @@ export const MovementsPage: React.FC = () => {
 
       {/* Undo Alert Notification */}
       {undoResult && (
-        <div className="p-3.5 rounded-2xl bg-[#FBBF24]/15 border border-[#FBBF24]/30 text-[#FBBF24] text-xs font-mono font-semibold flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-mono font-semibold flex items-center justify-between">
           <span>{undoResult}</span>
-          <button onClick={() => setUndoResult(null)} className="text-xs font-bold hover:underline">
+          <button onClick={() => setUndoResult(null)} className="text-xs font-bold hover:underline cursor-pointer">
             Dismiss
           </button>
         </div>
       )}
 
       {/* Time-Travel Interactive Slider Card */}
-      <GlassCard className="p-5 sm:p-6 border-[#7C6CFF]/30 bg-gradient-to-r from-[#7C6CFF]/10 via-[#22D3EE]/5 to-transparent">
+      <div className="surface-card p-5 sm:p-6 border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-cyan-500/5 to-transparent">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-[#7C6CFF]">
+            <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-indigo-600 dark:text-indigo-400">
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-heading text-base font-bold text-white flex items-center gap-2">
+              <h3 className="font-heading text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span>Time-Travel Historical Replay</span>
                 {isTimeTraveling && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#22D3EE]/20 text-[#22D3EE] border border-[#22D3EE]/40 animate-pulse font-bold">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/40 animate-pulse font-bold">
                     HISTORICAL REPLAY ACTIVE
                   </span>
                 )}
               </h3>
-              <p className="text-xs text-white/50 font-mono">
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                 Scrub the immutable timeline to reconstruct inventory quantities at any historical instant.
               </p>
             </div>
@@ -154,9 +153,9 @@ export const MovementsPage: React.FC = () => {
           {isTimeTraveling && (
             <button
               onClick={() => handleQueryAsOf(0)}
-              className="glass-button-secondary text-xs py-1.5 px-3 self-start md:self-auto font-mono"
+              className="btn-secondary text-xs py-1.5 px-3 self-start md:self-auto font-mono"
             >
-              <RotateCw className="w-3.5 h-3.5 text-[#22D3EE]" />
+              <RotateCw className="w-3.5 h-3.5 text-cyan-500" />
               <span>Reset to Present</span>
             </button>
           )}
@@ -164,12 +163,12 @@ export const MovementsPage: React.FC = () => {
 
         {/* Slider Controls */}
         <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between text-xs text-white/60 font-mono">
+          <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300 font-mono">
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-[#7C6CFF]" />
+              <Calendar className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
               {timeTravelMinutesAgo === 0 ? 'Present (Live Floor Stock)' : timeTravelDate.toLocaleString()}
             </span>
-            <span className="font-bold text-[#22D3EE]">
+            <span className="font-bold text-cyan-600 dark:text-cyan-400">
               {timeTravelMinutesAgo === 0 ? 'Live 0m' : `-${timeTravelMinutesAgo} mins ago`}
             </span>
           </div>
@@ -181,10 +180,10 @@ export const MovementsPage: React.FC = () => {
             step="15"
             value={timeTravelMinutesAgo}
             onChange={(e) => handleQueryAsOf(parseInt(e.target.value) || 0)}
-            className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#7C6CFF]"
+            className="w-full h-2 bg-slate-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-indigo-600"
           />
 
-          <div className="flex justify-between text-[10px] text-white/40 font-mono">
+          <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500 font-mono">
             <span>Live (0m)</span>
             <span>-1 Hour</span>
             <span>-6 Hours</span>
@@ -195,14 +194,14 @@ export const MovementsPage: React.FC = () => {
 
         {/* Historical Stock Results Preview */}
         {isTimeTraveling && (
-          <div className="mt-5 pt-4 border-t border-white/10">
-            <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-white/40 mb-3 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-[#22D3EE]" />
+          <div className="mt-5 pt-4 border-t border-slate-200 dark:border-white/10">
+            <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-cyan-500" />
               <span>Reconstructed Snapshot at {timeTravelDate.toLocaleTimeString()}</span>
             </h4>
 
             {historyLoading ? (
-              <div className="py-6 text-center text-xs text-white/40 font-mono">
+              <div className="py-6 text-center text-xs text-slate-400 font-mono">
                 Reconstructing state via TreeMap.headMap()...
               </div>
             ) : historicalStock ? (
@@ -214,14 +213,14 @@ export const MovementsPage: React.FC = () => {
                   return (
                     <div
                       key={p.id}
-                      className="p-2.5 rounded-2xl bg-white/[0.03] border border-white/10 text-xs font-mono"
+                      className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 text-xs font-mono shadow-xs"
                     >
-                      <div className="text-[10px] font-bold text-[#7C6CFF] truncate">{p.sku}</div>
-                      <div className="font-bold text-white truncate font-sans text-xs mt-0.5">{p.name}</div>
+                      <div className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 truncate">{p.sku}</div>
+                      <div className="font-bold text-slate-900 dark:text-white truncate font-sans text-xs mt-0.5">{p.name}</div>
                       <div className="mt-1 flex items-center justify-between text-[11px]">
-                        <span className="font-extrabold text-white">{historicQty}u</span>
+                        <span className="font-extrabold text-slate-800 dark:text-white">{historicQty}u</span>
                         {delta !== 0 && (
-                          <span className={delta > 0 ? 'text-[#34D399] font-bold' : 'text-[#F87171] font-bold'}>
+                          <span className={delta > 0 ? 'text-emerald-500 font-bold' : 'text-rose-500 font-bold'}>
                             {delta > 0 ? `+${delta}` : delta}
                           </span>
                         )}
@@ -233,23 +232,23 @@ export const MovementsPage: React.FC = () => {
             ) : null}
           </div>
         )}
-      </GlassCard>
+      </div>
 
       {/* Movement Ledger Table */}
-      <GlassCard className="p-5 sm:p-6">
+      <div className="surface-card p-5 sm:p-6 overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
           <div>
-            <h3 className="font-heading text-lg font-bold text-white flex items-center gap-2">
-              <History className="w-4 h-4 text-[#7C6CFF]" />
+            <h3 className="font-heading text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <History className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
               <span>Verified Ledger Log</span>
             </h3>
-            <p className="text-xs text-white/50 font-mono mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
               Total {movements.length} recorded inventory mutations in append-only WAL
             </p>
           </div>
 
           {/* Filter Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/10 text-xs font-mono">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs font-mono">
             {[
               { id: 'ALL', label: 'All' },
               { id: 'IN', label: 'Stock In' },
@@ -260,10 +259,10 @@ export const MovementsPage: React.FC = () => {
               <button
                 key={t.id}
                 onClick={() => setSelectedType(t.id)}
-                className={`px-3 py-1.5 rounded-xl transition-all ${
+                className={`px-3 py-1.5 rounded-lg transition-all ${
                   selectedType === t.id
-                    ? 'bg-gradient-to-r from-[#7C6CFF] to-[#22D3EE] text-[#070912] font-bold'
-                    : 'text-white/60 hover:text-white hover:bg-white/[0.04]'
+                    ? 'bg-indigo-600 text-white font-bold shadow-xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/[0.04]'
                 }`}
               >
                 {t.label}
@@ -275,7 +274,7 @@ export const MovementsPage: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-white/10 text-white/50 uppercase tracking-wider bg-white/[0.02] text-[10px]">
+              <tr className="border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50/75 dark:bg-white/[0.02] text-[10px]">
                 <th className="py-3 px-4">TX ID</th>
                 <th className="py-3 px-4">Action</th>
                 <th className="py-3 px-4">Product Code / ID</th>
@@ -286,39 +285,39 @@ export const MovementsPage: React.FC = () => {
                 <th className="py-3 px-4">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {filteredMovements.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center text-white/40">
+                  <td colSpan={8} className="py-16 text-center text-slate-400">
                     <Boxes className="w-10 h-10 mx-auto mb-3 opacity-30" />
                     <span className="text-xs font-mono">No inventory transactions match the filter criteria.</span>
                   </td>
                 </tr>
               ) : (
                 filteredMovements.map((m) => (
-                  <tr key={m.movementId} className="hover:bg-white/[0.03] transition-colors">
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-white/40">
+                  <tr key={m.movementId} className="hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors">
+                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400 dark:text-slate-500">
                       {m.movementId.slice(0, 8)}
                     </td>
                     <td className="py-3.5 px-4">
                       <StatusChip status={m.movementType} />
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-white">
+                    <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
                       {m.productId}
                     </td>
-                    <td className="py-3.5 px-4 font-extrabold text-[#22D3EE] text-sm">
+                    <td className="py-3.5 px-4 font-extrabold text-indigo-600 dark:text-cyan-400 text-sm">
                       {m.quantity} units
                     </td>
-                    <td className="py-3.5 px-4 text-white/70">
+                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
                       {m.sourceBin || 'Receiving Dock'} &rarr; {m.targetBin || 'Shipping Dock'}
                     </td>
-                    <td className="py-3.5 px-4 text-white/60 max-w-xs truncate text-[11px]">
+                    <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400 max-w-xs truncate text-[11px]">
                       {m.reason || '-'}
                     </td>
-                    <td className="py-3.5 px-4 text-white/90 font-bold">
+                    <td className="py-3.5 px-4 text-slate-800 dark:text-slate-200 font-bold">
                       {m.operatorId}
                     </td>
-                    <td className="py-3.5 px-4 text-white/40 text-[11px]">
+                    <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400 text-[11px]">
                       {new Date(m.timestamp).toLocaleString()}
                     </td>
                   </tr>
@@ -327,7 +326,7 @@ export const MovementsPage: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </GlassCard>
+      </div>
     </div>
   );
 };

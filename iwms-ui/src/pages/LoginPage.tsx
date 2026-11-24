@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import {
   Lock,
   User,
@@ -13,9 +14,10 @@ import {
   KeyRound,
   Radio,
   Fingerprint,
-  Boxes,
   Database,
   Wifi,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
@@ -28,6 +30,8 @@ type RoleTab = 'ADMIN' | 'MANAGER' | 'EMPLOYEE';
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
   const { login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   const [activeRole, setActiveRole] = useState<RoleTab>('ADMIN');
   const [username, setUsername] = useState('admin');
@@ -139,9 +143,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#090D14] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative selection:bg-indigo-600 selection:text-white">
+    <div className="min-h-screen w-full bg-slate-50 dark:bg-[#090D14] text-slate-900 dark:text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative selection:bg-indigo-600 selection:text-white transition-colors duration-200">
       {/* Top Header */}
-      <header className="relative z-20 max-w-7xl w-full mx-auto flex items-center justify-between pb-6 border-b border-white/[0.06]">
+      <header className="relative z-20 max-w-7xl w-full mx-auto flex items-center justify-between pb-6 border-b border-slate-200/80 dark:border-white/[0.06]">
         <button
           onClick={() => {
             if (onBackToOverview) {
@@ -150,16 +154,38 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
               window.location.hash = '';
             }
           }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#111726] hover:bg-[#161E30] border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white dark:bg-[#111726] hover:bg-slate-100 dark:hover:bg-[#161E30] border border-slate-200 dark:border-white/10 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors shadow-xs"
           title="Return to Story Overview"
         >
-          <ArrowLeft className="w-4 h-4 text-indigo-400" />
+          <ArrowLeft className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
           <span>Back to Product Story</span>
         </button>
 
-        <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs font-mono text-emerald-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span>Local Engine &bull; Zero External DB</span>
+        <div className="flex items-center gap-2.5">
+          {/* Light / Dark Mode Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#111726] hover:bg-slate-100 dark:hover:bg-[#182035] text-slate-700 dark:text-slate-200 text-xs font-medium flex items-center gap-1.5 transition-all active:scale-95 shadow-xs"
+            title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            aria-label="Toggle theme mode"
+          >
+            {isDark ? (
+              <>
+                <Sun className="w-4 h-4 text-amber-400" />
+                <span className="hidden sm:inline text-[11px]">Light</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-4 h-4 text-indigo-600" />
+                <span className="hidden sm:inline text-[11px]">Dark</span>
+              </>
+            )}
+          </button>
+
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs font-mono text-emerald-600 dark:text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
+            <span>Local Engine &bull; Zero External DB</span>
+          </div>
         </div>
       </header>
 
@@ -168,49 +194,49 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
         {/* Left Column: Industrial Proposition */}
         <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-[#111726] border border-white/10 flex items-center justify-center p-2.5 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-white dark:bg-[#111726] border border-slate-200 dark:border-white/10 flex items-center justify-center p-2.5 shadow-sm">
               <img src="/favicon.svg" alt="IWMS Pro Warehouse Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-heading font-extrabold text-2xl tracking-tight text-white">
+                <span className="font-heading font-extrabold text-2xl tracking-tight text-slate-900 dark:text-white">
                   IWMS Pro
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
+                <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30">
                   v2.0
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Industrial Warehouse Management Terminal
               </p>
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
             High-velocity inventory operations with zero cloud dependencies.
           </h1>
 
-          <p className="text-sm text-slate-300 leading-relaxed max-w-lg">
+          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg">
             Engineered with thread-safe pure Java memory models, crash-proof append-only Write-Ahead Logs, and an offline-first Progressive Web App client for Wi-Fi dead zones.
           </p>
 
           <div className="grid grid-cols-2 gap-3 pt-2">
-            <div className="p-3 rounded-xl bg-[#111726] border border-white/[0.06]">
-              <div className="flex items-center gap-2 text-indigo-400 text-xs font-semibold mb-1">
+            <div className="p-3 rounded-xl bg-white dark:bg-[#111726] border border-slate-200 dark:border-white/[0.06] shadow-xs">
+              <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-1">
                 <Database className="w-4 h-4" />
                 <span>Append-Only WAL</span>
               </div>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Immutable fsync ledger logging all movements without SQL overhead.
               </p>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#111726] border border-white/[0.06]">
-              <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
+            <div className="p-3 rounded-xl bg-white dark:bg-[#111726] border border-slate-200 dark:border-white/[0.06] shadow-xs">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-semibold mb-1">
                 <Wifi className="w-4 h-4" />
                 <span>IndexedDB Outbox</span>
               </div>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Floor associate transactions queue locally and sync automatically.
               </p>
             </div>
@@ -222,20 +248,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
           <div className="surface-panel p-6 sm:p-8 shadow-2xl">
             {/* Header */}
             <div className="mb-5">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-[11px] font-mono text-indigo-400 mb-2">
-                <Radio className="w-3 h-3 text-indigo-400" />
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-[11px] font-mono text-indigo-600 dark:text-indigo-400 mb-2">
+                <Radio className="w-3 h-3 text-indigo-500 dark:text-indigo-400" />
                 <span>Operator Terminal Auth</span>
               </div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                 Sign in to Warehouse OS
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Select your assigned workstation role and enter credentials.
               </p>
             </div>
 
             {/* Role Switcher Tabs */}
-            <div className="mb-5 p-1 rounded-xl bg-[#090D14] border border-white/[0.08] flex items-center gap-1">
+            <div className="mb-5 p-1 rounded-xl bg-slate-100 dark:bg-[#090D14] border border-slate-200 dark:border-white/[0.08] flex items-center gap-1">
               {(
                 [
                   { id: 'ADMIN', label: 'Admin', sub: 'Full Access' },
@@ -252,7 +278,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                     className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all text-center ${
                       isSelected
                         ? 'bg-indigo-600 text-white shadow-sm'
-                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/[0.04]'
                     }`}
                   >
                     <span>{tab.label}</span>
@@ -268,7 +294,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
-                  className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/25 text-rose-400 text-xs font-medium flex items-center gap-2"
+                  className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/25 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-2"
                 >
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
@@ -279,11 +305,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
             {/* Auth Form */}
             <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Operator Username
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input
                     type="text"
                     required
@@ -296,11 +322,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Security Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -312,7 +338,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -322,17 +348,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
 
               {/* Remember Session Checkbox */}
               <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-slate-400 hover:text-slate-200 select-none">
+                <label className="flex items-center gap-2 cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 select-none">
                   <input
                     type="checkbox"
                     checked={rememberSession}
                     onChange={(e) => setRememberSession(e.target.checked)}
-                    className="w-3.5 h-3.5 rounded bg-[#141B2D] border-white/20 text-indigo-600 focus:ring-indigo-500"
+                    className="w-3.5 h-3.5 rounded bg-white dark:bg-[#141B2D] border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500"
                   />
                   <span>Store session locally</span>
                 </label>
 
-                <span className="text-[11px] font-mono text-slate-500">PBKDF2 Salted</span>
+                <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">PBKDF2 Salted</span>
               </div>
 
               {/* Primary Submit Button */}
@@ -353,13 +379,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
             </form>
 
             {/* Quick Demo Login Presets */}
-            <div className="mt-5 pt-4 border-t border-white/[0.08]">
-              <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+            <div className="mt-5 pt-4 border-t border-slate-200 dark:border-white/[0.08]">
+              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
                 <span className="flex items-center gap-1.5 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
                   <span>1-Click Preset Roles:</span>
                 </span>
-                <span className="text-[10px] text-slate-500">Auto-fills credentials</span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500">Auto-fills credentials</span>
               </div>
 
               <div className="grid grid-cols-3 gap-2">
@@ -368,12 +394,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                   onClick={() => handleSelectRoleTab('ADMIN')}
                   className={`p-2 rounded-lg text-xs font-mono transition-all border text-center ${
                     activeRole === 'ADMIN'
-                      ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
-                      : 'bg-[#090D14] border-white/[0.06] text-slate-400 hover:text-white'
+                      ? 'bg-indigo-500/15 border-indigo-500 text-indigo-600 dark:text-indigo-300 font-bold'
+                      : 'bg-slate-100 dark:bg-[#090D14] border-slate-200 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  <span className="block font-bold">Admin</span>
-                  <span className="text-[10px] opacity-60">admin123</span>
+                  <span className="block">Admin</span>
+                  <span className="text-[10px] opacity-70">admin123</span>
                 </button>
 
                 <button
@@ -381,12 +407,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                   onClick={() => handleSelectRoleTab('MANAGER')}
                   className={`p-2 rounded-lg text-xs font-mono transition-all border text-center ${
                     activeRole === 'MANAGER'
-                      ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
-                      : 'bg-[#090D14] border-white/[0.06] text-slate-400 hover:text-white'
+                      ? 'bg-indigo-500/15 border-indigo-500 text-indigo-600 dark:text-indigo-300 font-bold'
+                      : 'bg-slate-100 dark:bg-[#090D14] border-slate-200 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  <span className="block font-bold">Manager</span>
-                  <span className="text-[10px] opacity-60">manager123</span>
+                  <span className="block">Manager</span>
+                  <span className="text-[10px] opacity-70">manager123</span>
                 </button>
 
                 <button
@@ -394,32 +420,32 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
                   onClick={() => handleSelectRoleTab('EMPLOYEE')}
                   className={`p-2 rounded-lg text-xs font-mono transition-all border text-center ${
                     activeRole === 'EMPLOYEE'
-                      ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
-                      : 'bg-[#090D14] border-white/[0.06] text-slate-400 hover:text-white'
+                      ? 'bg-indigo-500/15 border-indigo-500 text-indigo-600 dark:text-indigo-300 font-bold'
+                      : 'bg-slate-100 dark:bg-[#090D14] border-slate-200 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  <span className="block font-bold">Staff</span>
-                  <span className="text-[10px] opacity-60">emp123</span>
+                  <span className="block">Staff</span>
+                  <span className="text-[10px] opacity-70">emp123</span>
                 </button>
               </div>
 
               {/* Alternative Sign-In Options */}
-              <div className="mt-3 pt-2.5 flex items-center justify-between gap-2 text-xs text-slate-400">
+              <div className="mt-3 pt-2.5 flex items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
                 <button
                   type="button"
                   onClick={() => handleSimulateSSO('RFID')}
-                  className="flex-1 py-1.5 px-2 rounded-lg bg-[#090D14] hover:bg-[#141B2D] border border-white/[0.06] flex items-center justify-center gap-1.5 transition-colors"
+                  className="flex-1 py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-[#090D14] dark:hover:bg-[#141B2D] border border-slate-200 dark:border-white/[0.06] flex items-center justify-center gap-1.5 transition-colors text-slate-700 dark:text-slate-300"
                 >
-                  <KeyRound className="w-3.5 h-3.5 text-cyan-400" />
+                  <KeyRound className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
                   <span>Keycard RFID</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleSimulateSSO('Biometric')}
-                  className="flex-1 py-1.5 px-2 rounded-lg bg-[#090D14] hover:bg-[#141B2D] border border-white/[0.06] flex items-center justify-center gap-1.5 transition-colors"
+                  className="flex-1 py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-[#090D14] dark:hover:bg-[#141B2D] border border-slate-200 dark:border-white/[0.06] flex items-center justify-center gap-1.5 transition-colors text-slate-700 dark:text-slate-300"
                 >
-                  <Fingerprint className="w-3.5 h-3.5 text-indigo-400" />
+                  <Fingerprint className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
                   <span>Biometric</span>
                 </button>
               </div>
@@ -429,7 +455,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBackToOverview }) => {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-20 max-w-7xl w-full mx-auto text-center text-xs text-slate-500 font-mono py-3 border-t border-white/[0.06]">
+      <footer className="relative z-20 max-w-7xl w-full mx-auto text-center text-xs text-slate-500 font-mono py-3 border-t border-slate-200/80 dark:border-white/[0.06]">
         IWMS Pro &bull; Offline-First Progressive Web App &bull; Zero External Database Requirement &bull; 100% Free Open-Source
       </footer>
     </div>

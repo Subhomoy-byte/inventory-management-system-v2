@@ -104,13 +104,13 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-white/[0.06]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-white/[0.06]">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <Boxes className="w-6 h-6 text-indigo-400" />
-            Stock Catalog & Master Inventory
+          <h2 className="text-xl sm:text-2xl font-heading font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+            <Boxes className="w-6 h-6 text-indigo-500 dark:text-indigo-400" />
+            Stock Catalog &amp; Master Inventory
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Real-time item SKU balances, storage bin coordinates, and role-based FIFO cost tracking.
           </p>
         </div>
@@ -121,7 +121,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
             className="btn-secondary text-xs py-2 px-3"
             title="Upload CSV / Kaggle Dataset"
           >
-            <UploadCloud className="w-3.5 h-3.5 text-indigo-400" />
+            <UploadCloud className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
             <span>Import Dataset</span>
           </button>
           <button
@@ -129,7 +129,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
             className="btn-secondary text-xs py-2 px-3"
             title="Download Spreadsheet"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
             <span>Export CSV</span>
           </button>
           <button
@@ -147,7 +147,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Search Box */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search SKU, item name, shelf..."
@@ -168,7 +168,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                 setCategoryFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="surface-input text-xs bg-[#141B2D]"
+              className="surface-input text-xs"
             >
               <option value="ALL">All Categories</option>
               {categories.map((c) => (
@@ -187,7 +187,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                 setStatusFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="surface-input text-xs bg-[#141B2D]"
+              className="surface-input text-xs"
             >
               <option value="ALL">All Stock Statuses</option>
               <option value="OPTIMAL">Optimal Level</option>
@@ -205,7 +205,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                 setTypeFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="surface-input text-xs bg-[#141B2D]"
+              className="surface-input text-xs"
             >
               <option value="ALL">All Product Types</option>
               <option value="PERISHABLE">Perishable Goods</option>
@@ -223,8 +223,8 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-white/[0.08] text-slate-400 font-medium text-[11px] bg-white/[0.02]">
-                <th className="py-3 px-4">Product SKU & Name</th>
+              <tr className="border-b border-slate-200 dark:border-white/[0.08] text-slate-500 dark:text-slate-400 font-medium text-[11px] bg-slate-50/75 dark:bg-white/[0.02]">
+                <th className="py-3 px-4">Product SKU &amp; Name</th>
                 <th className="py-3 px-4">Category</th>
                 <th className="py-3 px-4">Floor Quantity</th>
                 <th className="py-3 px-4">Bin Shelf</th>
@@ -235,7 +235,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
               {paginatedProducts.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-16 text-center text-slate-400">
@@ -250,24 +250,24 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                   return (
                     <tr
                       key={p.id}
-                      className="hover:bg-white/[0.02] transition-colors"
+                      className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors"
                     >
                       {/* Item Code & Name */}
                       <td className="py-3 px-4">
-                        <div className="font-semibold text-white text-sm">
+                        <div className="font-semibold text-slate-900 dark:text-white text-sm">
                           {p.name}
                         </div>
-                        <div className="text-[11px] font-mono text-indigo-400 mt-0.5">
+                        <div className="text-[11px] font-mono text-indigo-600 dark:text-indigo-400 mt-0.5">
                           {p.sku}
                         </div>
                       </td>
 
                       {/* Category & Classification */}
                       <td className="py-3 px-4">
-                        <div className="font-medium text-slate-200">
+                        <div className="font-medium text-slate-800 dark:text-slate-200">
                           {p.category}
                         </div>
-                        <span className="inline-block text-[10px] px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 font-mono mt-0.5">
+                        <span className="inline-block text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-400 font-mono mt-0.5">
                           {p.productType}
                         </span>
                       </td>
@@ -275,12 +275,12 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                       {/* Quantity & Level Bar */}
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-1.5 mb-1">
-                          <span className="font-mono font-bold text-sm text-white tabular-nums">
+                          <span className="font-mono font-bold text-sm text-slate-900 dark:text-white tabular-nums">
                             {p.quantity} units
                           </span>
-                          <span className="text-slate-400 text-[10px]">/ min {p.reorderPoint}</span>
+                          <span className="text-slate-500 dark:text-slate-400 text-[10px]">/ min {p.reorderPoint}</span>
                         </div>
-                        <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                        <div className="w-24 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                           <div
                             className={`h-full rounded-full ${
                               p.quantity <= p.reorderPoint
@@ -295,23 +295,23 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                       </td>
 
                       {/* Shelf Location */}
-                      <td className="py-3 px-4 font-mono font-medium text-cyan-400 text-xs">
+                      <td className="py-3 px-4 font-mono font-medium text-cyan-600 dark:text-cyan-400 text-xs">
                         {p.binLocation}
                       </td>
 
                       {/* Price / Role-Based Masking */}
                       <td className="py-3 px-4 font-mono">
                         <div>
-                          <span className="font-bold text-slate-100 tabular-nums">
+                          <span className="font-bold text-slate-900 dark:text-slate-100 tabular-nums">
                             ${p.sellingPrice.toFixed(2)}
                           </span>
                         </div>
                         {isAdmin || isManager ? (
-                          <div className="text-[10px] text-slate-400 tabular-nums mt-0.5">
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 tabular-nums mt-0.5">
                             Cost: ${p.costPrice !== undefined ? p.costPrice.toFixed(2) : 'N/A'}
                           </div>
                         ) : (
-                          <div className="text-[10px] text-amber-400 flex items-center gap-1 mt-0.5">
+                          <div className="text-[10px] text-amber-500 flex items-center gap-1 mt-0.5">
                             <Lock className="w-2.5 h-2.5" />
                             <span>Masked</span>
                           </div>
@@ -328,21 +328,21 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => onOpenMovementModal('IN', p)}
-                            className="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-colors"
+                            className="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 transition-colors"
                             title="Receive Stock (Inbound)"
                           >
                             <ArrowDownRight className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => onOpenMovementModal('OUT', p)}
-                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors"
+                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-colors"
                             title="Dispatch Stock (Outbound)"
                           >
                             <ArrowUpRight className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => onOpenMovementModal('TRANSFER', p)}
-                            className="p-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 transition-colors"
+                            className="p-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 transition-colors"
                             title="Transfer Bin Shelf"
                           >
                             <ArrowLeftRight className="w-3.5 h-3.5" />
@@ -358,13 +358,13 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
         </div>
 
         {/* Pagination Footer */}
-        <div className="p-3.5 border-t border-white/[0.08] flex items-center justify-between text-xs text-slate-400">
+        <div className="p-3.5 border-t border-slate-200 dark:border-white/[0.08] flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
           <div>
-            Showing <span className="font-semibold text-slate-200 tabular-nums">
+            Showing <span className="font-semibold text-slate-800 dark:text-slate-200 tabular-nums">
               {filteredProducts.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}
-            </span> to <span className="font-semibold text-slate-200 tabular-nums">
+            </span> to <span className="font-semibold text-slate-800 dark:text-slate-200 tabular-nums">
               {Math.min(currentPage * pageSize, filteredProducts.length)}
-            </span> of <span className="font-semibold text-slate-200 tabular-nums">
+            </span> of <span className="font-semibold text-slate-800 dark:text-slate-200 tabular-nums">
               {filteredProducts.length}
             </span> items
           </div>
@@ -373,18 +373,18 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
             <button
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-1.5 rounded-lg bg-white/[0.04] border border-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/[0.08] transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 dark:hover:bg-white/[0.08] transition-colors"
               aria-label="Previous page"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="font-mono text-xs tabular-nums text-slate-300">
+            <span className="font-mono text-xs tabular-nums text-slate-600 dark:text-slate-300">
               {currentPage} / {totalPages}
             </span>
             <button
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="p-1.5 rounded-lg bg-white/[0.04] border border-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/[0.08] transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 dark:hover:bg-white/[0.08] transition-colors"
               aria-label="Next page"
             >
               <ChevronRight className="w-4 h-4" />

@@ -90,18 +90,18 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-white/[0.06]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="font-heading text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-              <ClipboardCheck className="w-7 h-7 text-[#7C6CFF]" />
-              <span>Floor Stock Verification & Cycle Count</span>
+          <div className="flex items-center gap-2.5">
+            <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+              <ClipboardCheck className="w-6 h-6 text-indigo-500 dark:text-indigo-400" />
+              <span>Floor Stock Verification &amp; Cycle Count</span>
             </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#34D399]/20 text-[#34D399] border border-[#34D399]/40 font-bold">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-bold">
               VARIANCE AUDIT
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-white/60 font-mono mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-mono mt-0.5">
             Physical stock count audits, discrepancy calculations, and 1-click inventory balance reconciliation.
           </p>
         </div>
@@ -111,7 +111,7 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
             setCounts({});
             setSuccessNote(null);
           }}
-          className="glass-button-secondary text-xs sm:text-sm py-2 px-3.5"
+          className="btn-secondary text-xs py-2 px-3.5"
         >
           <RotateCw className="w-3.5 h-3.5" />
           <span>Reset Counts</span>
@@ -137,38 +137,38 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
       )}
 
       {/* Cycle Count Table */}
-      <GlassCard className="p-0 overflow-hidden">
+      <div className="surface-card p-0 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-white/10 text-white/50 uppercase tracking-wider bg-white/[0.02] text-[10px]">
+              <tr className="border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50 uppercase tracking-wider bg-slate-50/75 dark:bg-white/[0.02] text-[10px]">
                 <th className="py-3.5 px-5">Shelf Bin</th>
-                <th className="py-3.5 px-5">Product SKU & Name</th>
+                <th className="py-3.5 px-5">Product SKU &amp; Name</th>
                 <th className="py-3.5 px-5">Recorded Stock</th>
                 <th className="py-3.5 px-5 w-44">Physical Count</th>
                 <th className="py-3.5 px-5">Discrepancy</th>
                 <th className="py-3.5 px-5 text-right">Adjustment Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {products.slice(0, 20).map((p) => {
                 const physicalCount = counts[p.id] !== undefined ? counts[p.id] : p.quantity;
                 const variance = physicalCount - p.quantity;
 
                 return (
-                  <tr key={p.id} className="hover:bg-white/[0.03] transition-colors">
-                    <td className="py-3.5 px-5 font-mono font-bold text-[#22D3EE] text-xs">
+                  <tr key={p.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors">
+                    <td className="py-3.5 px-5 font-mono font-bold text-cyan-600 dark:text-[#22D3EE] text-xs">
                       {p.binLocation}
                     </td>
                     <td className="py-3.5 px-5">
-                      <div className="font-heading font-bold text-sm text-white">
+                      <div className="font-heading font-bold text-sm text-slate-900 dark:text-white">
                         {p.name}
                       </div>
-                      <div className="text-[11px] font-mono text-[#7C6CFF] mt-0.5">
+                      <div className="text-[11px] font-mono text-indigo-600 dark:text-[#7C6CFF] mt-0.5">
                         SKU: {p.sku} &bull; {p.category}
                       </div>
                     </td>
-                    <td className="py-3.5 px-5 font-mono font-extrabold text-white text-sm">
+                    <td className="py-3.5 px-5 font-mono font-extrabold text-slate-900 dark:text-white text-sm">
                       {p.quantity} units
                     </td>
                     <td className="py-3.5 px-5">
@@ -177,21 +177,21 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
                         min="0"
                         value={physicalCount}
                         onChange={(e) => handleCountChange(p.id, parseInt(e.target.value) || 0)}
-                        className="glass-input py-1.5 px-3 font-mono text-xs font-bold w-28"
+                        className="surface-input py-1.5 px-3 font-mono text-xs font-bold w-28"
                       />
                     </td>
                     <td className="py-3.5 px-5">
                       {variance === 0 ? (
-                        <span className="text-[#34D399] font-bold font-mono text-xs flex items-center gap-1.5">
+                        <span className="text-emerald-600 dark:text-[#34D399] font-bold font-mono text-xs flex items-center gap-1.5">
                           <Check className="w-3.5 h-3.5" />
                           <span>Balanced (0)</span>
                         </span>
                       ) : variance > 0 ? (
-                        <span className="text-[#22D3EE] font-bold font-mono text-xs">
+                        <span className="text-cyan-600 dark:text-[#22D3EE] font-bold font-mono text-xs">
                           +{variance} (Surplus)
                         </span>
                       ) : (
-                        <span className="text-[#F87171] font-bold font-mono text-xs flex items-center gap-1.5">
+                        <span className="text-rose-600 dark:text-[#F87171] font-bold font-mono text-xs flex items-center gap-1.5">
                           <AlertTriangle className="w-3.5 h-3.5" />
                           <span>{variance} (Deficit)</span>
                         </span>
@@ -202,10 +202,10 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
                         <button
                           onClick={() => handleReconcile(p)}
                           disabled={reconcilingId === p.id}
-                          className="glass-button-primary text-xs py-1.5 px-3"
+                          className="btn-primary text-xs py-1.5 px-3"
                         >
                           {reconcilingId === p.id ? (
-                            <span className="inline-block w-3.5 h-3.5 border-2 border-[#070912] border-t-transparent rounded-full animate-spin" />
+                            <span className="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           ) : (
                             <>
                               <Save className="w-3 h-3" />
@@ -214,7 +214,7 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
                           )}
                         </button>
                       ) : (
-                        <span className="text-[#34D399] font-bold text-xs px-2.5 py-1 rounded-lg bg-[#34D399]/10 border border-[#34D399]/20">
+                        <span className="text-emerald-600 dark:text-[#34D399] font-bold text-xs px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                           Verified
                         </span>
                       )}
@@ -225,7 +225,7 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
             </tbody>
           </table>
         </div>
-      </GlassCard>
+      </div>
     </div>
   );
 };

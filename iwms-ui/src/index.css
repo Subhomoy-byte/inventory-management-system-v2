@@ -4,22 +4,45 @@
 
 @layer base {
   :root {
-    --bg-canvas: #090D14;
-    --bg-surface: #0F1523;
-    --bg-surface-elevated: #151D2E;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.16);
+    --bg-canvas: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #F1F5F9;
+    --bg-surface-hover: #F8FAFC;
+    --border-subtle: #E2E8F0;
+    --border-strong: #CBD5E1;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
     --accent-indigo: #4F46E5;
+    --accent-indigo-hover: #4338CA;
     --accent-cyan: #06B6D4;
     --status-emerald: #10B981;
     --status-amber: #F59E0B;
     --status-crimson: #EF4444;
   }
 
+  .dark {
+    --bg-canvas: #090D16;
+    --bg-surface: #0F1524;
+    --bg-surface-elevated: #151E32;
+    --bg-surface-hover: #1A2338;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --accent-indigo: #6366F1;
+    --accent-indigo-hover: #4F46E5;
+    --accent-cyan: #22D3EE;
+    --status-emerald: #10B981;
+    --status-amber: #F59E0B;
+    --status-crimson: #EF4444;
+  }
+
   body {
-    @apply m-0 p-0 font-sans antialiased text-white bg-[#090D14] min-h-screen selection:bg-indigo-600 selection:text-white;
-    background-color: #090D14;
-    color: #F8FAFC;
+    @apply m-0 p-0 font-sans antialiased min-h-screen selection:bg-indigo-600 selection:text-white transition-colors duration-200;
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -36,32 +59,64 @@
 }
 
 @layer components {
-  /* High-Precision Tactical Surface Card */
+  /* High-Precision Tactical Surface Card (Adaptive Light/Dark) */
   .glass-card, .surface-card {
     position: relative;
-    background: #0F1523;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
     border-radius: 16px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .dark .glass-card, .dark .surface-card {
+    background-color: #0F1524;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
 
   .glass-card-hover {
+    @apply hover:border-indigo-500/40 transition-all duration-150;
+  }
+  .dark .glass-card-hover {
     @apply hover:border-indigo-500/40 hover:bg-[#12192A] hover:shadow-lg hover:shadow-black/60;
   }
 
   /* High Density Surface Panel (for Modals, Flyouts, Palettes) */
   .glass-panel, .surface-panel {
-    background: #111726;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-strong);
     border-radius: 20px;
+    box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.15);
+  }
+
+  .dark .glass-panel, .dark .surface-panel {
+    background-color: #111726;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.85);
   }
 
   /* Precision Form Inputs */
   .glass-input, .surface-input {
-    @apply w-full px-3.5 py-2.5 rounded-xl bg-[#141B2D] border border-white/10 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-[#172036] transition-all;
+    @apply w-full px-3.5 py-2.5 rounded-xl border text-sm transition-all;
+    background-color: var(--bg-surface-elevated);
+    border-color: var(--border-subtle);
+    color: var(--text-primary);
+  }
+
+  .surface-input:focus, .glass-input:focus {
+    @apply outline-none ring-1 ring-indigo-500 border-indigo-500;
+  }
+
+  .dark .glass-input, .dark .surface-input {
+    background-color: #141B2D;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #F8FAFC;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) inset;
+  }
+  .dark .surface-input:focus, .dark .glass-input:focus {
+    background-color: #172036;
+    border-color: #6366F1;
   }
 
   /* Primary High-Contrast Button */
@@ -79,12 +134,35 @@
 
   /* Secondary Structured Button */
   .glass-button-secondary, .btn-secondary {
-    @apply px-4 py-2.5 rounded-xl bg-[#141B2D] hover:bg-[#1A233A] text-slate-200 hover:text-white border border-white/10 hover:border-white/20 text-sm font-medium shadow-sm active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+    @apply px-4 py-2.5 rounded-xl text-sm font-medium shadow-sm active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+  }
+
+  .btn-secondary:hover, .glass-button-secondary:hover {
+    background-color: var(--bg-surface-elevated);
+    border-color: var(--border-strong);
+  }
+
+  .dark .glass-button-secondary, .dark .btn-secondary {
+    background-color: #141B2D;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #E2E8F0;
+  }
+  .dark .btn-secondary:hover, .dark .glass-button-secondary:hover {
+    background-color: #1A233A;
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
   }
 
   /* Developer Telemetry Chip */
   .telemetry-chip {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono font-medium tracking-wide border;
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+  .dark .telemetry-chip {
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(255, 255, 255, 0.08);
   }
@@ -114,14 +192,18 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #090D14;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 4px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.6);
+  background: rgba(99, 102, 241, 0.7);
 }
